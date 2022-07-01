@@ -15,7 +15,8 @@ import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.nio.charset.Charset;
+import java.io.FileNotFoundException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,19 +38,19 @@ public class AdventOfCodeControllerTest {
     @MockBean
     private AdventOfCodeService adventOfCodeService;
 
-    private String baseUrl = "/api/adventOfCode";
+    private final String baseUrl = "/api/adventOfCode";
 
-    private MediaType contentType = new MediaType("application", "hal+json", Charset.forName("UTF-8"));
+    private final MediaType contentType = new MediaType("application", "hal+json", StandardCharsets.UTF_8);
 
-    private String day1 = "1";
-    private String part1 = "1";
-    private String resultDay1Part1 = "Part 1 - Frequency: 599";
+    private final String day1 = "1";
+    private final String part1 = "1";
+    private final String resultDay1Part1 = "Part 1 - Frequency: 599";
 
     @Autowired
     private MockMvc mvc;
 
     @Before
-    public void setup() {
+    public void setup() throws FileNotFoundException {
         Mockito.when(adventOfCodeService.getResultsForASpecificDayAndPuzzlePart(day1, part1))
                 .thenReturn(resultDay1Part1);
     }
@@ -66,7 +67,6 @@ public class AdventOfCodeControllerTest {
                         preprocessResponse(prettyPrint()),
                         responseFields(getResultForASpecificDayAndPuzzlePart("")))
                 );
-
     }
 
     @Test
