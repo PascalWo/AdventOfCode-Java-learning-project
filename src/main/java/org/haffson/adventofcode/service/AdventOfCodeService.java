@@ -7,6 +7,7 @@ import org.haffson.adventofcode.exceptions.PuzzleNotSolvedYetException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Objects;
 
@@ -43,7 +44,7 @@ public class AdventOfCodeService {
      * @return a {@code String} with the result for the puzzle, or in case it has not been implemented,
      * an {@link PuzzleNotSolvedYetException} is thrown.
      */
-    public String getResultsForASpecificDayAndPuzzlePart(String day, String part) {
+    public String getResultsForASpecificDayAndPuzzlePart(String day, String part) throws FileNotFoundException {
         Days thisDaysClass = findDayForDay(Integer.parseInt(day));
         if (!isProblemSolvedForPart(thisDaysClass, part)) {
             throw new PuzzleNotSolvedYetException(new Throwable());

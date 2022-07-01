@@ -2,6 +2,7 @@ package org.haffson.adventofcode.days;
 
 import org.haffson.adventofcode.ProblemStatusEnum;
 
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 
 /**
@@ -17,7 +18,7 @@ public interface Days {
      *
      * @return the solution of Part 1
      */
-    String firstPart();
+    String firstPart() throws FileNotFoundException;
 
     /**
      * Returns the solution of Part 2.
