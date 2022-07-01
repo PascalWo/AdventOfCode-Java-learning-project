@@ -6,6 +6,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
@@ -27,7 +32,7 @@ public class Day01Test {
         //arrange
         Day01 day01 = new Day01(fileReaders);
         when(fileReaders.getInputArray("src/main/resources/puzzle_input/day1_input.txt"))
-                .thenReturn(new int[]{1,2,3,-4});
+                .thenReturn(new ArrayList<>(Arrays.asList(1,2,3,-4)));
 
         String expectedResult = "Part 1 - Frequency: " + 2;
 

@@ -6,8 +6,8 @@ import org.haffson.adventofcode.utils.FileReaders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Implementation for <i>Day 1: Chronal Calibration</i>.
@@ -60,8 +60,9 @@ public class Day01 implements Days {
      *
      * @return the final frequency
      */
-    private int calculateFrequency(int[] myIntArray) {
-        return Arrays.stream(myIntArray)
+    private int calculateFrequency(List<Integer> myIntArrayList) {
+        return myIntArrayList.stream()
+                .mapToInt(Integer::intValue)
                 .sum();
     }
 }
