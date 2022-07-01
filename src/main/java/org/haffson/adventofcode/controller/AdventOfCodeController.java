@@ -28,11 +28,15 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 @RequestMapping(value = "/api/adventOfCode", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class AdventOfCodeController {
 
-    /** Adds a logger to the controller */
+    /**
+     * Adds a logger to the controller
+     */
     private static final Logger logger = LoggerFactory.getLogger(AdventOfCodeController.class);
 
-    /** Implements the {@link AdventOfCodeService}. */
-    private AdventOfCodeService adventOfCodeService;
+    /**
+     * Implements the {@link AdventOfCodeService}.
+     */
+    private final AdventOfCodeService adventOfCodeService;
 
     /**
      * {@code @Autowired} constructor of this controller.
@@ -48,7 +52,7 @@ public class AdventOfCodeController {
      * Handles a GET-Request with the day of the advent calendar and the part to be solved and returns a HATEOAS
      * {@code Resource<>} with the corresponding solution.
      *
-     * @param day the simple day of the advent calendar to be solved
+     * @param day  the simple day of the advent calendar to be solved
      * @param part the part of the puzzle for that day
      * @return a HATEOAS-{@code Resource<>} with the corresponding solution
      */
