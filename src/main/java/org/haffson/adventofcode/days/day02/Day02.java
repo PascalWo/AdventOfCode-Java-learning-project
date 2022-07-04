@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Component
 public class Day02 implements Days {
@@ -61,42 +62,17 @@ public class Day02 implements Days {
      */
 
     private int calculateCheckSum(List<String> myStringList) {
-        int exactlyTwoSameLetters = 0;
-        int exactlyThreeSameLetters = 0;
+        int[] countSameLetterArray = new int[2];
 
-        for (String wordFromList : myStringList
-        ) {
-            HashMap<Character, Integer> wordToLetterMap = new HashMap<>();
-            for (Character wordLetter : wordFromList.toCharArray()
-            ) {
-                if (wordToLetterMap.containsKey(wordLetter)) {
-                    int letterValue = wordToLetterMap.get(wordLetter);
-                    wordToLetterMap.put(wordLetter, letterValue + 1);
-                } else {
-                    wordToLetterMap.put(wordLetter, 1);
-                }
-            }
-            boolean hasExactlyTwoLetters = false;
-            boolean hasExactlyThreeLetters = false;
-
-            for (Character wordLetter: wordToLetterMap.keySet()
-                 ) {
-                if (wordToLetterMap.get(wordLetter) == 2){
-                    hasExactlyTwoLetters = true;
-                } else if (wordToLetterMap.get(wordLetter) == 3){
-                    hasExactlyThreeLetters = true;
-                }
-                if (hasExactlyTwoLetters && hasExactlyThreeLetters){
-                    break;
-                }
-            }
-            if(hasExactlyTwoLetters) {
-                exactlyTwoSameLetters++;
-            }
-            if(hasExactlyThreeLetters) {
-                exactlyThreeSameLetters++;
-            }
-        }
-        return exactlyTwoSameLetters * exactlyThreeSameLetters;
+        myStringList.forEach(word -> {
+            Map<Integer, Integer> letterMap = new HashMap<>();
+            word.chars().forEach(wordCharacter -> {
+                Integer numberOfLetter = letterMap.get(wordCharacter);
+                letterMap.put(wordCharacter, numberOfLetter != null ? numberOfLetter + 1 : 1);
+            });
+            countSameLetterArray[0] += letterMap.entrySet().stream().anyMatch(e -> e.getValue() == 2) ? 1 : 0;
+            countSameLetterArray[1] += letterMap.entrySet().stream().anyMatch(e -> e.getValue() == 3) ? 1 : 0;
+        });
+        return countSameLetterArray[0] * countSameLetterArray[1];
     }
 }
