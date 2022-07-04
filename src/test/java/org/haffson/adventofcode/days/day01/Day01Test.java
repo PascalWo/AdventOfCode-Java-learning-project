@@ -42,4 +42,20 @@ public class Day01Test {
         //assert
         Assert.assertEquals(expectedResult, actualResult);
     }
+
+    @Test
+    public void test_secondPart_returnsExpectedResult() {
+        //arrange
+        Day01 day01 = new Day01(fileReaders);
+        when(fileReaders.getInputArray("src/main/resources/puzzle_input/day1_input.txt"))
+                .thenReturn(new ArrayList<>(Arrays.asList(3,3,4,-2,-4)));
+
+        String expectedResult = "Part 2 - Frequency: " + 10;
+
+        //act
+        String actualResult = day01.secondPart();
+
+        //assert
+        Assert.assertEquals(expectedResult, actualResult);
+    }
 }
