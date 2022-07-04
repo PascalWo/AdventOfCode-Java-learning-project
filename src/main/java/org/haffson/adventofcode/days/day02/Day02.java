@@ -29,7 +29,7 @@ public class Day02 implements Days {
         this.fileReaders = fileReaders;
         this.problemStatus = new HashMap<>();
         this.problemStatus.put("1", ProblemStatusEnum.SOLVED);
-        this.problemStatus.put("2", ProblemStatusEnum.UNSOLVED);
+        this.problemStatus.put("2", ProblemStatusEnum.SOLVED);
     }
 
     @Override
@@ -51,7 +51,8 @@ public class Day02 implements Days {
 
     @Override
     public String secondPart() {
-        return null;
+        String fileName = "src/main/resources/puzzle_input/day2_input.txt";
+        return "Part 2 - common letters: " + calculateCommonLetters(fileReaders.getInputList(fileName));
     }
 
     /**
@@ -74,5 +75,34 @@ public class Day02 implements Days {
             countSameLetterArray[1] += letterMap.entrySet().stream().anyMatch(e -> e.getValue() == 3) ? 1 : 0;
         });
         return countSameLetterArray[0] * countSameLetterArray[1];
+    }
+
+    private String calculateCommonLetters(List<String> myStringList) {
+
+        for (int i = 0; i < myStringList.size(); i++) {
+            String word1 = myStringList.get(i);
+            for (int j = i + 1; j < myStringList.size(); j++) {
+                String word2 = myStringList.get(j);
+                int count = 0;
+                int position = 0;
+                for (int k = 0; k < word1.length(); k++) {
+                    if (word1.charAt(k) != word2.charAt(k)) {
+                        count++;
+                        if (count > 1) break;
+                        position = k;
+                    }
+                }
+                if (count == 1) {
+                    StringBuilder stringBuilder = new StringBuilder(word1);
+                    stringBuilder.deleteCharAt(position);
+                    return stringBuilder.toString();
+                }
+            }
+        }
+        return null;
+    }
+
+    private String calculateCommonLettersRefactored(List<String> myStringList) {
+        return null;
     }
 }
