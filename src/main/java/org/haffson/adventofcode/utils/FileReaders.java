@@ -16,11 +16,11 @@ public class FileReaders {
 
         try(Scanner scanner = new Scanner(new File(String.valueOf(fileName)))) {
 
-            ArrayList<String> inputIntArray = new ArrayList<>();
-            while (scanner.hasNextInt()) {
-                inputIntArray.add(scanner.nextLine());
+            ArrayList<String> inputArray = new ArrayList<>();
+            while (scanner.hasNextLine()) {
+                inputArray.add(scanner.nextLine());
             }
-            return inputIntArray;
+            return inputArray;
 
         } catch (FileNotFoundException e) {
             throw new UncheckedFileNotFoundException("FileInput not found", e);
