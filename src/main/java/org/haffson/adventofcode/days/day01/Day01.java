@@ -72,20 +72,20 @@ public class Day01 implements Days {
     private int calculateFrequencyPart2(List<String> myArrayList){
         List<Integer> myIntArrayList = myArrayList.stream().map(Integer::parseInt).collect(Collectors.toList());
 
-        int sum = 0;
-        HashSet<Integer> found = new HashSet<>();
+        int sumOfLookedUpListEntries = 0;
+        HashSet<Integer> previousSums = new HashSet<>();
         boolean foundDuplicate = false;
         while (!foundDuplicate) {
             for (int f : myIntArrayList) {
-                sum += f;
-                if (found.contains(sum)) {
+                sumOfLookedUpListEntries += f;
+                if (previousSums.contains(sumOfLookedUpListEntries)) {
                     foundDuplicate = true;
                     break;
                 } else {
-                    found.add(sum);
+                    previousSums.add(sumOfLookedUpListEntries);
                 }
             }
         }
-        return sum;
+        return sumOfLookedUpListEntries;
     }
 }
