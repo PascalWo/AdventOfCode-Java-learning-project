@@ -12,6 +12,7 @@ import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,7 +21,7 @@ import java.util.List;
 public class AdventOfCodeServiceTest {
 
     private final List<Days> daysSolutions = new LinkedList<>();
-    private HashMap<String, ProblemStatusEnum> problemStatus = new HashMap<>();
+    private final HashMap<String, ProblemStatusEnum> problemStatus = new HashMap<>();
 
     private AdventOfCodeService adventOfCodeService;
 
@@ -40,24 +41,24 @@ public class AdventOfCodeServiceTest {
     }
 
     @Test
-    public void getResultsForASpecificDayAndPuzzlePartTest() {
+    public void getResultsForASpecificDayAndPuzzlePartTest() throws FileNotFoundException {
         String actualResult = adventOfCodeService.getResultsForASpecificDayAndPuzzlePart("1", "1");
 
         Assert.assertEquals("Part 1 - Frequency: 599", actualResult);
     }
 
     @Test(expected = PuzzleNotSolvedYetException.class)
-    public void tryingToGetResultsForANotYetImplementedPartThrowsExceptionTest() {
+    public void tryingToGetResultsForANotYetImplementedPartThrowsExceptionTest() throws FileNotFoundException {
         adventOfCodeService.getResultsForASpecificDayAndPuzzlePart("1", "2");
     }
 
     @Test(expected = PuzzleNotSolvedYetException.class)
-    public void tryingToGetResultsForANotYetImplementedDayThrowsException() {
+    public void tryingToGetResultsForANotYetImplementedDayThrowsException() throws FileNotFoundException {
         adventOfCodeService.getResultsForASpecificDayAndPuzzlePart("2", "1");
     }
 
     @Test(expected = PuzzleNotSolvedYetException.class)
-    public void tryingToGetResultsForAnyOtherPartThrowsException() {
+    public void tryingToGetResultsForAnyOtherPartThrowsException() throws FileNotFoundException {
         adventOfCodeService.getResultsForASpecificDayAndPuzzlePart("1", "3");
     }
 

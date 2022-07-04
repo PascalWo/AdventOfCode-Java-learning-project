@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.FileNotFoundException;
 import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
@@ -28,11 +29,15 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 @RequestMapping(value = "/api/adventOfCode", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class AdventOfCodeController {
 
-    /** Adds a logger to the controller */
+    /**
+     * Adds a logger to the controller
+     */
     private static final Logger logger = LoggerFactory.getLogger(AdventOfCodeController.class);
 
-    /** Implements the {@link AdventOfCodeService}. */
-    private AdventOfCodeService adventOfCodeService;
+    /**
+     * Implements the {@link AdventOfCodeService}.
+     */
+    private final AdventOfCodeService adventOfCodeService;
 
     /**
      * {@code @Autowired} constructor of this controller.
@@ -48,14 +53,16 @@ public class AdventOfCodeController {
      * Handles a GET-Request with the day of the advent calendar and the part to be solved and returns a HATEOAS
      * {@code Resource<>} with the corresponding solution.
      *
-     * @param day the simple day of the advent calendar to be solved
+     * @param day  the simple day of the advent calendar to be solved
      * @param part the part of the puzzle for that day
      * @return a HATEOAS-{@code Resource<>} with the corresponding solution
      */
     @GetMapping
-    public Resource getResultForASpecificDayAndPuzzlePart(@RequestParam(value = "day", defaultValue = "") String day, @RequestParam(value = "part", defaultValue = "") String part) {
-
-        logger.info("The results for day " + day + ", part " + part + " have been requested.");
+    public Resource<String> getResultForASpecificDayAndPuzzlePart(
+            @RequestParam(value = "day", defaultValue = "") String day,
+            @RequestParam(value = "part", defaultValue = "") String part
+    ) throws FileNotFoundException {
+        logger.info("The results for day {} and {} have been requested.", day, part);
 
         return new Resource<>(
                 adventOfCodeService.getResultsForASpecificDayAndPuzzlePart(day, part),
@@ -69,7 +76,7 @@ public class AdventOfCodeController {
      * @return a HATEOAS-{@code Resources<>} with an integer list of all days that have been implemented
      */
     @GetMapping("/daysimplemented")
-    public Resources daysImplemented() {
+    public Resources<Integer> daysImplemented() {
 
         logger.info("A list of implemented days has been requested.");
 
