@@ -12,7 +12,9 @@ import java.util.List;
 @Component
 public class Day02 implements Days {
 
-    /** The puzzle status {@code HashMap} */
+    /**
+     * The puzzle status {@code HashMap}
+     */
     private final HashMap<String, ProblemStatusEnum> problemStatus;
     private final FileReaders fileReaders;
 
@@ -25,7 +27,7 @@ public class Day02 implements Days {
     Day02(FileReaders fileReaders) {
         this.fileReaders = fileReaders;
         this.problemStatus = new HashMap<>();
-        this.problemStatus.put("1", ProblemStatusEnum.UNSOLVED);
+        this.problemStatus.put("1", ProblemStatusEnum.SOLVED);
         this.problemStatus.put("2", ProblemStatusEnum.UNSOLVED);
     }
 
@@ -42,7 +44,7 @@ public class Day02 implements Days {
     @Override
     public String firstPart() {
         String fileName = "src/main/resources/puzzle_input/day2_input.txt";
-        
+
         return "Part 1 - checksum: " + calculateCheckSum(fileReaders.getInputList(fileName));
     }
 
@@ -58,10 +60,43 @@ public class Day02 implements Days {
      * @return the final frequency
      */
 
-    private int calculateCheckSum(List<String> myStringList){
-        int exactlyTwoLetters = 0;
-        int exactlyThreeLetters = 0;
+    private int calculateCheckSum(List<String> myStringList) {
+        int exactlyTwoSameLetters = 0;
+        int exactlyThreeSameLetters = 0;
 
-        return 0;
+        for (String wordFromList : myStringList
+        ) {
+            HashMap<Character, Integer> wordToLetterMap = new HashMap<>();
+            for (Character wordLetter : wordFromList.toCharArray()
+            ) {
+                if (wordToLetterMap.containsKey(wordLetter)) {
+                    int letterValue = wordToLetterMap.get(wordLetter);
+                    wordToLetterMap.put(wordLetter, letterValue + 1);
+                } else {
+                    wordToLetterMap.put(wordLetter, 1);
+                }
+            }
+            boolean hasExactlyTwoLetters = false;
+            boolean hasExactlyThreeLetters = false;
+
+            for (Character wordLetter: wordToLetterMap.keySet()
+                 ) {
+                if (wordToLetterMap.get(wordLetter) == 2){
+                    hasExactlyTwoLetters = true;
+                } else if (wordToLetterMap.get(wordLetter) == 3){
+                    hasExactlyThreeLetters = true;
+                }
+                if (hasExactlyTwoLetters && hasExactlyThreeLetters){
+                    break;
+                }
+            }
+            if(hasExactlyTwoLetters) {
+                exactlyTwoSameLetters++;
+            }
+            if(hasExactlyThreeLetters) {
+                exactlyThreeSameLetters++;
+            }
+        }
+        return exactlyTwoSameLetters * exactlyThreeSameLetters;
     }
 }
