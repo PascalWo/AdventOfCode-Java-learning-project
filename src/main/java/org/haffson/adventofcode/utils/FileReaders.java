@@ -12,13 +12,13 @@ import java.util.*;
 @Component
 public class FileReaders {
 
-    public List<Integer> getInputArray(String fileName) {
+    public List<String> getInputList(String fileName) {
 
         try(Scanner scanner = new Scanner(new File(String.valueOf(fileName)))) {
 
-            ArrayList<Integer> inputIntArray = new ArrayList<>();
+            ArrayList<String> inputIntArray = new ArrayList<>();
             while (scanner.hasNextInt()) {
-                inputIntArray.add(scanner.nextInt());
+                inputIntArray.add(scanner.nextLine());
             }
             return inputIntArray;
 

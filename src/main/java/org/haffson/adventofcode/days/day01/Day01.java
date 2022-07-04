@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Implementation for <i>Day 1: Chronal Calibration</i>.
@@ -47,13 +48,13 @@ public class Day01 implements Days {
     public String firstPart() {
         String fileName = "src/main/resources/puzzle_input/day1_input.txt";
         
-        return "Part 1 - Frequency: " + calculateFrequency(fileReaders.getInputArray(fileName));
+        return "Part 1 - Frequency: " + calculateFrequency(fileReaders.getInputList(fileName));
     }
 
     @Override
     public String secondPart() {
         String fileName = "src/main/resources/puzzle_input/day1_input.txt";
-        return "Part 2 - Frequency: " + calculateFrequencyPart2(fileReaders.getInputArray(fileName));
+        return "Part 2 - Frequency: " + calculateFrequencyPart2(fileReaders.getInputList(fileName));
     }
 
     /**
@@ -62,13 +63,15 @@ public class Day01 implements Days {
      *
      * @return the final frequency
      */
-    private int calculateFrequency(List<Integer> myIntArrayList) {
-        return myIntArrayList.stream()
-                .mapToInt(Integer::intValue)
+    private int calculateFrequency(List<String> myArrayList) {
+
+        return myArrayList.stream().map(Integer::parseInt).collect(Collectors.toList()).stream().mapToInt(Integer::intValue)
                 .sum();
     }
 
-    private int calculateFrequencyPart2(List<Integer> myIntArrayList){
+    private int calculateFrequencyPart2(List<String> myArrayList){
+        List<Integer> myIntArrayList = myArrayList.stream().map(Integer::parseInt).collect(Collectors.toList());
+
         int sum = 0;
         HashSet<Integer> found = new HashSet<>();
         boolean foundDuplicate = false;

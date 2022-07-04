@@ -9,7 +9,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import static org.mockito.Mockito.*;
 
@@ -31,8 +30,8 @@ public class Day01Test {
     public void test_firstPart_returnsExpectedResult() {
         //arrange
         Day01 day01 = new Day01(fileReaders);
-        when(fileReaders.getInputArray("src/main/resources/puzzle_input/day1_input.txt"))
-                .thenReturn(new ArrayList<>(Arrays.asList(1,2,3,-4)));
+        when(fileReaders.getInputList("src/main/resources/puzzle_input/day1_input.txt"))
+                .thenReturn(new ArrayList<>(Arrays.asList("1","2","3","-4")));
 
         String expectedResult = "Part 1 - Frequency: " + 2;
 
@@ -47,8 +46,8 @@ public class Day01Test {
     public void test_secondPart_returnsExpectedResult() {
         //arrange
         Day01 day01 = new Day01(fileReaders);
-        when(fileReaders.getInputArray("src/main/resources/puzzle_input/day1_input.txt"))
-                .thenReturn(new ArrayList<>(Arrays.asList(3,3,4,-2,-4)));
+        when(fileReaders.getInputList("src/main/resources/puzzle_input/day1_input.txt"))
+                .thenReturn(new ArrayList<>(Arrays.asList("3","3","4","-2","-4")));
 
         String expectedResult = "Part 2 - Frequency: " + 10;
 
