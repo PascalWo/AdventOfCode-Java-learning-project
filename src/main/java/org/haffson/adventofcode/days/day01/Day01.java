@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -29,7 +30,7 @@ public class Day01 implements Days {
         this.fileReaders = fileReaders;
         this.problemStatus = new HashMap<>();
         this.problemStatus.put("1", ProblemStatusEnum.SOLVED);
-        this.problemStatus.put("2", ProblemStatusEnum.UNSOLVED);
+        this.problemStatus.put("2", ProblemStatusEnum.SOLVED);
     }
 
     @Override
@@ -51,7 +52,8 @@ public class Day01 implements Days {
 
     @Override
     public String secondPart() {
-        return null;
+        String fileName = "src/main/resources/puzzle_input/day1_input.txt";
+        return "Part 2 - Frequency: " + calculateFrequencyPart2(fileReaders.getInputArray(fileName));
     }
 
     /**
@@ -64,5 +66,23 @@ public class Day01 implements Days {
         return myIntArrayList.stream()
                 .mapToInt(Integer::intValue)
                 .sum();
+    }
+
+    private int calculateFrequencyPart2(List<Integer> myIntArrayList){
+        int sum = 0;
+        HashSet<Integer> found = new HashSet<>();
+        boolean foundDuplicate = false;
+        while (!foundDuplicate) {
+            for (int f : myIntArrayList) {
+                sum += f;
+                if (found.contains(sum)) {
+                    foundDuplicate = true;
+                    break;
+                } else {
+                    found.add(sum);
+                }
+            }
+        }
+        return sum;
     }
 }
