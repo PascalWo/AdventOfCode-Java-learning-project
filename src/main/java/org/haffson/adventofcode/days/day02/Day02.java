@@ -25,7 +25,7 @@ public class Day02 implements Days {
      * @param fileReaders {@code @Autowired} fileReader //TODO: inject what you need
      */
     @Autowired
-    Day02(FileReaders fileReaders) {
+    Day02(final FileReaders fileReaders) {
         this.fileReaders = fileReaders;
         this.problemStatus = new HashMap<>();
         this.problemStatus.put("1", ProblemStatusEnum.SOLVED);
@@ -44,14 +44,14 @@ public class Day02 implements Days {
 
     @Override
     public String firstPart() {
-        String fileName = "src/main/resources/puzzle_input/day2_input.txt";
+        final String fileName = "src/main/resources/puzzle_input/day2_input.txt";
 
         return "Part 1 - checksum: " + calculateCheckSum(fileReaders.getInputList(fileName));
     }
 
     @Override
     public String secondPart() {
-        String fileName = "src/main/resources/puzzle_input/day2_input.txt";
+        final String fileName = "src/main/resources/puzzle_input/day2_input.txt";
         return "Part 2 - common letters: " + calculateCommonLetters(fileReaders.getInputList(fileName));
     }
 
@@ -62,13 +62,13 @@ public class Day02 implements Days {
      * @return the final frequency
      */
 
-    private int calculateCheckSum(List<String> myStringList) {
-        int[] countSameLetterArray = new int[2];
+    private int calculateCheckSum(final List<String> myStringList) {
+        final int[] countSameLetterArray = new int[2];
 
         myStringList.forEach(word -> {
-            Map<Integer, Integer> letterMap = new HashMap<>();
+            final Map<Integer, Integer> letterMap = new HashMap<>();
             word.chars().forEach(wordCharacter -> {
-                Integer numberOfLetter = letterMap.get(wordCharacter);
+                final Integer numberOfLetter = letterMap.get(wordCharacter);
                 letterMap.put(wordCharacter, numberOfLetter != null ? numberOfLetter + 1 : 1);
             });
             countSameLetterArray[0] += letterMap.entrySet().stream().anyMatch(e -> e.getValue() == 2) ? 1 : 0;
@@ -77,21 +77,22 @@ public class Day02 implements Days {
         return countSameLetterArray[0] * countSameLetterArray[1];
     }
 
-    private String calculateCommonLetters(List<String> myStringList) {
-        for (int i = 0; i < myStringList.size(); i++) {
-            String word1 = myStringList.get(i);
-            for (int j = i + 1; j < myStringList.size(); j++) {
-                String word2 = myStringList.get(j);
-                int count = 0;
-                int position = 0;
-                String stringBuilder = compareWordsForEqualLetters(word1, word2, count, position);
+    private String calculateCommonLetters(final List<String> myStringList) {
+        final int stringListSize = myStringList.size();
+        for (int i = 0; i < stringListSize; i++) {
+            final String word1 = myStringList.get(i);
+            for (int j = i + 1; j < stringListSize; j++) {
+                final String word2 = myStringList.get(j);
+                final String stringBuilder = compareWordsForEqualLetters(word1, word2);
                 if (stringBuilder != null) return stringBuilder;
             }
         }
         return null;
     }
 
-    private String compareWordsForEqualLetters(String word1, String word2, int count, int position) {
+    private String compareWordsForEqualLetters(final String word1, final String word2) {
+        int count = 0;
+        int position = 0;
         for (int k = 0; k < word1.length(); k++) {
             if (word1.charAt(k) != word2.charAt(k)) {
                 count++;
@@ -100,7 +101,7 @@ public class Day02 implements Days {
             }
         }
         if (count == 1) {
-            StringBuilder stringBuilder = new StringBuilder(word1);
+            final StringBuilder stringBuilder = new StringBuilder(word1);
             stringBuilder.deleteCharAt(position);
             return stringBuilder.toString();
         }
