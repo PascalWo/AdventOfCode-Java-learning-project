@@ -78,31 +78,32 @@ public class Day02 implements Days {
     }
 
     private String calculateCommonLetters(List<String> myStringList) {
-
         for (int i = 0; i < myStringList.size(); i++) {
             String word1 = myStringList.get(i);
             for (int j = i + 1; j < myStringList.size(); j++) {
                 String word2 = myStringList.get(j);
                 int count = 0;
                 int position = 0;
-                for (int k = 0; k < word1.length(); k++) {
-                    if (word1.charAt(k) != word2.charAt(k)) {
-                        count++;
-                        if (count > 1) break;
-                        position = k;
-                    }
-                }
-                if (count == 1) {
-                    StringBuilder stringBuilder = new StringBuilder(word1);
-                    stringBuilder.deleteCharAt(position);
-                    return stringBuilder.toString();
-                }
+                String stringBuilder = compareWordsForEqualLetters(word1, word2, count, position);
+                if (stringBuilder != null) return stringBuilder;
             }
         }
         return null;
     }
 
-    private String calculateCommonLettersRefactored(List<String> myStringList) {
+    private String compareWordsForEqualLetters(String word1, String word2, int count, int position) {
+        for (int k = 0; k < word1.length(); k++) {
+            if (word1.charAt(k) != word2.charAt(k)) {
+                count++;
+                if (count > 1) break;
+                position = k;
+            }
+        }
+        if (count == 1) {
+            StringBuilder stringBuilder = new StringBuilder(word1);
+            stringBuilder.deleteCharAt(position);
+            return stringBuilder.toString();
+        }
         return null;
     }
 }
