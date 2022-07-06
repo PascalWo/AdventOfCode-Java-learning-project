@@ -54,7 +54,8 @@ public class Day03 implements Days {
 
     @Override
     public String secondPart() {
-        return "Part 2: " + null;
+        final String fileName = "src/main/resources/puzzle_input/day3_input.txt";
+        return "Part 2 - not overlapping claim: " + calculateNotOverlappingClaim(fileReaders.getInputList(fileName));
     }
 
     /**
@@ -96,7 +97,7 @@ public class Day03 implements Days {
             final String[] topSpace = spaces[1].split(":");
             final String[] recSize = split2[2].split("x");
 
-            final String currentId = splitId[0];
+            final int currentId = Integer.parseInt(splitId[0]);
             final int leftSpace = Integer.parseInt(spaces[0]);
             final int topSPace = Integer.parseInt(topSpace[0]);
             final int width = Integer.parseInt(recSize[0]);
@@ -106,4 +107,51 @@ public class Day03 implements Days {
         }
         return rectangleClaimList;
     }
+
+    private int calculateNotOverlappingClaim(final List<String> inputList) {
+        final List<RectangleClaim> rectangleClaimList = convertStringToRectangleList(inputList);
+        final Integer[] overlapping = new Integer[rectangleClaimList.size()];
+
+        final String[][] fabric = new String[1000][1000];
+        rectangleClaimList.forEach(claim ->{
+            overlapping[claim.getId()-1]=0;
+            IntStream.range(claim.getLeftSpace(), claim.getLeftSpace() + claim.getWidth())
+                    .forEach(i
+                            -> IntStream.range(claim.getTopSpace(), claim.getTopSpace() + claim.getHeight())
+                            .forEach(j
+                                    ->  {
+                                if (fabric[i][j] == null) {
+                                    fabric [i][j] = String.valueOf(claim.getId());
+                                } else {
+                                    overlapping[claim.getId()-1]++;
+                                    overlapping[Integer.parseInt(fabric[i][j])-1]++;
+                                }
+                            }));});
+
+        return Arrays.asList(overlapping).indexOf(0);
+    }
+
+
+//    private int calculateNotOverlappingClaim(final List<String> inputList) {
+//        final List<RectangleClaim> rectangleClaimList = convertStringToRectangleList(inputList);
+//        final Integer[] overlapping = new Integer[rectangleClaimList.size()];
+//
+//        final String[][] fabric = new String[1000][1000];
+//        rectangleClaimList.forEach(claim ->{
+//
+//            IntStream.range(claim.getLeftSpace(), claim.getLeftSpace() + claim.getWidth())
+//                    .forEach(i
+//                            -> IntStream.range(claim.getTopSpace(), claim.getTopSpace() + claim.getHeight())
+//                            .forEach(j
+//                                    ->  {
+//                                if (fabric[i][j] == null) {
+//                                    fabric [i][j] = String.valueOf(rectangleClaimList.get(0).getId());
+//                                } else {
+//                                    overlapping[rectangleClaimList.get(0).getId()-1]++;
+//                                    overlapping[Integer.parseInt(fabric[i][j])-1]++;
+//                                }
+//                            }))});
+//
+//        return Arrays.asList(overlapping).indexOf(0);
+//    }
 }
