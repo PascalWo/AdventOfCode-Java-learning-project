@@ -3,13 +3,13 @@ package org.haffson.adventofcode.days.day03;
 import java.util.Objects;
 
 public class RectangleClaim {
-    private int id;
-    private int leftSpace;
-    private int topSpace;
-    private int width;
-    private int height;
+    private final String id;
+    private final int leftSpace;
+    private final int topSpace;
+    private final int width;
+    private final int height;
 
-    public RectangleClaim(final int id, final int leftSpace, final int topSpace, final int width, final int height) {
+    public RectangleClaim(final String id, final int leftSpace, final int topSpace, final int width, final int height) {
         this.id = id;
         this.leftSpace = leftSpace;
         this.topSpace = topSpace;
@@ -17,44 +17,40 @@ public class RectangleClaim {
         this.height = height;
     }
 
-    public int getId() {
-        return id;
-    }
+    public static RectangleClaim of(String input){
+        final String[] split1 = input.split("@");
+        final String[] splitId = split1[0].split("#")[1].split(" ");
+        final String[] split2 = split1[1].split(" ");
+        final String[] spaces = split2[1].split(",");
+        final String[] topSpace = spaces[1].split(":");
+        final String[] recSize = split2[2].split("x");
 
-    public void setId(final int id) {
-        this.id = id;
+        final String currentId = splitId[0];
+        final int leftSpace = Integer.parseInt(spaces[0]);
+        final int topSPace = Integer.parseInt(topSpace[0]);
+        final int width = Integer.parseInt(recSize[0]);
+        final int height = Integer.parseInt(recSize[1]);
+
+        return new RectangleClaim(currentId, leftSpace, topSPace, width, height);
+    }
+    public String getId() {
+        return id;
     }
 
     public int getLeftSpace() {
         return leftSpace;
     }
 
-    public void setLeftSpace(final int leftSpace) {
-        this.leftSpace = leftSpace;
-    }
-
     public int getTopSpace() {
         return topSpace;
-    }
-
-    public void setTopSpace(final int topSpace) {
-        this.topSpace = topSpace;
     }
 
     public int getWidth() {
         return width;
     }
 
-    public void setWidth(final int width) {
-        this.width = width;
-    }
-
     public int getHeight() {
         return height;
-    }
-
-    public void setHeight(final int height) {
-        this.height = height;
     }
 
     @Override
@@ -62,7 +58,7 @@ public class RectangleClaim {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         final RectangleClaim that = (RectangleClaim) o;
-        return id == that.id && leftSpace == that.leftSpace && topSpace == that.topSpace && width == that.width && height == that.height;
+        return leftSpace == that.leftSpace && topSpace == that.topSpace && width == that.width && height == that.height && Objects.equals(id, that.id);
     }
 
     @Override
@@ -73,7 +69,7 @@ public class RectangleClaim {
     @Override
     public String toString() {
         return "RectangleClaim{" +
-                "id=" + id +
+                "id='" + id + '\'' +
                 ", leftSpace=" + leftSpace +
                 ", topSpace=" + topSpace +
                 ", width=" + width +
