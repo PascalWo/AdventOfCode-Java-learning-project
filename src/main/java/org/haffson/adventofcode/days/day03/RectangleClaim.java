@@ -17,6 +17,22 @@ public class RectangleClaim {
         this.height = height;
     }
 
+    public static RectangleClaim of(String input){
+        final String[] split1 = input.split("@");
+        final String[] splitId = split1[0].split("#")[1].split(" ");
+        final String[] split2 = split1[1].split(" ");
+        final String[] spaces = split2[1].split(",");
+        final String[] topSpace = spaces[1].split(":");
+        final String[] recSize = split2[2].split("x");
+
+        final String currentId = splitId[0];
+        final int leftSpace = Integer.parseInt(spaces[0]);
+        final int topSPace = Integer.parseInt(topSpace[0]);
+        final int width = Integer.parseInt(recSize[0]);
+        final int height = Integer.parseInt(recSize[1]);
+
+        return new RectangleClaim(currentId, leftSpace, topSPace, width, height);
+    }
     public String getId() {
         return id;
     }

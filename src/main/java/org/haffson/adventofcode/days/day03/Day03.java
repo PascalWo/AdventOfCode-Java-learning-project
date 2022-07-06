@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 
@@ -59,9 +60,9 @@ public class Day03 implements Days {
 
     /**
      * Primary method for Day 3, Part 1.
-     * Calculates the final frequency as the sum of all frequencies.
+     * Calculates the count of overlapping rectangle coordinates.
      *
-     * @return the final frequency
+     * @return the final count of overlapping inches
      */
 
 
@@ -85,25 +86,7 @@ public class Day03 implements Days {
     }
 
     List<RectangleClaim> convertStringToRectangleList(final List<String> stringList) {
-        final List<RectangleClaim> rectangleClaimList = new ArrayList<>();
 
-        for (final String str : stringList
-        ) {
-            final String[] split1 = str.split("@");
-            final String[] splitId = split1[0].split("#")[1].split(" ");
-            final String[] split2 = split1[1].split(" ");
-            final String[] spaces = split2[1].split(",");
-            final String[] topSpace = spaces[1].split(":");
-            final String[] recSize = split2[2].split("x");
-
-            final String currentId = splitId[0];
-            final int leftSpace = Integer.parseInt(spaces[0]);
-            final int topSPace = Integer.parseInt(topSpace[0]);
-            final int width = Integer.parseInt(recSize[0]);
-            final int height = Integer.parseInt(recSize[1]);
-
-            rectangleClaimList.add(new RectangleClaim(currentId, leftSpace, topSPace, width, height));
-        }
-        return rectangleClaimList;
+        return stringList.stream().map(RectangleClaim::of).collect(Collectors.toList());
     }
 }
