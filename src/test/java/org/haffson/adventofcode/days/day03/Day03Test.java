@@ -10,6 +10,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import static org.mockito.Mockito.when;
 
@@ -36,6 +38,7 @@ public class Day03Test {
                         "#1 @ 1,3: 4x4",
                         "#2 @ 3,1: 4x4",
                         "#3 @ 5,5: 2x2",
+                        "#4 @ 1,1: 6x6",
                         "#5 @ 3,2: 3x3"
                 )));
 
@@ -48,5 +51,25 @@ public class Day03Test {
         Assert.assertEquals(expectedResult, actualResult);
     }
 
+    @Test
+    public void testConvertStringToRectangleList_returnListOfRectangles() {
+        //arrange
+        final Day03 day03 = new Day03(fileReaders);
+        final List<String> stringList = Arrays.asList(
+                "#1 @ 1,3: 4x4",
+                "#2 @ 3,1: 4x4",
+                "#3 @ 5,5: 2x2"
+        );
 
+        final List<RectangleClaim> expectedResult = Arrays.asList(
+                new RectangleClaim("1", 1, 3, 4, 4),
+                new RectangleClaim("2", 3, 1, 4, 4),
+                new RectangleClaim("3", 5, 5, 2, 2));
+
+        //act
+        final List<RectangleClaim> actualResult = day03.convertStringToRectangleList(stringList);
+
+        //assert
+        Assert.assertEquals(expectedResult, actualResult);
+    }
 }
