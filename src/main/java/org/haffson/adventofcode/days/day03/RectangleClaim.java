@@ -4,12 +4,12 @@ import java.util.Objects;
 
 public class RectangleClaim {
     private String id;
-    private long leftSpace;
-    private long topSpace;
-    private long width;
-    private long height;
+    private int leftSpace;
+    private int topSpace;
+    private int width;
+    private int height;
 
-    public RectangleClaim(final String id, final long leftSpace, final long topSpace, final long width, final long height) {
+    public RectangleClaim(final String id, final int leftSpace, final int topSpace, final int width, final int height) {
         this.id = id;
         this.leftSpace = leftSpace;
         this.topSpace = topSpace;
@@ -25,35 +25,35 @@ public class RectangleClaim {
         this.id = id;
     }
 
-    public long getLeftSpace() {
+    public int getLeftSpace() {
         return leftSpace;
     }
 
-    public void setLeftSpace(final long leftSpace) {
+    public void setLeftSpace(final int leftSpace) {
         this.leftSpace = leftSpace;
     }
 
-    public long getTopSpace() {
+    public int getTopSpace() {
         return topSpace;
     }
 
-    public void setTopSpace(final long topSpace) {
+    public void setTopSpace(final int topSpace) {
         this.topSpace = topSpace;
     }
 
-    public long getWidth() {
+    public int getWidth() {
         return width;
     }
 
-    public void setWidth(final long width) {
+    public void setWidth(final int width) {
         this.width = width;
     }
 
-    public long getHeight() {
+    public int getHeight() {
         return height;
     }
 
-    public void setHeight(final long height) {
+    public void setHeight(final int height) {
         this.height = height;
     }
 
