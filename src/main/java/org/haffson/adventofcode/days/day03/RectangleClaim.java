@@ -3,11 +3,11 @@ package org.haffson.adventofcode.days.day03;
 import java.util.Objects;
 
 public class RectangleClaim {
-    private String id;
-    private int leftSpace;
-    private int topSpace;
-    private int width;
-    private int height;
+    private final String id;
+    private final int leftSpace;
+    private final int topSpace;
+    private final int width;
+    private final int height;
 
     public RectangleClaim(final String id, final int leftSpace, final int topSpace, final int width, final int height) {
         this.id = id;
@@ -21,40 +21,20 @@ public class RectangleClaim {
         return id;
     }
 
-    public void setId(final String id) {
-        this.id = id;
-    }
-
     public int getLeftSpace() {
         return leftSpace;
-    }
-
-    public void setLeftSpace(final int leftSpace) {
-        this.leftSpace = leftSpace;
     }
 
     public int getTopSpace() {
         return topSpace;
     }
 
-    public void setTopSpace(final int topSpace) {
-        this.topSpace = topSpace;
-    }
-
     public int getWidth() {
         return width;
     }
 
-    public void setWidth(final int width) {
-        this.width = width;
-    }
-
     public int getHeight() {
         return height;
-    }
-
-    public void setHeight(final int height) {
-        this.height = height;
     }
 
     @Override
