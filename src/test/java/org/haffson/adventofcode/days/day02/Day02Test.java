@@ -42,4 +42,20 @@ public class Day02Test {
         //assert
         Assert.assertEquals(expectedResult, actualResult);
     }
+
+    @Test
+    public void test_secondPart_returnsExpectedResult() {
+        //arrange
+        Day02 day02 = new Day02(fileReaders);
+        when(fileReaders.getInputList("src/main/resources/puzzle_input/day2_input.txt"))
+                .thenReturn(new ArrayList<>(Arrays.asList("abcde","fghij", "klmno", "pqrst", "fguij", "axcye", "wvxyz")));
+
+        String expectedResult = "Part 2 - common letters: " + "fgij";
+
+        //act
+        String actualResult = day02.secondPart();
+
+        //assert
+        Assert.assertEquals(expectedResult, actualResult);
+    }
 }
