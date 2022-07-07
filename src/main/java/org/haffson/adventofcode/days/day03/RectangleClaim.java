@@ -2,6 +2,12 @@ package org.haffson.adventofcode.days.day03;
 
 import java.util.Objects;
 
+/**
+ * Primary class for Day 3.
+ * Is used to get rectangles claims out of the string-list.
+ * It helps to compare the different claims.
+ */
+
 public class RectangleClaim {
     private final String id;
     private final int leftSpace;
@@ -17,7 +23,14 @@ public class RectangleClaim {
         this.height = height;
     }
 
-    public static RectangleClaim of(String input){
+    public int getRightXCoordinate(){
+        return leftSpace+width;
+    }
+
+    public int getBottomYCoordinate(){
+        return topSpace+height;
+    }
+    public static RectangleClaim of(final String input){
         final String[] split1 = input.split("@");
         final String[] splitId = split1[0].split("#")[1].split(" ");
         final String[] split2 = split1[1].split(" ");
