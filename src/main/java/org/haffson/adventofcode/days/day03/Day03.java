@@ -33,7 +33,7 @@ public class Day03 implements Days {
         this.fileReaders = fileReaders;
         this.problemStatus = new HashMap<>();
         this.problemStatus.put("1", ProblemStatusEnum.SOLVED);
-        this.problemStatus.put("2", ProblemStatusEnum.UNSOLVED);
+        this.problemStatus.put("2", ProblemStatusEnum.SOLVED);
     }
 
     @Override
@@ -93,48 +93,32 @@ public class Day03 implements Days {
 
     private int calculateNotOverlappingClaim(final List<String> inputList) {
         final List<RectangleClaim> rectangleClaimList = convertStringToRectangleList(inputList);
-        final Integer[] overlapping = new Integer[rectangleClaimList.size()];
 
-        final String[][] fabric = new String[1000][1000];
-        rectangleClaimList.forEach(claim ->{
-            overlapping[claim.getId()-1]=0;
-            IntStream.range(claim.getLeftSpace(), claim.getLeftSpace() + claim.getWidth())
-                    .forEach(i
-                            -> IntStream.range(claim.getTopSpace(), claim.getTopSpace() + claim.getHeight())
-                            .forEach(j
-                                    ->  {
-                                if (fabric[i][j] == null) {
-                                    fabric [i][j] = String.valueOf(claim.getId());
-                                } else {
-                                    overlapping[claim.getId()-1]++;
-                                    overlapping[Integer.parseInt(fabric[i][j])-1]++;
-                                }
-                            }));});
+        final int[][] fabric = new int[1000][1000];
 
-        return Arrays.asList(overlapping).indexOf(0);
+        rectangleClaimList.forEach(claim ->
+                IntStream.range(claim.getLeftSpace(), claim.getLeftSpace() + claim.getWidth())
+                        .forEach(i
+                                -> IntStream.range(claim.getTopSpace(), claim.getTopSpace() + claim.getHeight())
+                                .forEach(j
+                                        -> fabric[i][j] = fabric[i][j] == 0 ? Integer.parseInt(claim.getId()) : -1)));
+
+
+        final int[] intactClaimId = {-1};
+        rectangleClaimList .forEach(claim ->{
+            boolean stillFree = true;
+            for (int x = claim.getLeftSpace(); x < claim.getLeftSpace() + claim.getWidth() && stillFree; x++){
+                for (int y = claim.getTopSpace(); y < claim.getTopSpace() + claim.getHeight() && stillFree ; y++) {
+                    if (fabric[x][y] != Integer.parseInt(claim.getId())){
+                        stillFree = false;
+                        break;
+                    }else if ((x == (claim.getLeftSpace() + claim.getWidth() -1)) && (y == (claim.getTopSpace() + claim.getHeight() -1)) && stillFree){
+                        intactClaimId[0] = Integer.parseInt(claim.getId());
+                    }
+                }
+            }
+        });
+
+        return intactClaimId[0];
     }
-
-
-//    private int calculateNotOverlappingClaim(final List<String> inputList) {
-//        final List<RectangleClaim> rectangleClaimList = convertStringToRectangleList(inputList);
-//        final Integer[] overlapping = new Integer[rectangleClaimList.size()];
-//
-//        final String[][] fabric = new String[1000][1000];
-//        rectangleClaimList.forEach(claim ->{
-//
-//            IntStream.range(claim.getLeftSpace(), claim.getLeftSpace() + claim.getWidth())
-//                    .forEach(i
-//                            -> IntStream.range(claim.getTopSpace(), claim.getTopSpace() + claim.getHeight())
-//                            .forEach(j
-//                                    ->  {
-//                                if (fabric[i][j] == null) {
-//                                    fabric [i][j] = String.valueOf(rectangleClaimList.get(0).getId());
-//                                } else {
-//                                    overlapping[rectangleClaimList.get(0).getId()-1]++;
-//                                    overlapping[Integer.parseInt(fabric[i][j])-1]++;
-//                                }
-//                            }))});
-//
-//        return Arrays.asList(overlapping).indexOf(0);
-//    }
 }

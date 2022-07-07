@@ -62,9 +62,9 @@ public class Day03Test {
         );
 
         final List<RectangleClaim> expectedResult = Arrays.asList(
-                new RectangleClaim(1, 1, 3, 4, 4),
-                new RectangleClaim(2, 3, 1, 4, 4),
-                new RectangleClaim(3, 5, 5, 2, 2));
+                new RectangleClaim("1", 1, 3, 4, 4),
+                new RectangleClaim("2", 3, 1, 4, 4),
+                new RectangleClaim("3", 5, 5, 2, 2));
 
         //act
         final List<RectangleClaim> actualResult = day03.convertStringToRectangleList(stringList);
