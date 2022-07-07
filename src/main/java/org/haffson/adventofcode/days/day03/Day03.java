@@ -65,24 +65,21 @@ public class Day03 implements Days {
      * @return the final count of overlapping inches
      */
 
-
     private long calculateClaims(final List<String> myArrayList) {
         final List<RectangleClaim> rectangleClaimList = convertStringToRectangleList(myArrayList);
 
         final String[][] fabric = new String[1000][1000];
         rectangleClaimList.forEach(claim ->
-                IntStream.range(claim.getLeftSpace(), claim.getLeftSpace() + claim.getWidth())
+                IntStream.range(claim.getLeftSpace(), claim.getRightXCoordinate())
                         .forEach(i
-                                -> IntStream.range(claim.getTopSpace(), claim.getTopSpace() + claim.getHeight())
+                                -> IntStream.range(claim.getTopSpace(), claim.getBottomYCoordinate())
                                 .forEach(j
                                         -> fabric[i][j] = fabric[i][j] == null ? "0" : "X")));
-        return Arrays.stream(fabric)
-                .mapToLong(claims ->
-                        Arrays.stream(claims)
-                                .filter("X"::equals)
-                                .count())
-                .sum();
 
+        return Arrays.stream(fabric)
+                .flatMap(Arrays::stream)
+                .filter("X"::equals)
+                .count();
     }
 
     List<RectangleClaim> convertStringToRectangleList(final List<String> stringList) {
