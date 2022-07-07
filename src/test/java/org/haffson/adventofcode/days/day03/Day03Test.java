@@ -42,7 +42,7 @@ public class Day03Test {
                         "#5 @ 3,2: 3x3"
                 )));
 
-        final String expectedResult = "Part 1 - two or more claims: " + 9;
+        final String expectedResult = "Part 1 - two or more claims: " + 32;
 
         //act
         final String actualResult = day03.firstPart();
