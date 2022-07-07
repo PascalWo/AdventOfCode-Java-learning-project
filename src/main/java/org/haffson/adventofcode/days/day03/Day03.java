@@ -68,14 +68,7 @@ public class Day03 implements Days {
 
     private long calculateClaims(final List<String> myArrayList) {
         final List<RectangleClaim> rectangleClaimList = convertStringToRectangleList(myArrayList);
-
-        final String[][] fabric = new String[1000][1000];
-        rectangleClaimList.forEach(claim ->
-                IntStream.range(claim.getLeftSpace(), claim.getRightXCoordinate())
-                        .forEach(i
-                                -> IntStream.range(claim.getTopSpace(), claim.getBottomYCoordinate())
-                                .forEach(j
-                                        -> fabric[i][j] = fabric[i][j] == null ? "0" : "X")));
+        final String[][] fabric = get2DClaimArray(rectangleClaimList);
 
         return Arrays.stream(fabric)
                 .flatMap(Arrays::stream)
@@ -90,32 +83,34 @@ public class Day03 implements Days {
 
     private int calculateNotOverlappingClaim(final List<String> inputList) {
         final List<RectangleClaim> rectangleClaimList = convertStringToRectangleList(inputList);
-
-        final int[][] fabric = new int[1000][1000];
-
-        rectangleClaimList.forEach(claim ->
-                IntStream.range(claim.getLeftSpace(), claim.getLeftSpace() + claim.getWidth())
-                        .forEach(i
-                                -> IntStream.range(claim.getTopSpace(), claim.getTopSpace() + claim.getHeight())
-                                .forEach(j
-                                        -> fabric[i][j] = fabric[i][j] == 0 ? Integer.parseInt(claim.getId()) : -1)));
-
+        final String[][] fabric = get2DClaimArray(rectangleClaimList);
 
         final int[] intactClaimId = {-1};
         rectangleClaimList .forEach(claim ->{
             boolean stillFree = true;
-            for (int x = claim.getLeftSpace(); x < claim.getLeftSpace() + claim.getWidth() && stillFree; x++){
-                for (int y = claim.getTopSpace(); y < claim.getTopSpace() + claim.getHeight() && stillFree ; y++) {
-                    if (fabric[x][y] != Integer.parseInt(claim.getId())){
+            for (int x = claim.getLeftSpace(); x < claim.getRightXCoordinate() && stillFree; x++){
+                for (int y = claim.getTopSpace(); y < claim.getBottomYCoordinate(); y++) {
+                    if (!Objects.equals(fabric[x][y], claim.getId())){
                         stillFree = false;
                         break;
-                    }else if ((x == (claim.getLeftSpace() + claim.getWidth() -1)) && (y == (claim.getTopSpace() + claim.getHeight() -1)) && stillFree){
+                    }else if (x == claim.getRightXCoordinate() - 1 && y == claim.getBottomYCoordinate() - 1){
                         intactClaimId[0] = Integer.parseInt(claim.getId());
                     }
                 }
             }
         });
-
         return intactClaimId[0];
+    }
+
+    private String[][] get2DClaimArray(final List<RectangleClaim> claimList){
+        final String[][] fabric = new String[1000][1000];
+
+        claimList.forEach(claim ->
+                IntStream.range(claim.getLeftSpace(), claim.getRightXCoordinate())
+                        .forEach(i
+                                -> IntStream.range(claim.getTopSpace(), claim.getBottomYCoordinate())
+                                .forEach(j
+                                        -> fabric[i][j] = fabric[i][j] == null ? claim.getId() : "X")));
+        return fabric;
     }
 }
