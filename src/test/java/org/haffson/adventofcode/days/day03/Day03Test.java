@@ -72,4 +72,25 @@ public class Day03Test {
         //assert
         Assert.assertEquals(expectedResult, actualResult);
     }
+
+    @Test
+    public void test_secondPart_returnsExpectedResult() {
+        //arrange
+        final Day03 day03 = new Day03(fileReaders);
+        when(fileReaders.getInputList("src/main/resources/puzzle_input/day3_input.txt"))
+                .thenReturn(new ArrayList<>(Arrays.asList(
+                        "#1 @ 1,3: 4x4",
+                        "#2 @ 3,1: 4x4",
+                        "#3 @ 5,5: 2x2",
+                        "#5 @ 3,2: 3x3"
+                )));
+
+        final String expectedResult = "Part 2 - not overlapping claim: " + 3;
+
+        //act
+        final String actualResult = day03.secondPart();
+
+        //assert
+        Assert.assertEquals(expectedResult, actualResult);
+    }
 }
