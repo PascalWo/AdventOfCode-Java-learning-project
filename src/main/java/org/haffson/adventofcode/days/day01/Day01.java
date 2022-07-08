@@ -8,6 +8,10 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Implementation for <i>Day 1: Chronal Calibration</i>.
@@ -15,9 +19,17 @@ import java.util.Map;
 @Component
 public class Day01 implements Days {
 
+    /** The puzzle status {@code HashMap} */
     private final Map<Integer, ProblemStatusEnum> problemStatus;
+    private final FileReaders fileReaders;
 
-    public Day01(FileReaders fileReaders) {
+    /**
+     * Causes the input file to be parsed into the frequencies array ({@code frequencies}).
+     *
+     * @param fileReaders {@code @Autowired} fileReader //TODO: inject what you need
+     */
+    public Day01(final FileReaders fileReaders) {
+        this.fileReaders = fileReaders;
         this.problemStatus = ProblemStatus.getProblemStatusMap(1, 2,
                 ProblemStatusEnum.SOLVED, ProblemStatusEnum.SOLVED);
     }
@@ -34,12 +46,15 @@ public class Day01 implements Days {
 
     @Override
     public String firstPart() {
-        return "Part 1 - Frequency: " + calculateFrequency();
+        final String fileName = "src/main/resources/puzzle_input/day1_input.txt";
+
+        return "Part 1 - Frequency: " + calculateFrequency(fileReaders.getInputList(fileName));
     }
 
     @Override
     public String secondPart() {
-        return null;
+        final String fileName = "src/main/resources/puzzle_input/day1_input.txt";
+        return "Part 2 - Frequency: " + calculateFrequencyPart2(fileReaders.getInputList(fileName));
     }
 
     /**
@@ -48,7 +63,29 @@ public class Day01 implements Days {
      *
      * @return the final frequency
      */
-    private int calculateFrequency() {
-        return 0;
+    private int calculateFrequency(final List<String> myArrayList) {
+
+        return myArrayList.stream().map(Integer::parseInt).toList().stream().mapToInt(Integer::intValue)
+                .sum();
+    }
+
+    private int calculateFrequencyPart2(final List<String> myArrayList){
+        final List<Integer> myIntArrayList = myArrayList.stream().map(Integer::parseInt).toList();
+
+        int sumOfLookedUpListEntries = 0;
+        final HashSet<Integer> previousSums = new HashSet<>();
+        boolean foundDuplicate = false;
+        while (!foundDuplicate) {
+            for (final int f : myIntArrayList) {
+                sumOfLookedUpListEntries += f;
+                if (previousSums.contains(sumOfLookedUpListEntries)) {
+                    foundDuplicate = true;
+                    break;
+                } else {
+                    previousSums.add(sumOfLookedUpListEntries);
+                }
+            }
+        }
+        return sumOfLookedUpListEntries;
     }
 }

@@ -31,20 +31,20 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(AdventOfCodeController.class)
 @AutoConfigureRestDocs(outputDir = "target/snippets")
-public class AdventOfCodeControllerTest {
+class AdventOfCodeControllerTest {
 
     @MockBean
     AdventOfCodeService adventOfCodeService;
 
-    private String baseUrl = "/api/adventOfCode";
+    private final String baseUrl = "/api/adventOfCode";
 
-    private MediaType contentType = new MediaType("application", "hal+json", Charset.forName("UTF-8"));
+    private final MediaType contentType = new MediaType("application", "hal+json", Charset.forName("UTF-8"));
 
-    private Integer day1 = 1;
-    private Integer part1 = 1;
-    private Integer part2 = 2;
-    private String resultDay1Part1 = "Product 1: " + 326211;
-    private String resultDay1Part2 = "Product 2: " + 326211;
+    private final Integer day1 = 1;
+    private final Integer part1 = 1;
+    private final Integer part2 = 2;
+    private final String resultDay1Part1 = "Product 1: " + 326211;
+    private final String resultDay1Part2 = "Product 2: " + 326211;
 
     @Autowired
     private MockMvc mvc;
@@ -52,12 +52,12 @@ public class AdventOfCodeControllerTest {
 
     @BeforeEach
     void setup() {
-        Days day01Stub = Mockito.mock(Days.class);
-        Days day02Stub = Mockito.mock(Days.class);
+        final Days day01Stub = Mockito.mock(Days.class);
+        final Days day02Stub = Mockito.mock(Days.class);
         Mockito.when(day01Stub.getDay()).thenReturn(1);
         Mockito.when(day02Stub.getDay()).thenReturn(2);
 
-        List<Days> daysImplementedList = new LinkedList<>();
+        final List<Days> daysImplementedList = new LinkedList<>();
         daysImplementedList.add(day01Stub);
         daysImplementedList.add(day02Stub);
 
@@ -69,7 +69,7 @@ public class AdventOfCodeControllerTest {
 
 
     @Test
-    public void testGetResultForASpecificDayAndPuzzlePart() throws Exception {
+    void testGetResultForASpecificDayAndPuzzlePart() throws Exception {
         mvc.perform(get(baseUrl + "/" + "?day=" + day1 + "&part=" + part1)
                 .contentType(contentType))
                 .andExpect(status().isOk())
@@ -81,11 +81,10 @@ public class AdventOfCodeControllerTest {
                         preprocessResponse(prettyPrint()),
                         responseFields(getResultForASpecificDayAndPuzzlePart("")))
                 );
-
     }
 
     @Test
-    public void testGetResultForASpecificDayAndPuzzlePart2() throws Exception {
+    void testGetResultForASpecificDayAndPuzzlePart2() throws Exception {
         mvc.perform(get(baseUrl + "/" + "?day=" + day1 + "&part=" + part2)
                 .contentType(contentType))
                 .andExpect(status().isOk())
@@ -101,9 +100,9 @@ public class AdventOfCodeControllerTest {
     }
 
     @Test
-    public void testDaysImplemented() throws Exception {
+    void testDaysImplemented() throws Exception {
 
-        List<Integer> daysImplementedIntegerList = new LinkedList<>(Arrays.asList(1, 2));
+        final List<Integer> daysImplementedIntegerList = new LinkedList<>(Arrays.asList(1, 2));
 
         mvc.perform(get(baseUrl + "/daysimplemented")
                 .contentType(contentType))
@@ -118,13 +117,13 @@ public class AdventOfCodeControllerTest {
                 );
     }
 
-    private ArrayList<FieldDescriptor> getResultForASpecificDayAndPuzzlePart(String path) {
-        String pathString;
+    private ArrayList<FieldDescriptor> getResultForASpecificDayAndPuzzlePart(final String path) {
+        final String pathString;
         if (path.isEmpty()) {
             pathString = "";
         } else pathString = path;
 
-        ArrayList<FieldDescriptor> fieldDescriptorList = new ArrayList<>();
+        final ArrayList<FieldDescriptor> fieldDescriptorList = new ArrayList<>();
         fieldDescriptorList.add(fieldWithPath(pathString + "day")
                 .description("Specific day of the puzzle of the AdventOfCode calendar"));
         fieldDescriptorList.add(fieldWithPath(pathString + "part")
@@ -137,13 +136,13 @@ public class AdventOfCodeControllerTest {
         return fieldDescriptorList;
     }
 
-    private ArrayList<FieldDescriptor> daysImplemented(String path) {
-        String pathString;
+    private ArrayList<FieldDescriptor> daysImplemented(final String path) {
+        final String pathString;
         if (path.isEmpty()) {
             pathString = "";
         } else pathString = path;
 
-        ArrayList<FieldDescriptor> fieldDescriptorList = new ArrayList<>();
+        final ArrayList<FieldDescriptor> fieldDescriptorList = new ArrayList<>();
         fieldDescriptorList.add(fieldWithPath(pathString + "_embedded.integerList")
                 .description("List of all implemented days"));
         fieldDescriptorList.add(fieldWithPath(pathString + "_links.self.href")
