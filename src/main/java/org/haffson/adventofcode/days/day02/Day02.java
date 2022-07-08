@@ -3,6 +3,7 @@ package org.haffson.adventofcode.days.day02;
 import org.haffson.adventofcode.ProblemStatusEnum;
 import org.haffson.adventofcode.days.Days;
 import org.haffson.adventofcode.utils.FileReaders;
+import org.haffson.adventofcode.utils.ProblemStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +17,7 @@ public class Day02 implements Days {
     /**
      * The puzzle status {@code HashMap}
      */
-    private final HashMap<String, ProblemStatusEnum> problemStatus;
+    private final Map<Integer, ProblemStatusEnum> problemStatus;
     private final FileReaders fileReaders;
 
     /**
@@ -27,9 +28,8 @@ public class Day02 implements Days {
     @Autowired
     Day02(final FileReaders fileReaders) {
         this.fileReaders = fileReaders;
-        this.problemStatus = new HashMap<>();
-        this.problemStatus.put("1", ProblemStatusEnum.SOLVED);
-        this.problemStatus.put("2", ProblemStatusEnum.SOLVED);
+        this.problemStatus = ProblemStatus.getProblemStatusMap(1, 2,
+                ProblemStatusEnum.SOLVED, ProblemStatusEnum.SOLVED);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class Day02 implements Days {
     }
 
     @Override
-    public HashMap<String, ProblemStatusEnum> getProblemStatus() {
+    public Map<Integer, ProblemStatusEnum> getProblemStatus() {
         return problemStatus;
     }
 

@@ -1,7 +1,7 @@
 package org.haffson.adventofcode.utils;
 
 public class UncheckedFileNotFoundException extends RuntimeException {
-    public UncheckedFileNotFoundException(String errorMessage, Throwable err) {
+    public UncheckedFileNotFoundException(final String errorMessage, final Throwable err) {
         super(errorMessage, err);
     }
 }

@@ -1,60 +1,57 @@
 package org.haffson.adventofcode.days.day01;
 
 import org.haffson.adventofcode.utils.FileReaders;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit4.SpringRunner;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import static org.mockito.Mockito.*;
 
-@RunWith(SpringRunner.class)
-public class Day01Test {
+class Day01Test {
 
     @MockBean
     private FileReaders fileReaders;
 
     @Test
-    public void testGetDay() {
-        Day01 day01 = new Day01(fileReaders);
-        int expectedResult = 1;
-        int actualResult = day01.getDay();
-        Assert.assertEquals(expectedResult, actualResult);
+    void testGetDay() {
+        final Day01 day01 = new Day01(fileReaders);
+        final int expectedResult = 1;
+        final int actualResult = day01.getDay();
+        assertEquals(expectedResult, actualResult);
     }
 
     @Test
-    public void test_firstPart_returnsExpectedResult() {
+    void test_firstPart_returnsExpectedResult() {
         //arrange
-        Day01 day01 = new Day01(fileReaders);
+        final Day01 day01 = new Day01(fileReaders);
         when(fileReaders.getInputList("src/main/resources/puzzle_input/day1_input.txt"))
                 .thenReturn(new ArrayList<>(Arrays.asList("1","2","3","-4")));
 
-        String expectedResult = "Part 1 - Frequency: " + 2;
+        final String expectedResult = "Part 1 - Frequency: " + 2;
 
         //act
-        String actualResult = day01.firstPart();
+        final String actualResult = day01.firstPart();
 
         //assert
-        Assert.assertEquals(expectedResult, actualResult);
+        assertEquals(expectedResult, actualResult);
     }
 
     @Test
-    public void test_secondPart_returnsExpectedResult() {
+    void test_secondPart_returnsExpectedResult() {
         //arrange
-        Day01 day01 = new Day01(fileReaders);
+        final Day01 day01 = new Day01(fileReaders);
         when(fileReaders.getInputList("src/main/resources/puzzle_input/day1_input.txt"))
                 .thenReturn(new ArrayList<>(Arrays.asList("3","3","4","-2","-4")));
 
-        String expectedResult = "Part 2 - Frequency: " + 10;
+        final String expectedResult = "Part 2 - Frequency: " + 10;
 
         //act
-        String actualResult = day01.secondPart();
+        final String actualResult = day01.secondPart();
 
         //assert
-        Assert.assertEquals(expectedResult, actualResult);
+        assertEquals(expectedResult, actualResult);
     }
 }

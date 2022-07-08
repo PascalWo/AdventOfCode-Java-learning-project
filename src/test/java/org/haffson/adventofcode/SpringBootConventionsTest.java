@@ -5,8 +5,11 @@ import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.domain.properties.CanBeAnnotated;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
 import com.tngtech.archunit.core.importer.ImportOption;
-import org.haffson.adventofcode.archUnitTestingUtils.*;
-import org.junit.Test;
+import org.haffson.adventofcode.archUnitTestingUtils.FieldsCondition;
+import org.haffson.adventofcode.archUnitTestingUtils.IsAutowired;
+import org.haffson.adventofcode.archUnitTestingUtils.IsSpringBootTest;
+import org.haffson.adventofcode.archUnitTestingUtils.MethodCondition;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,14 +21,12 @@ import static com.tngtech.archunit.base.DescribedPredicate.not;
 import static com.tngtech.archunit.core.domain.JavaMember.Predicates.declaredIn;
 import static com.tngtech.archunit.core.domain.properties.CanBeAnnotated.Predicates.annotatedWith;
 import static com.tngtech.archunit.lang.conditions.ArchPredicates.are;
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.no;
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.*;
 
 public class SpringBootConventionsTest {
 
     private final JavaClasses allClasses = new ClassFileImporter()
-            .withImportOption(new ImportOption.DontIncludeTests())
+            .withImportOption(new ImportOption.DoNotIncludeTests())
             .importPackages("org.haffson.adventofcode");
 
     /**
@@ -38,7 +39,7 @@ public class SpringBootConventionsTest {
 
     @Test
     public void doNotCreateBeansInApplicationClass() {
-        no(MethodTransformer.methods())
+        noMethods()
             .that(are(annotatedWith(Bean.class)))
             .should(MethodCondition.be(declaredIn(springBootApplicationClass())))
             .because("this may lead to problems with missing dependencies in tests that bootstrap the Spring Boot Application only partially (e.g. @DataMongoTest tests). Simply declare your beans in separate @" + Configuration.class.getSimpleName() + " classes.")

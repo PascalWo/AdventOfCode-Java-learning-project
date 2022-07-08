@@ -1,8 +1,16 @@
 |===
 |Path|Type|Description
 
-|`+content+`
-|`+String+`
+|`+day+`
+|`+Number+`
+|Specific day of the puzzle of the AdventOfCode calendar
+
+|`+part+`
+|`+Number+`
+|Specific day's part of the puzzle of the AdventOfCode calendar
+
+|`+answer+`
+|`+Null+`
 |Result of the Puzzle for a specific day and part of the AdventOfCode calendar
 
 |`+_links.self.href+`

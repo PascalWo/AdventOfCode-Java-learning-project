@@ -4,35 +4,30 @@ import org.haffson.adventofcode.ProblemStatusEnum;
 import org.haffson.adventofcode.days.Days;
 import org.haffson.adventofcode.days.day01.Day01;
 import org.haffson.adventofcode.exceptions.PuzzleNotSolvedYetException;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit4.SpringRunner;
 
-import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-@RunWith(SpringRunner.class)
-public class AdventOfCodeServiceTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+class AdventOfCodeServiceTest {
 
     private final List<Days> daysSolutions = new LinkedList<>();
-    private final HashMap<String, ProblemStatusEnum> problemStatus = new HashMap<>();
+
+    private final HashMap<Integer, ProblemStatusEnum> problemStatus = new HashMap<>();
 
     private AdventOfCodeService adventOfCodeService;
 
-
-    @MockBean
-    private Day01 day01;
-
-    @Before
+    @BeforeEach
     public void setup() {
-        problemStatus.put("1", ProblemStatusEnum.SOLVED);
-        problemStatus.put("2", ProblemStatusEnum.UNSOLVED);
+        final Day01 day01 = Mockito.mock(Day01.class);
+        problemStatus.put(1, ProblemStatusEnum.SOLVED);
+        problemStatus.put(2, ProblemStatusEnum.UNSOLVED);
         daysSolutions.add(day01);
         Mockito.when(day01.getDay()).thenReturn(1);
         Mockito.when(day01.getProblemStatus()).thenReturn(problemStatus);
@@ -41,25 +36,26 @@ public class AdventOfCodeServiceTest {
     }
 
     @Test
-    public void getResultsForASpecificDayAndPuzzlePartTest() throws FileNotFoundException {
-        String actualResult = adventOfCodeService.getResultsForASpecificDayAndPuzzlePart("1", "1");
-
-        Assert.assertEquals("Part 1 - Frequency: 599", actualResult);
+    void getResultsForASpecificDayAndPuzzlePartTest() {
+        final String actualResult = adventOfCodeService.getResultsForASpecificDayAndPuzzlePart(1, 1);
+        assertEquals("Part 1 - Frequency: 599", actualResult);
     }
 
-    @Test(expected = PuzzleNotSolvedYetException.class)
-    public void tryingToGetResultsForANotYetImplementedPartThrowsExceptionTest() throws FileNotFoundException {
-        adventOfCodeService.getResultsForASpecificDayAndPuzzlePart("1", "2");
+    @Test
+    void tryingToGetResultsForANotYetImplementedPartThrowsExceptionTest() {
+        Assertions.assertThrows(PuzzleNotSolvedYetException.class, () ->
+                adventOfCodeService.getResultsForASpecificDayAndPuzzlePart(1, 2));
     }
 
-    @Test(expected = PuzzleNotSolvedYetException.class)
-    public void tryingToGetResultsForANotYetImplementedDayThrowsException() throws FileNotFoundException {
-        adventOfCodeService.getResultsForASpecificDayAndPuzzlePart("2", "1");
+    @Test
+    void tryingToGetResultsForANotYetImplementedDayThrowsException() {
+        Assertions.assertThrows(PuzzleNotSolvedYetException.class, () ->
+                adventOfCodeService.getResultsForASpecificDayAndPuzzlePart(10, 1));
     }
 
-    @Test(expected = PuzzleNotSolvedYetException.class)
-    public void tryingToGetResultsForAnyOtherPartThrowsException() throws FileNotFoundException {
-        adventOfCodeService.getResultsForASpecificDayAndPuzzlePart("1", "3");
+    @Test
+    void tryingToGetResultsForAnyOtherPartThrowsException() {
+        Assertions.assertThrows(PuzzleNotSolvedYetException.class, () ->
+                adventOfCodeService.getResultsForASpecificDayAndPuzzlePart(2, 3));
     }
-
 }

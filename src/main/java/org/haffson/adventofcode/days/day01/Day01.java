@@ -3,8 +3,10 @@ package org.haffson.adventofcode.days.day01;
 import org.haffson.adventofcode.ProblemStatusEnum;
 import org.haffson.adventofcode.days.Days;
 import org.haffson.adventofcode.utils.FileReaders;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.haffson.adventofcode.utils.ProblemStatus;
 import org.springframework.stereotype.Component;
+
+import java.util.Map;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -18,7 +20,7 @@ import java.util.stream.Collectors;
 public class Day01 implements Days {
 
     /** The puzzle status {@code HashMap} */
-    private final HashMap<String, ProblemStatusEnum> problemStatus;
+    private final Map<Integer, ProblemStatusEnum> problemStatus;
     private final FileReaders fileReaders;
 
     /**
@@ -26,12 +28,10 @@ public class Day01 implements Days {
      *
      * @param fileReaders {@code @Autowired} fileReader //TODO: inject what you need
      */
-    @Autowired
-    Day01(FileReaders fileReaders) {
+    public Day01(final FileReaders fileReaders) {
         this.fileReaders = fileReaders;
-        this.problemStatus = new HashMap<>();
-        this.problemStatus.put("1", ProblemStatusEnum.SOLVED);
-        this.problemStatus.put("2", ProblemStatusEnum.SOLVED);
+        this.problemStatus = ProblemStatus.getProblemStatusMap(1, 2,
+                ProblemStatusEnum.SOLVED, ProblemStatusEnum.SOLVED);
     }
 
     @Override
@@ -40,20 +40,20 @@ public class Day01 implements Days {
     }
 
     @Override
-    public HashMap<String, ProblemStatusEnum> getProblemStatus() {
+    public Map<Integer, ProblemStatusEnum> getProblemStatus() {
         return problemStatus;
     }
 
     @Override
     public String firstPart() {
-        String fileName = "src/main/resources/puzzle_input/day1_input.txt";
-        
+        final String fileName = "src/main/resources/puzzle_input/day1_input.txt";
+
         return "Part 1 - Frequency: " + calculateFrequency(fileReaders.getInputList(fileName));
     }
 
     @Override
     public String secondPart() {
-        String fileName = "src/main/resources/puzzle_input/day1_input.txt";
+        final String fileName = "src/main/resources/puzzle_input/day1_input.txt";
         return "Part 2 - Frequency: " + calculateFrequencyPart2(fileReaders.getInputList(fileName));
     }
 
@@ -63,20 +63,20 @@ public class Day01 implements Days {
      *
      * @return the final frequency
      */
-    private int calculateFrequency(List<String> myArrayList) {
+    private int calculateFrequency(final List<String> myArrayList) {
 
-        return myArrayList.stream().map(Integer::parseInt).collect(Collectors.toList()).stream().mapToInt(Integer::intValue)
+        return myArrayList.stream().map(Integer::parseInt).toList().stream().mapToInt(Integer::intValue)
                 .sum();
     }
 
-    private int calculateFrequencyPart2(List<String> myArrayList){
-        List<Integer> myIntArrayList = myArrayList.stream().map(Integer::parseInt).collect(Collectors.toList());
+    private int calculateFrequencyPart2(final List<String> myArrayList){
+        final List<Integer> myIntArrayList = myArrayList.stream().map(Integer::parseInt).toList();
 
         int sumOfLookedUpListEntries = 0;
-        HashSet<Integer> previousSums = new HashSet<>();
+        final HashSet<Integer> previousSums = new HashSet<>();
         boolean foundDuplicate = false;
         while (!foundDuplicate) {
-            for (int f : myIntArrayList) {
+            for (final int f : myIntArrayList) {
                 sumOfLookedUpListEntries += f;
                 if (previousSums.contains(sumOfLookedUpListEntries)) {
                     foundDuplicate = true;

@@ -12,17 +12,17 @@ import java.util.*;
 @Component
 public class FileReaders {
 
-    public List<String> getInputList(String fileName) {
+    public List<String> getInputList(final String fileName) {
 
-        try(Scanner scanner = new Scanner(new File(String.valueOf(fileName)))) {
+        try(final Scanner scanner = new Scanner(new File(String.valueOf(fileName)))) {
 
-            ArrayList<String> inputArray = new ArrayList<>();
+            final ArrayList<String> inputArray = new ArrayList<>();
             while (scanner.hasNextLine()) {
                 inputArray.add(scanner.nextLine());
             }
             return inputArray;
 
-        } catch (FileNotFoundException e) {
+        } catch (final FileNotFoundException e) {
             throw new UncheckedFileNotFoundException("FileInput not found", e);
         }
     }

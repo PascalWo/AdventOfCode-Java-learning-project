@@ -11,7 +11,7 @@ import com.tngtech.archunit.lang.AbstractClassesTransformer;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-import static com.tngtech.archunit.core.domain.properties.HasReturnType.Predicates.returnType;
+import static com.tngtech.archunit.core.domain.properties.HasReturnType.Predicates.rawReturnType;
 
 public class MethodTransformer extends AbstractClassesTransformer<JavaMethod> {
     public MethodTransformer() {
@@ -31,6 +31,7 @@ public class MethodTransformer extends AbstractClassesTransformer<JavaMethod> {
 
     /**
      * A predicate that handles a {@link JavaMethod}
+     *
      * @param className a {@code String} with the name of the Class
      * @return if the method is implemented in a specific classname
      */
@@ -62,7 +63,7 @@ public class MethodTransformer extends AbstractClassesTransformer<JavaMethod> {
     }
 
     public static DescribedPredicate<HasReturnType> string() {
-        return returnType(String.class);
+        return rawReturnType(String.class);
     }
 
     public Iterable<JavaMethod> doTransform(final JavaClasses classes) {
@@ -70,4 +71,5 @@ public class MethodTransformer extends AbstractClassesTransformer<JavaMethod> {
                 .flatMap(javaClass -> javaClass.getMethods().stream())
                 .collect(Collectors.toList());
     }
+
 }
