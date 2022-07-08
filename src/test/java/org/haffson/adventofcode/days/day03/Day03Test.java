@@ -10,13 +10,13 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 
 class Day03Test {
 
-    @MockBean
-    private FileReaders fileReaders;
+    private final FileReaders fileReaders=mock(FileReaders.class);
 
     @Test
     void testGetDay() {

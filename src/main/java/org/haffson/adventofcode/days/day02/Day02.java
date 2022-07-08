@@ -45,7 +45,6 @@ public class Day02 implements Days {
     @Override
     public String firstPart() {
         final String fileName = "src/main/resources/puzzle_input/day2_input.txt";
-
         return "Part 1 - checksum: " + calculateCheckSum(fileReaders.getInputList(fileName));
     }
 

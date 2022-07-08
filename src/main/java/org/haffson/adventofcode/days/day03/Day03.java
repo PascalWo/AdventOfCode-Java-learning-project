@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 
@@ -49,7 +48,6 @@ public class Day03 implements Days {
     @Override
     public String firstPart() {
         final String fileName = "src/main/resources/puzzle_input/day3_input.txt";
-
         return "Part 1 - two or more claims: " + calculateClaims(fileReaders.getInputList(fileName));
     }
 
@@ -78,7 +76,7 @@ public class Day03 implements Days {
 
     List<RectangleClaim> convertStringToRectangleList(final List<String> stringList) {
 
-        return stringList.stream().map(RectangleClaim::of).collect(Collectors.toList());
+        return stringList.stream().map(RectangleClaim::of).toList();
     }
 
     private int calculateNotOverlappingClaim(final List<String> inputList) {

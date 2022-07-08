@@ -12,8 +12,7 @@ import static org.mockito.Mockito.*;
 
 class Day01Test {
 
-    @MockBean
-    private FileReaders fileReaders;
+    private final FileReaders fileReaders=mock(FileReaders.class);
 
     @Test
     void testGetDay() {

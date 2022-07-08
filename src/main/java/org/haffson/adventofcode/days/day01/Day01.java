@@ -8,10 +8,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Implementation for <i>Day 1: Chronal Calibration</i>.
@@ -47,7 +45,6 @@ public class Day01 implements Days {
     @Override
     public String firstPart() {
         final String fileName = "src/main/resources/puzzle_input/day1_input.txt";
-
         return "Part 1 - Frequency: " + calculateFrequency(fileReaders.getInputList(fileName));
     }
 

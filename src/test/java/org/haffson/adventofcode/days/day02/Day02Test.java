@@ -8,12 +8,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class Day02Test {
 
-    @MockBean
-    private FileReaders fileReaders;
+    private final FileReaders fileReaders=mock(FileReaders.class);
 
     @Test
     void testGetDay() {
