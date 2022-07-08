@@ -8,7 +8,7 @@ buildscript {
     }
 
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.6.6")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.7.1")
     }
 }
 
@@ -67,7 +67,7 @@ ext {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot:2.6.6'
+    implementation 'org.springframework.boot:spring-boot:2.7.1'
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-hateoas'
     implementation 'org.springframework.boot:spring-boot-starter-web'
