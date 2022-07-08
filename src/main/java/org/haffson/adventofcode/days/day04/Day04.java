@@ -43,7 +43,7 @@ public class Day04 implements Days {
     @Override
     public String firstPart() {
         final String fileName = "src/main/resources/puzzle_input/day4_input.txt";
-        return "Part 4 - Guard ID multiplied by selected minute: " + calculateSearchedMinute(fileReaders.getInputList(fileName));
+        return "Part 1 - Guard ID multiplied by selected minute: " + calculateSearchedMinute(fileReaders.getInputList(fileName));
     }
 
     @Override
