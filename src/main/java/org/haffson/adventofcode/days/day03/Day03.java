@@ -107,8 +107,7 @@ public class Day03 implements Days {
 
         claimList.forEach(claim ->
                 IntStream.range(claim.getLeftSpace(), claim.getRightXCoordinate())
-                        .forEach(i
-                                -> IntStream.range(claim.getTopSpace(), claim.getBottomYCoordinate())
+                        .forEach(i -> IntStream.range(claim.getTopSpace(), claim.getBottomYCoordinate())
                                 .forEach(j
                                         -> fabric[i][j] = fabric[i][j] == null ? claim.getId() : "X")));
         return fabric;
