@@ -93,7 +93,7 @@ public class Day03 implements Days {
                     if (!Objects.equals(fabric[x][y], claim.getId())){
                         stillFree = false;
                         break;
-                    }else if (x == claim.getRightXCoordinate() - 1 && y == claim.getBottomYCoordinate() - 1){
+                    } else if (x == claim.getRightXCoordinate() - 1 && y == claim.getBottomYCoordinate() - 1){
                         intactClaimId[0] = Integer.parseInt(claim.getId());
                     }
                 }
