@@ -58,8 +58,12 @@ public class Day04 implements Days {
      * @return the multiplication of guard id by selected minute
      */
     private int calculateSearchedMinute(final List<String> myArrayList) {
-
+        List<TimeStampInformation> convertedInput = convertStringListToTimeStampList(myArrayList);
         return 0;
+    }
+
+    List<TimeStampInformation> convertStringListToTimeStampList(final List<String> stringInput){
+        return stringInput.stream().map(TimeStampInformation::of).toList();
     }
 
 }
