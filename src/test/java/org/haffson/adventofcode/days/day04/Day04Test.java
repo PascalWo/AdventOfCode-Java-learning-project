@@ -109,4 +109,37 @@ class Day04Test {
         assertEquals(expectedResult, actualResult);
     }
 
+    @Test
+    void testSortListByDate_returnSortedListOfTimeStampInformation() {
+        //arrange
+        final Day04 day04 = new Day04(fileReaders);
+        final List<TimeStampInformation> inputList = List.of(
+                new TimeStampInformation(
+                        LocalDateTime.of(1518, 11, 1, 0, 25),
+                        "wakes up"),
+                new TimeStampInformation(
+                        LocalDateTime.of(1518, 11, 1, 0, 5),
+                        "falls asleep"),
+                new TimeStampInformation(
+                        LocalDateTime.of(1518, 11, 1, 0, 0),
+                        "Guard #10 begins shift")
+                );
+
+        final List<TimeStampInformation> expectedResult = List.of(
+                new TimeStampInformation(
+                        LocalDateTime.of(1518, 11, 1, 0, 0),
+                        "Guard #10 begins shift"),
+                new TimeStampInformation(
+                        LocalDateTime.of(1518, 11, 1, 0, 5),
+                        "falls asleep"),
+                new TimeStampInformation(
+                        LocalDateTime.of(1518, 11, 1, 0, 25),
+                        "wakes up"));
+
+        //act
+        final List<TimeStampInformation> actualResult = day04.sortListByDate(inputList);
+
+        //assert
+        assertEquals(expectedResult, actualResult);
+    }
 }
