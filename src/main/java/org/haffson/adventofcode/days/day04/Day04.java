@@ -6,6 +6,7 @@ import org.haffson.adventofcode.utils.FileReaders;
 import org.haffson.adventofcode.utils.ProblemStatus;
 import org.springframework.stereotype.Component;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -58,7 +59,8 @@ public class Day04 implements Days {
      * @return the multiplication of guard id by selected minute
      */
     private int calculateSearchedMinute(final List<String> myArrayList) {
-        List<TimeStampInformation> convertedInput = convertStringListToTimeStampList(myArrayList);
+        final List<TimeStampInformation> convertedInput = convertStringListToTimeStampList(myArrayList);
+        final List<TimeStampInformation> sortedList = sortListByDate(convertedInput);
         return 0;
     }
 
@@ -66,4 +68,7 @@ public class Day04 implements Days {
         return stringInput.stream().map(TimeStampInformation::of).toList();
     }
 
+    List<TimeStampInformation> sortListByDate(final List<TimeStampInformation> stringInput){
+        return stringInput.stream().sorted(Comparator.comparing(TimeStampInformation::getTimeStamp)).toList();
+    }
 }
