@@ -91,9 +91,6 @@ public class Day04 implements Days {
                 guard = Integer.parseInt(timeStampInformation.getInformation().split("#")[1].split(" ")[0]);
             } else if (timeStampInformation.getInformation().contains("falls")) {
                 falls = timeStampInformation.getTimeStamp();
-                if (falls.getHour() == 23) {
-                    falls.plusMinutes(60 - falls.getMinute());
-                }
             } else {
                 final LocalDateTime wakes = timeStampInformation.getTimeStamp();
                 Integer[] minutes = minutesAsleep.get(guard);
@@ -118,14 +115,12 @@ public class Day04 implements Days {
                         .sum() - Arrays
                         .stream(g2.getValue())
                         .mapToInt(i -> i)
-                        .sum())
-                .get();
+                        .sum()).orElseThrow(NoSuchElementException::new);
     }
 
     int findGuardWithMostMinutesAsleep(final Map.Entry<Integer, Integer[]> mostMinutesAsleep) {
         return List.of(mostMinutesAsleep.getValue())
                 .indexOf((Arrays.stream(mostMinutesAsleep.getValue())
-                        .max(Integer::compareTo)
-                        .get()));
+                        .max(Integer::compareTo).orElseThrow(NoSuchElementException::new)));
     }
 }
