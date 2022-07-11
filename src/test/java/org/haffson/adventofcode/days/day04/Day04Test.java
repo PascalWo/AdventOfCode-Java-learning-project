@@ -35,7 +35,7 @@ class Day04Test {
     void test_firstPart_returnsExpectedResult() {
         //arrange
         final Day04 day04 = new Day04(fileReaders);
-        when(fileReaders.getInputList("src/main/resources/puzzle_input/day3_input.txt"))
+        when(fileReaders.getInputList("src/main/resources/puzzle_input/day4_input.txt"))
                 .thenReturn(List.of(
                         "[1518-11-01 00:00] Guard #10 begins shift",
                         "[1518-11-01 00:05] falls asleep",
