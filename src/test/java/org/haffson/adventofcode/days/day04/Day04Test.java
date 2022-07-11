@@ -1,12 +1,14 @@
 package org.haffson.adventofcode.days.day04;
 
-import org.haffson.adventofcode.days.day03.Day03;
-import org.haffson.adventofcode.days.day03.RectangleClaim;
 import org.haffson.adventofcode.utils.FileReaders;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -63,9 +65,11 @@ class Day04Test {
     @Test
     void testConvertStringToTimeStampInformation_returnTimeStampInformationInstance() {
         //arrange
-        final String inputString = "[1518-11-01 00:00] Guard #10 begins shift";
+        final String inputString = "[1518-11-01 00:25] Guard #10 begins shift";
 
-        final TimeStampInformation expectedResult = new TimeStampInformation(1518, 11, 01, 00, 00, "Guard #10 begins shift");
+        final TimeStampInformation expectedResult = new TimeStampInformation(
+                LocalDateTime.of(1518, 11, 1, 0, 25),
+                "Guard #10 begins shift");
 
         //act
         final TimeStampInformation actualResult = TimeStampInformation.of(inputString);
