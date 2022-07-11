@@ -6,9 +6,8 @@ import org.haffson.adventofcode.utils.FileReaders;
 import org.haffson.adventofcode.utils.ProblemStatus;
 import org.springframework.stereotype.Component;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.*;
 
 /**
  * Implementation for <i>Day 4: Chronal Calibration</i>.
@@ -16,7 +15,9 @@ import java.util.Map;
 @Component
 public class Day04 implements Days {
 
-    /** The puzzle status {@code HashMap} */
+    /**
+     * The puzzle status {@code HashMap}
+     */
     private final Map<Integer, ProblemStatusEnum> problemStatus;
     private final FileReaders fileReaders;
 
@@ -61,14 +62,70 @@ public class Day04 implements Days {
     private int calculateSearchedMinute(final List<String> myArrayList) {
         final List<TimeStampInformation> convertedInput = convertStringListToTimeStampList(myArrayList);
         final List<TimeStampInformation> sortedList = sortListByDate(convertedInput);
-        return 0;
+
+        final Map<Integer, Integer[]> minutesAsleep = minutesEachGuardIsAsleep(sortedList);
+
+        final Map.Entry<Integer, Integer[]> mostMinutesAsleep = findEntryWithMostMinutesAsleep(minutesAsleep);
+
+        final int guardId = findGuardWithMostMinutesAsleep(mostMinutesAsleep);
+
+        return mostMinutesAsleep.getKey() * guardId;
     }
 
-    List<TimeStampInformation> convertStringListToTimeStampList(final List<String> stringInput){
+    List<TimeStampInformation> convertStringListToTimeStampList(final List<String> stringInput) {
         return stringInput.stream().map(TimeStampInformation::of).toList();
     }
 
-    List<TimeStampInformation> sortListByDate(final List<TimeStampInformation> stringInput){
+    List<TimeStampInformation> sortListByDate(final List<TimeStampInformation> stringInput) {
         return stringInput.stream().sorted(Comparator.comparing(TimeStampInformation::getTimeStamp)).toList();
+    }
+
+    Map<Integer, Integer[]> minutesEachGuardIsAsleep(final List<TimeStampInformation> sortedList) {
+        int guard = -1;
+        final Map<Integer, Integer[]> minutesAsleep = new HashMap<>();
+        LocalDateTime falls = LocalDateTime.MIN;
+
+        for (final TimeStampInformation timeStampInformation : sortedList
+        ) {
+            if (timeStampInformation.getInformation().contains("shift")) {
+                guard = Integer.parseInt(timeStampInformation.getInformation().split("#")[1].split(" ")[0]);
+            } else if (timeStampInformation.getInformation().contains("falls")) {
+                falls = timeStampInformation.getTimeStamp();
+                if (falls.getHour() == 23) {
+                    falls.plusMinutes(60 - falls.getMinute());
+                }
+            } else {
+                final LocalDateTime wakes = timeStampInformation.getTimeStamp();
+                Integer[] minutes = minutesAsleep.get(guard);
+                if (minutes == null) {
+                    minutes = new Integer[60];
+                    for (int i = 0; i < 60; i++) minutes[i] = 0;
+                }
+                for (int i = falls.getMinute(); i < wakes.getMinute(); i++)
+                    minutes[i]++;
+                minutesAsleep.put(guard, minutes);
+            }
+        }
+        return minutesAsleep;
+    }
+
+    Map.Entry<Integer, Integer[]> findEntryWithMostMinutesAsleep(final Map<Integer, Integer[]> minutesAsleep) {
+        return minutesAsleep
+                .entrySet()
+                .stream()
+                .max((g1, g2) -> Arrays.stream(g1.getValue())
+                        .mapToInt(i -> i)
+                        .sum() - Arrays
+                        .stream(g2.getValue())
+                        .mapToInt(i -> i)
+                        .sum())
+                .get();
+    }
+
+    int findGuardWithMostMinutesAsleep(final Map.Entry<Integer, Integer[]> mostMinutesAsleep) {
+        return List.of(mostMinutesAsleep.getValue())
+                .indexOf((Arrays.stream(mostMinutesAsleep.getValue())
+                        .max(Integer::compareTo)
+                        .get()));
     }
 }
