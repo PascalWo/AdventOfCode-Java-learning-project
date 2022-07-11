@@ -80,4 +80,33 @@ class Day04Test {
         //assert
         assertEquals(expectedResult, actualResult);
     }
+
+    @Test
+    void testConvertStringListToTimeStampList_returnListOfTimeStampInformation() {
+        //arrange
+        final Day04 day04 = new Day04(fileReaders);
+        final List<String> stringList = List.of(
+                "[1518-11-01 00:00] Guard #10 begins shift",
+                "[1518-11-01 00:05] falls asleep",
+                "[1518-11-01 00:25] wakes up"
+        );
+
+        final List<TimeStampInformation> expectedResult = List.of(
+                new TimeStampInformation(
+                        LocalDateTime.of(1518, 11, 1, 0, 0),
+                        "Guard #10 begins shift"),
+                new TimeStampInformation(
+                        LocalDateTime.of(1518, 11, 1, 0, 5),
+                        "falls asleep"),
+                new TimeStampInformation(
+                        LocalDateTime.of(1518, 11, 1, 0, 25),
+                        "wakes up"));
+
+        //act
+        final List<TimeStampInformation> actualResult = day04.convertStringListToTimeStampList(stringList);
+
+        //assert
+        assertEquals(expectedResult, actualResult);
+    }
+
 }
