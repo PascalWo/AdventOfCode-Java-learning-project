@@ -1,20 +1,14 @@
 package org.haffson.adventofcode.days.day04;
 
-import org.haffson.adventofcode.days.day03.Day03;
-import org.haffson.adventofcode.days.day03.RectangleClaim;
 import org.haffson.adventofcode.utils.FileReaders;
 import org.junit.jupiter.api.Test;
 
-import java.text.ParseException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -28,7 +22,7 @@ class Day04Test {
         final Day04 day04 = new Day04(fileReaders);
         final int expectedResult = 4;
         final int actualResult = day04.getDay();
-        assertEquals(expectedResult, actualResult);
+        assertThat(actualResult).isEqualTo(expectedResult);
     }
 
     @Test
@@ -54,7 +48,7 @@ class Day04Test {
                         "[1518-11-05 00:03] Guard #99 begins shift",
                         "[1518-11-05 00:45] falls asleep",
                         "[1518-11-05 00:55] wakes up"
-                        ));
+                ));
 
         final String expectedResult = "Part 1 - Guard ID multiplied by selected minute: " + 240;
 
@@ -62,7 +56,7 @@ class Day04Test {
         final String actualResult = day04.firstPart();
 
         //assert
-        assertEquals(expectedResult, actualResult);
+        assertThat(actualResult).isEqualTo(expectedResult);
     }
 
     @Test
@@ -78,7 +72,7 @@ class Day04Test {
         final TimeStampInformation actualResult = TimeStampInformation.of(inputString);
 
         //assert
-        assertEquals(expectedResult, actualResult);
+        assertThat(actualResult).isEqualTo(expectedResult);
     }
 
     @Test
@@ -106,7 +100,7 @@ class Day04Test {
         final List<TimeStampInformation> actualResult = day04.convertStringListToTimeStampList(stringList);
 
         //assert
-        assertEquals(expectedResult, actualResult);
+        assertThat(actualResult).isEqualTo(expectedResult);
     }
 
     @Test
@@ -123,7 +117,7 @@ class Day04Test {
                 new TimeStampInformation(
                         LocalDateTime.of(1518, 11, 1, 0, 0),
                         "Guard #10 begins shift")
-                );
+        );
 
         final List<TimeStampInformation> expectedResult = List.of(
                 new TimeStampInformation(
@@ -140,6 +134,80 @@ class Day04Test {
         final List<TimeStampInformation> actualResult = day04.sortListByDate(inputList);
 
         //assert
-        assertEquals(expectedResult, actualResult);
+        assertThat(actualResult).isEqualTo(expectedResult);
+    }
+
+    @Test
+    void testMinutesEachGuardIsAsleep_returnMapOfGuardsWithMinutesAsleep() {
+        //arrange
+        final Day04 day04 = new Day04(fileReaders);
+
+        final List<TimeStampInformation> inputList = List.of(
+                new TimeStampInformation(
+                        LocalDateTime.of(1518, 11, 1, 0, 0),
+                        "Guard #10 begins shift"),
+                new TimeStampInformation(
+                        LocalDateTime.of(1518, 11, 1, 0, 5),
+                        "falls asleep"),
+                new TimeStampInformation(
+                        LocalDateTime.of(1518, 11, 1, 0, 25),
+                        "wakes up"),
+                new TimeStampInformation(
+                        LocalDateTime.of(1518, 11, 1, 0, 30),
+                        "falls asleep"),
+                new TimeStampInformation(
+                        LocalDateTime.of(1518, 11, 1, 0, 55),
+                        "wakes up"),
+                new TimeStampInformation(
+                        LocalDateTime.of(1518, 11, 1, 23, 58),
+                        "Guard #99 begins shift"),
+                new TimeStampInformation(
+                        LocalDateTime.of(1518, 11, 2, 0, 40),
+                        "falls asleep"),
+                new TimeStampInformation(
+                        LocalDateTime.of(1518, 11, 2, 0, 50),
+                        "wakes up"),
+                new TimeStampInformation(
+                        LocalDateTime.of(1518, 11, 3, 0, 5),
+                        "Guard #10 begins shift"),
+                new TimeStampInformation(
+                        LocalDateTime.of(1518, 11, 3, 0, 24),
+                        "falls asleep"),
+                new TimeStampInformation(
+                        LocalDateTime.of(1518, 11, 3, 0, 29),
+                        "wakes up"),
+                new TimeStampInformation(
+                        LocalDateTime.of(1518, 11, 4, 0, 2),
+                        "Guard #99 begins shift"),
+                new TimeStampInformation(
+                        LocalDateTime.of(1518, 11, 4, 0, 36),
+                        "falls asleep"),
+                new TimeStampInformation(
+                        LocalDateTime.of(1518, 11, 4, 0, 46),
+                        "wakes up"),
+                new TimeStampInformation(
+                        LocalDateTime.of(1518, 11, 5, 0, 3),
+                        "Guard #99 begins shift"),
+                new TimeStampInformation(
+                        LocalDateTime.of(1518, 11, 5, 0, 45),
+                        "falls asleep"),
+                new TimeStampInformation(
+                        LocalDateTime.of(1518, 11, 5, 0, 55),
+                        "wakes up"));
+
+        final Map<Integer, Integer[]> expectedResult = new HashMap<>();
+        expectedResult.put(99,
+                new Integer[]
+                        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0});
+
+        expectedResult.put(10,
+                new Integer[]
+                        {0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0});
+
+        //act
+        final Map<Integer, Integer[]> actualResult = day04.minutesEachGuardIsAsleep(inputList);
+
+        //assert
+        assertThat(actualResult).usingRecursiveComparison().isEqualTo(expectedResult);
     }
 }
