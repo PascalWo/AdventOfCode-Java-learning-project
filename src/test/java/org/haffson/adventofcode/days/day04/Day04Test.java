@@ -210,4 +210,45 @@ class Day04Test {
         //assert
         assertThat(actualResult).usingRecursiveComparison().isEqualTo(expectedResult);
     }
+
+    @Test
+    void testFindGuardEntryWithMostMinutesAsleep_returnMapEntry(){
+        //arrange
+        final Day04 day04 = new Day04(fileReaders);
+
+        final Map<Integer, List<Integer>> inputMap = new HashMap<>();
+        inputMap.put(99,
+                List.of(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                        0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0));
+
+        inputMap.put(10,
+                List.of(0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1,
+                        0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0));
+
+        final Map.Entry<Integer, List<Integer>> expectedResult =
+               Map.entry(10, List.of(0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                       2, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
+                       0, 0, 0, 0));
+
+        //act
+        final Map.Entry<Integer, List<Integer>> actualResult = day04.findGuardEntryWithMostMinutesAsleep(inputMap);
+
+        assertThat(actualResult).isEqualTo(expectedResult);
+    }
+
+    @Test
+    void testFindMinuteWhichGuardIsMostlyAsleep_returnIndexOfGreatestValue(){
+        //arrange
+        final Day04 day04 = new Day04(fileReaders);
+
+        final Map.Entry<Integer, List<Integer>> entryInput = Map.entry(1,
+                List.of(1,1,1,1,2,3,4,5,6,1,2,3,4,1,0));
+        final int expectedResult = 8;
+
+        //act
+        final int actualResult = day04.findMinuteWhichGuardIsMostlyAsleep(entryInput);
+
+        //assert
+        assertThat(actualResult).isEqualTo(expectedResult);
+    }
 }
