@@ -59,68 +59,118 @@ public class Day04 implements Days {
      *
      * @return the multiplication of guard id by selected minute
      */
-    private int calculateSearchedMinute(final List<String> myArrayList) {
-        final List<TimeStampInformation> convertedInput = convertStringListToTimeStampList(myArrayList);
+    private int calculateSearchedMinute(final List<String> inputList) {
+        final List<TimeStampInformation> convertedInput = convertStringListToTimeStampList(inputList);
         final List<TimeStampInformation> sortedList = sortListByDate(convertedInput);
 
-        final Map<Integer, Integer[]> minutesAsleep = minutesEachGuardIsAsleep(sortedList);
+        final Map<Integer, List<Integer>> minutesAsleepByGuard = minutesEachGuardIsAsleep(sortedList);
 
-        final Map.Entry<Integer, Integer[]> mostMinutesAsleep = findEntryWithMostMinutesAsleep(minutesAsleep);
+        final Map.Entry<Integer, List<Integer>> guardWithMostMinutesAsleep = findGuardEntryWithMostMinutesAsleep(minutesAsleepByGuard);
 
-        final int guardId = findGuardWithMostMinutesAsleep(mostMinutesAsleep);
+        final int minuteWhichGuardIsMostlyAsleep = findMinuteWhichGuardIsMostlyAsleep(guardWithMostMinutesAsleep);
 
-        return mostMinutesAsleep.getKey() * guardId;
+        return guardWithMostMinutesAsleep.getKey() * minuteWhichGuardIsMostlyAsleep;
     }
 
+    /**
+     * Auxiliary method for Day 4, Part 1.
+     * Converts the String-list to a List of TimeStampInformation.class
+     *
+     * @return List<TimeStampInformation>
+     */
     List<TimeStampInformation> convertStringListToTimeStampList(final List<String> stringInput) {
-        return stringInput.stream().map(TimeStampInformation::of).toList();
+        return stringInput
+                .stream()
+                .map(TimeStampInformation::of)
+                .toList();
     }
 
+    /**
+     * Auxiliary method for Day 4, Part 1.
+     * Sorts the List<TimeStampInformation> by its LocalDayDate property.
+     *
+     * @return (sorted) List<TimeStampInformation>
+     */
     List<TimeStampInformation> sortListByDate(final List<TimeStampInformation> stringInput) {
-        return stringInput.stream().sorted(Comparator.comparing(TimeStampInformation::getTimeStamp)).toList();
+        return stringInput
+                .stream()
+                .sorted(Comparator.comparing(TimeStampInformation::getTimeStamp))
+                .toList();
     }
 
-    Map<Integer, Integer[]> minutesEachGuardIsAsleep(final List<TimeStampInformation> sortedList) {
-        int guard = -1;
-        final Map<Integer, Integer[]> minutesAsleep = new HashMap<>();
-        LocalDateTime falls = LocalDateTime.MIN;
+    /**
+     * Auxiliary method for Day 4, Part 1.
+     * Maps the TimeStampInformation's to a Map with Key= GuardID, Value= List of Minutes.
+     * Each List Entry equals a minute.
+     * If a guard is asleep at a certain minute, the value of the minute-index counts up.
+     *
+     * @return Map<Integer, List<Integer>> Map of minutes each guard is asleep
+     */
+    Map<Integer, List<Integer>> minutesEachGuardIsAsleep(final List<TimeStampInformation> sortedList) {
+        int guardId = -1;
+        final Map<Integer, List<Integer>> minutesAsleepByGuard = new HashMap<>();
+        LocalDateTime fallsAsleep = LocalDateTime.MIN;
 
         for (final TimeStampInformation timeStampInformation : sortedList
         ) {
             if (timeStampInformation.getInformation().contains("shift")) {
-                guard = Integer.parseInt(timeStampInformation.getInformation().split("#")[1].split(" ")[0]);
+                guardId = timeStampInformation.getGuardID();
             } else if (timeStampInformation.getInformation().contains("falls")) {
-                falls = timeStampInformation.getTimeStamp();
+                fallsAsleep = timeStampInformation.getTimeStamp();
             } else {
-                final LocalDateTime wakes = timeStampInformation.getTimeStamp();
-                Integer[] minutes = minutesAsleep.get(guard);
+                final LocalDateTime wakesUp = timeStampInformation.getTimeStamp();
+                List<Integer> minutes = minutesAsleepByGuard.get(guardId);
                 if (minutes == null) {
-                    minutes = new Integer[60];
-                    for (int i = 0; i < 60; i++) minutes[i] = 0;
+                    minutes = new ArrayList<>();
+                    for (int i = 0; i < 60; i++) {
+                        minutes.add(i, 0);
+                    }
                 }
-                for (int i = falls.getMinute(); i < wakes.getMinute(); i++)
-                    minutes[i]++;
-                minutesAsleep.put(guard, minutes);
+                for (int i = fallsAsleep.getMinute(); i < wakesUp.getMinute(); i++) {
+                    final Integer minuteIndex = minutes.get(i);
+                    minutes.set(i, minuteIndex + 1);
+                }
+
+                minutesAsleepByGuard.put(guardId, minutes);
             }
         }
-        return minutesAsleep;
+        return minutesAsleepByGuard;
     }
 
-    Map.Entry<Integer, Integer[]> findEntryWithMostMinutesAsleep(final Map<Integer, Integer[]> minutesAsleep) {
-        return minutesAsleep
+    /**
+     * Auxiliary method for Day 4, Part 1.
+     * Sums all List-values and compares them to each other.
+     * Finds the Entry and List with the most combined minutes asleep.
+     *
+     * @return Map.Entry<Integer, List<Integer>> guard entry with most minutes asleep
+     */
+    Map.Entry<Integer, List<Integer>> findGuardEntryWithMostMinutesAsleep(final Map<Integer, List<Integer>> minutesAsleepByGuard) {
+        return minutesAsleepByGuard
                 .entrySet()
                 .stream()
-                .max((g1, g2) -> Arrays.stream(g1.getValue())
-                        .mapToInt(i -> i)
-                        .sum() - Arrays
-                        .stream(g2.getValue())
-                        .mapToInt(i -> i)
-                        .sum()).orElseThrow(NoSuchElementException::new);
+                .max(
+                        (guard1, guard2) ->
+                                guard1.getValue()
+                                        .stream()
+                                        .mapToInt(i -> i)
+                                        .sum()
+                                        - guard2.getValue()
+                                        .stream()
+                                        .mapToInt(i -> i)
+                                        .sum()
+                ).orElseThrow(NoSuchElementException::new);
     }
 
-    int findGuardWithMostMinutesAsleep(final Map.Entry<Integer, Integer[]> mostMinutesAsleep) {
-        return List.of(mostMinutesAsleep.getValue())
-                .indexOf((Arrays.stream(mostMinutesAsleep.getValue())
-                        .max(Integer::compareTo).orElseThrow(NoSuchElementException::new)));
+    /**
+     * Auxiliary method for Day 4, Part 1.
+     * After the Entry with the most asleep minutes is found, this method calculates
+     * the minute which the guard is mostly asleep.
+     *
+     * @return int minute which guard is mostly asleep
+     */
+    int findMinuteWhichGuardIsMostlyAsleep(final Map.Entry<Integer, List<Integer>> guardEntryWithMostMinutesAsleep) {
+        final List<Integer> guardsAsleepMinutes = guardEntryWithMostMinutesAsleep.getValue();
+
+        return guardsAsleepMinutes.indexOf(Collections.max(guardEntryWithMostMinutesAsleep.getValue()));
     }
 }

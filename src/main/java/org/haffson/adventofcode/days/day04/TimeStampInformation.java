@@ -34,6 +34,13 @@ public class TimeStampInformation {
         return information;
     }
 
+    public int getGuardID() {
+        if (this.getInformation().contains("shift")) {
+            return Integer.parseInt(this.getInformation().split("#")[1].split(" ")[0]);
+        }
+        return 0;
+    }
+
     @Override
     public boolean equals(final Object o) {
         if (this == o) return true;

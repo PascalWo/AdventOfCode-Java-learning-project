@@ -195,17 +195,17 @@ class Day04Test {
                         LocalDateTime.of(1518, 11, 5, 0, 55),
                         "wakes up"));
 
-        final Map<Integer, Integer[]> expectedResult = new HashMap<>();
+        final Map<Integer, List<Integer>> expectedResult = new HashMap<>();
         expectedResult.put(99,
-                new Integer[]
-                        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0});
+                List.of(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                        0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0));
 
         expectedResult.put(10,
-                new Integer[]
-                        {0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0});
+                List.of(0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1,
+                        0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0));
 
         //act
-        final Map<Integer, Integer[]> actualResult = day04.minutesEachGuardIsAsleep(inputList);
+        final Map<Integer, List<Integer>> actualResult = day04.minutesEachGuardIsAsleep(inputList);
 
         //assert
         assertThat(actualResult).usingRecursiveComparison().isEqualTo(expectedResult);
