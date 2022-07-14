@@ -195,7 +195,7 @@ public class Day04 implements Days {
     }
 
     /**
-     * Auxiliary method for Day 4, Part 1.
+     * Auxiliary method for Day 4, Part 2.
      * Sums all List-values and compares them to each other.
      * Finds the Entry and List with the highest entry.
      * This is the minute which the guard is mostly asleep.
