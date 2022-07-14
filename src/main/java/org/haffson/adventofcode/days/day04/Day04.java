@@ -105,7 +105,7 @@ public class Day04 implements Days {
      * Each List Entry equals a minute.
      * If a guard is asleep at a certain minute, the value of the minute-index counts up.
      *
-     * @return Map<Integer, List<Integer>> Map of minutes each guard is asleep
+     * @return Map<Integer, List < Integer>> Map of minutes each guard is asleep
      */
     Map<Integer, List<Integer>> minutesEachGuardIsAsleep(final List<TimeStampInformation> sortedList) {
         int guardId = -1;
@@ -143,7 +143,7 @@ public class Day04 implements Days {
      * Sums all List-values and compares them to each other.
      * Finds the Entry and List with the most combined minutes asleep.
      *
-     * @return Map.Entry<Integer, List<Integer>> guard entry with most minutes asleep
+     * @return Map.Entry<Integer, List < Integer>> guard entry with most minutes asleep
      */
     Map.Entry<Integer, List<Integer>> findGuardEntryWithMostMinutesAsleep(final Map<Integer, List<Integer>> minutesAsleepByGuard) {
         return minutesAsleepByGuard
