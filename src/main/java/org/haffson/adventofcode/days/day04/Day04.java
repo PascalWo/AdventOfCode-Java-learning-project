@@ -29,7 +29,7 @@ public class Day04 implements Days {
     public Day04(final FileReaders fileReaders) {
         this.fileReaders = fileReaders;
         this.problemStatus = ProblemStatus.getProblemStatusMap(1, 2,
-                ProblemStatusEnum.SOLVED, ProblemStatusEnum.UNSOLVED);
+                ProblemStatusEnum.SOLVED, ProblemStatusEnum.SOLVED);
     }
 
     @Override
@@ -50,7 +50,8 @@ public class Day04 implements Days {
 
     @Override
     public String secondPart() {
-        return null;
+        final String fileName = "src/main/resources/puzzle_input/day4_input.txt";
+        return "Part 2 - Guard ID multiplied by selected minute: " + calculateMostAsleepMinuteMultipliedByGuardId(fileReaders.getInputList(fileName));
     }
 
     /**
@@ -172,5 +173,43 @@ public class Day04 implements Days {
         final List<Integer> guardsAsleepMinutes = guardEntryWithMostMinutesAsleep.getValue();
 
         return guardsAsleepMinutes.indexOf(Collections.max(guardEntryWithMostMinutesAsleep.getValue()));
+    }
+
+    /**
+     * Primary method for Day 4, Part 2.
+     * Calculates the guard id who sleeps more than all other guards at a certain minute and multiply the id with the
+     * minute which he slept the most.
+     *
+     * @return the multiplication of guard id by selected minute
+     */
+    private int calculateMostAsleepMinuteMultipliedByGuardId(List<String> inputList) {
+        final List<TimeStampInformation> convertedInput = convertStringListToTimeStampList(inputList);
+        final List<TimeStampInformation> sortedList = sortListByDate(convertedInput);
+
+        final Map<Integer, List<Integer>> minutesAsleepByGuard = minutesEachGuardIsAsleep(sortedList);
+        final Map.Entry<Integer, List<Integer>> guardWithCertainMinuteMostAsleep = findGuardEntryWithCertainMinuteMostAsleep(minutesAsleepByGuard);
+
+        final int minuteWhichGuardIsMostlyAsleep = findMinuteWhichGuardIsMostlyAsleep(guardWithCertainMinuteMostAsleep);
+
+        return guardWithCertainMinuteMostAsleep.getKey() * minuteWhichGuardIsMostlyAsleep;
+    }
+
+    /**
+     * Auxiliary method for Day 4, Part 1.
+     * Sums all List-values and compares them to each other.
+     * Finds the Entry and List with the highest entry.
+     * This is the minute which the guard is mostly asleep.
+     *
+     * @return Map.Entry<Integer, List < Integer>> guard entry with most minutes asleep
+     */
+    Map.Entry<Integer, List<Integer>> findGuardEntryWithCertainMinuteMostAsleep(Map<Integer, List<Integer>> minutesAsleepByGuard) {
+        return minutesAsleepByGuard
+                .entrySet()
+                .stream()
+                .max(
+                        Comparator.comparingInt(guard -> guard.getValue()
+                                .stream()
+                                .max(Integer::compareTo).orElseThrow(NoSuchElementException::new))
+                ).orElseThrow(NoSuchElementException::new);
     }
 }
