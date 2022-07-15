@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.IntStream;
 
 /**
  * Implementation for <i>Day 4: Chronal Calibration</i>.
@@ -120,19 +121,23 @@ public class Day04 implements Days {
                 fallsAsleep = timeStampInformation.getTimeStamp();
             } else {
                 final LocalDateTime wakesUp = timeStampInformation.getTimeStamp();
-                List<Integer> minutes = minutesAsleepByGuard.get(guardId);
-                if (minutes == null) {
-                    minutes = new ArrayList<>();
-                    for (int i = 0; i < 60; i++) {
-                        minutes.add(i, 0);
-                    }
-                }
-                for (int i = fallsAsleep.getMinute(); i < wakesUp.getMinute(); i++) {
-                    final Integer minuteIndex = minutes.get(i);
-                    minutes.set(i, minuteIndex + 1);
-                }
+                final int minuteFallsAsleep = fallsAsleep.getMinute();
+                final int minuteWakesUp = wakesUp.getMinute();
 
-                minutesAsleepByGuard.put(guardId, minutes);
+                minutesAsleepByGuard.computeIfAbsent(guardId,
+                        guardIdKey -> new ArrayList<>(Collections.nCopies(60, 0)));
+
+                minutesAsleepByGuard.computeIfPresent(guardId,
+                        (guardIdKey, listOfMinutes) -> {
+
+                            IntStream
+                                    .range(minuteFallsAsleep,
+                                    minuteWakesUp)
+                                    .forEach(minute -> listOfMinutes.set(minute,
+                                            listOfMinutes.get(minute)+1));
+
+                            return listOfMinutes;
+                        });
             }
         }
         return minutesAsleepByGuard;
