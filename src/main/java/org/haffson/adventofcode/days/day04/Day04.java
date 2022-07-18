@@ -111,18 +111,18 @@ public class Day04 implements Days {
     Map<Integer, List<Integer>> minutesEachGuardIsAsleep(final List<TimeStampInformation> sortedList) {
         int guardId = -1;
         final Map<Integer, List<Integer>> minutesAsleepByGuard = new HashMap<>();
-        LocalDateTime fallsAsleep = LocalDateTime.MIN;
+        LocalDateTime fallsAsleepAt = LocalDateTime.MIN;
 
         for (final TimeStampInformation timeStampInformation : sortedList
         ) {
             if (timeStampInformation.getInformation().contains("shift")) {
                 guardId = timeStampInformation.getGuardID();
             } else if (timeStampInformation.getInformation().contains("falls")) {
-                fallsAsleep = timeStampInformation.getTimeStamp();
+                fallsAsleepAt = timeStampInformation.getTimeStamp();
             } else {
-                final LocalDateTime wakesUp = timeStampInformation.getTimeStamp();
-                final int minuteFallsAsleep = fallsAsleep.getMinute();
-                final int minuteWakesUp = wakesUp.getMinute();
+                final LocalDateTime wakesUpAt = timeStampInformation.getTimeStamp();
+                final int minuteFallsAsleepAt = fallsAsleepAt.getMinute();
+                final int minuteWakesUpAt = wakesUpAt.getMinute();
 
                 minutesAsleepByGuard.computeIfAbsent(guardId,
                         guardIdKey -> new ArrayList<>(Collections.nCopies(60, 0)));
@@ -131,8 +131,8 @@ public class Day04 implements Days {
                         (guardIdKey, listOfMinutes) -> {
 
                             IntStream
-                                    .range(minuteFallsAsleep,
-                                    minuteWakesUp)
+                                    .range(minuteFallsAsleepAt,
+                                    minuteWakesUpAt)
                                     .forEach(minute -> listOfMinutes.set(minute,
                                             listOfMinutes.get(minute)+1));
 
