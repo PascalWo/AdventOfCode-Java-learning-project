@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.IntStream;
 
 /**
  * Implementation for <i>Day 4: Chronal Calibration</i>.
@@ -110,29 +111,33 @@ public class Day04 implements Days {
     Map<Integer, List<Integer>> minutesEachGuardIsAsleep(final List<TimeStampInformation> sortedList) {
         int guardId = -1;
         final Map<Integer, List<Integer>> minutesAsleepByGuard = new HashMap<>();
-        LocalDateTime fallsAsleep = LocalDateTime.MIN;
+        LocalDateTime fallsAsleepAt = LocalDateTime.MIN;
 
         for (final TimeStampInformation timeStampInformation : sortedList
         ) {
             if (timeStampInformation.getInformation().contains("shift")) {
                 guardId = timeStampInformation.getGuardID();
             } else if (timeStampInformation.getInformation().contains("falls")) {
-                fallsAsleep = timeStampInformation.getTimeStamp();
+                fallsAsleepAt = timeStampInformation.getTimeStamp();
             } else {
-                final LocalDateTime wakesUp = timeStampInformation.getTimeStamp();
-                List<Integer> minutes = minutesAsleepByGuard.get(guardId);
-                if (minutes == null) {
-                    minutes = new ArrayList<>();
-                    for (int i = 0; i < 60; i++) {
-                        minutes.add(i, 0);
-                    }
-                }
-                for (int i = fallsAsleep.getMinute(); i < wakesUp.getMinute(); i++) {
-                    final Integer minuteIndex = minutes.get(i);
-                    minutes.set(i, minuteIndex + 1);
-                }
+                final LocalDateTime wakesUpAt = timeStampInformation.getTimeStamp();
+                final int minuteFallsAsleepAt = fallsAsleepAt.getMinute();
+                final int minuteWakesUpAt = wakesUpAt.getMinute();
 
-                minutesAsleepByGuard.put(guardId, minutes);
+                minutesAsleepByGuard.computeIfAbsent(guardId,
+                        guardIdKey -> new ArrayList<>(Collections.nCopies(60, 0)));
+
+                minutesAsleepByGuard.computeIfPresent(guardId,
+                        (guardIdKey, listOfMinutes) -> {
+
+                            IntStream
+                                    .range(minuteFallsAsleepAt,
+                                    minuteWakesUpAt)
+                                    .forEach(minute -> listOfMinutes.set(minute,
+                                            listOfMinutes.get(minute)+1));
+
+                            return listOfMinutes;
+                        });
             }
         }
         return minutesAsleepByGuard;
