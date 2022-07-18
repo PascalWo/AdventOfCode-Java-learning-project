@@ -251,4 +251,64 @@ class Day04Test {
         //assert
         assertThat(actualResult).isEqualTo(expectedResult);
     }
+
+    @Test
+    void testFindGuardEntryWithCertainMinuteMostAsleep(){
+        //arrange
+        final Day04 day04 = new Day04(fileReaders);
+
+        final Map<Integer, List<Integer>> inputMap = new HashMap<>();
+        inputMap.put(99,
+                List.of(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                        0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0));
+
+        inputMap.put(10,
+                List.of(0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1,
+                        0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0));
+
+        final Map.Entry<Integer, List<Integer>> expectedResult =
+                Map.entry(99,
+                        List.of(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 2, 2, 2, 2, 1, 1, 1, 1, 1,
+                                0, 0, 0, 0, 0));
+
+        //act
+        final Map.Entry<Integer, List<Integer>> actualResult = day04.findGuardEntryWithCertainMinuteMostAsleep(inputMap);
+
+        assertThat(actualResult).isEqualTo(expectedResult);
+    }
+
+    @Test
+    void test_secondPart_returnsExpectedResult() {
+        //arrange
+        final Day04 day04 = new Day04(fileReaders);
+        when(fileReaders.getInputList("src/main/resources/puzzle_input/day4_input.txt"))
+                .thenReturn(List.of(
+                        "[1518-11-01 00:00] Guard #10 begins shift",
+                        "[1518-11-01 00:05] falls asleep",
+                        "[1518-11-01 00:25] wakes up",
+                        "[1518-11-01 00:30] falls asleep",
+                        "[1518-11-01 00:55] wakes up",
+                        "[1518-11-01 23:58] Guard #99 begins shift",
+                        "[1518-11-02 00:40] falls asleep",
+                        "[1518-11-02 00:50] wakes up",
+                        "[1518-11-03 00:05] Guard #10 begins shift",
+                        "[1518-11-03 00:24] falls asleep",
+                        "[1518-11-03 00:29] wakes up",
+                        "[1518-11-04 00:02] Guard #99 begins shift",
+                        "[1518-11-04 00:36] falls asleep",
+                        "[1518-11-04 00:46] wakes up",
+                        "[1518-11-05 00:03] Guard #99 begins shift",
+                        "[1518-11-05 00:45] falls asleep",
+                        "[1518-11-05 00:55] wakes up"
+                ));
+
+        final String expectedResult = "Part 2 - Guard ID multiplied by selected minute: " + 4455;
+
+        //act
+        final String actualResult = day04.secondPart();
+
+        //assert
+        assertThat(actualResult).isEqualTo(expectedResult);
+    }
 }
