@@ -46,7 +46,7 @@ class Day05Test {
         final String inputString = "dabAcCaCBAcCcaDA";
 
 //        final List<Character> expectedResult = List.of('d',"a","b","A","c","C","c","a","C","B","A","c","C","c","a","D","A");
-        final List<Character> expectedResult = List.of('d','a','b','A','c','C','a','C','B','A','c','C','c','a','D','A');
+        final List<Character> expectedResult = List.of('d', 'a', 'b', 'A', 'c', 'C', 'a', 'C', 'B', 'A', 'c', 'C', 'c', 'a', 'D', 'A');
 
         //act
         final List<Character> actualResult = day05.convertStringToCharacterList(inputString);
@@ -64,7 +64,7 @@ class Day05Test {
         final String expectedResult = "dabAcCaCBAcCcaDA";
 
         //act
-        final String actualResult =day05.convertStringListToString(inputStringList);
+        final String actualResult = day05.convertStringListToString(inputStringList);
 
         //assert
         assertThat(actualResult).isEqualTo(expectedResult);
