@@ -1,14 +1,10 @@
 package org.haffson.adventofcode.days.day05;
 
-import org.haffson.adventofcode.days.day04.Day04;
-import org.haffson.adventofcode.days.day04.TimeStampInformation;
 import org.haffson.adventofcode.utils.FileReaders;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -69,6 +65,22 @@ class Day05Test {
 
         //act
         final String actualResult =day05.convertStringListToString(inputStringList);
+
+        //assert
+        assertThat(actualResult).isEqualTo(expectedResult);
+    }
+
+    @Test
+    void removeCharDuplicatesWithDifferentCases_returnListWithoutDuplicatesInDifferentCases() {
+        //arrange
+        final Day05 day05 = new Day05(fileReaders);
+        // new ArrayList because I need a mutable list
+        final List<Character> inputList = new ArrayList<>(List.of('d', 'a', 'b', 'A', 'c', 'C', 'a', 'C', 'B', 'A', 'c', 'C', 'c', 'a', 'D', 'A'));
+
+        final List<Character> expectedResult = List.of('d', 'a', 'b', 'C', 'B', 'A', 'c', 'a', 'D', 'A');
+
+        //act
+        final List<Character> actualResult = day05.removeCharDuplicatesWithDifferentCases(inputList);
 
         //assert
         assertThat(actualResult).isEqualTo(expectedResult);
