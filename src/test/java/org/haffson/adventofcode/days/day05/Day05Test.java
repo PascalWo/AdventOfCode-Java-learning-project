@@ -40,7 +40,7 @@ class Day05Test {
     }
 
     @Test
-    void convertStringToCharacterList() {
+    void convertStringToCharacterList_returnListOfChars() {
         //arrange
         final Day05 day05 = new Day05(fileReaders);
         final String inputString = "dabAcCaCBAcCcaDA";
@@ -56,7 +56,7 @@ class Day05Test {
     }
 
     @Test
-    void convertStringListToString() {
+    void convertStringListToString_returnString() {
         //arrange
         final Day05 day05 = new Day05(fileReaders);
         final List<String> inputStringList = List.of("dabAcCaCBAcCcaDA");
