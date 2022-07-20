@@ -157,9 +157,7 @@ public class Day05 implements Days {
      */
     @Nonnull
     Map<Character, Integer> getPolymerLengthByRemovedChar(@Nonnull final List<Character> inputCharacterList) {
-        String letterString = "abcdefghijklmnopqrstuvwxyz";
-
-        List<Character> letterList = letterString.chars().mapToObj(c -> (char) c).toList();
+        List<Character> letterList = inputCharacterList.stream().map(Character::toLowerCase).distinct().sorted().toList();
 
         Map<Character, Integer> lengthByLetter = new HashMap<>();
 

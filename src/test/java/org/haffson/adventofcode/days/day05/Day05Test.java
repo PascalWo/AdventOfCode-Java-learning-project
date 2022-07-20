@@ -114,29 +114,7 @@ class Day05Test {
                 entry('a', 6),
                 entry('b', 8),
                 entry('c', 4),
-                entry('d', 6),
-                entry('e', 10),
-                entry('f', 10),
-                entry('g', 10),
-                entry('h', 10),
-                entry('i', 10),
-                entry('j', 10),
-                entry('k', 10),
-                entry('l', 10),
-                entry('m', 10),
-                entry('n', 10),
-                entry('o', 10),
-                entry('p', 10),
-                entry('q', 10),
-                entry('r', 10),
-                entry('s', 10),
-                entry('t', 10),
-                entry('u', 10),
-                entry('v', 10),
-                entry('w', 10),
-                entry('x', 10),
-                entry('y', 10),
-                entry('z', 10));
+                entry('d', 6));
 
         //act
         final Map<Character, Integer> actualResult = day05.getPolymerLengthByRemovedChar(inputList);
