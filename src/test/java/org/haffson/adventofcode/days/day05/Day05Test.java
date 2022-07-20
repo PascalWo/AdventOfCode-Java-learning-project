@@ -5,6 +5,9 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -81,6 +84,79 @@ class Day05Test {
 
         //act
         final List<Character> actualResult = day05.removeCharDuplicatesWithDifferentCases(inputList);
+
+        //assert
+        assertThat(actualResult).isEqualTo(expectedResult);
+    }
+
+    @Test
+    void test_secondPart_returnsExpectedResult() {
+        //arrange
+        final Day05 day05 = new Day05(fileReaders);
+        when(fileReaders.getInputList("src/main/resources/puzzle_input/day5_input.txt"))
+                .thenReturn(List.of("dabAcCaCBAcCcaDA"));
+
+        final String expectedResult = "Part 2 - Shortest remaining Units after fully reacting the polymer and removing one letter: " + 4;
+
+        //act
+        final String actualResult = day05.secondPart();
+
+        //assert
+        assertThat(actualResult).isEqualTo(expectedResult);
+    }
+
+    @Test
+    void getPolymerLengthByRemovedChar_returnIntValueOfPolymerLength() {
+        //arrange
+        final Day05 day05 = new Day05(fileReaders);
+        final List<Character> inputList = new ArrayList<>(List.of('d', 'a', 'b', 'A', 'c', 'C', 'a', 'C', 'B', 'A', 'c', 'C', 'c', 'a', 'D', 'A'));
+
+        final Map<Character, Integer> expectedResult = Stream.of(new Object[][]{
+                {'a', 6,},
+                {'b', 8,},
+                {'c', 4,},
+                {'d', 6,},
+                {'e', 10,},
+                {'f', 10,},
+                {'g', 10,},
+                {'h', 10,},
+                {'i', 10,},
+                {'j', 10,},
+                {'k', 10,},
+                {'l', 10,},
+                {'m', 10,},
+                {'n', 10,},
+                {'o', 10,},
+                {'p', 10,},
+                {'q', 10,},
+                {'r', 10,},
+                {'s', 10,},
+                {'t', 10,},
+                {'u', 10,},
+                {'v', 10,},
+                {'w', 10,},
+                {'x', 10,},
+                {'y', 10,},
+                {'z', 10}}).collect(Collectors.toMap(data -> (Character) data[0], data -> (Integer) data[1]));
+
+        //act
+        final Map<Character, Integer> actualResult = day05.getPolymerLengthByRemovedChar(inputList);
+
+        //assert
+        assertThat(actualResult).isEqualTo(expectedResult);
+    }
+
+    @Test
+    void removeSpecificLetterAndReturnDuplicateCleanedPolymerLength() {
+        //arrange
+        final Day05 day05 = new Day05(fileReaders);
+        final List<Character> inputList = new ArrayList<>(List.of('d', 'a', 'b', 'A', 'c', 'C', 'a', 'C', 'B', 'A', 'c', 'C', 'c', 'a', 'D', 'A'));
+        final Character inputLetter = 'a';
+
+        final int expectedResult = 6;
+
+        //act
+        final int actualResult = day05.removeSpecificLetterAndReturnDuplicateCleanedPolymerLength(inputLetter,inputList);
 
         //assert
         assertThat(actualResult).isEqualTo(expectedResult);
