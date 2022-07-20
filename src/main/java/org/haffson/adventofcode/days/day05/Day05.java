@@ -152,7 +152,7 @@ public class Day05 implements Days {
         Map<Character, Integer> lengthByLetter = new HashMap<>();
 
         letterList.forEach(letter -> lengthByLetter.put(letter,
-                   removeSpecificLetterAndReturnDuplicateCleanedPolymerLength(letter, inputCharacterList)));
+                removeSpecificLetterAndReturnDuplicateCleanedPolymerLength(letter, inputCharacterList)));
 
         return lengthByLetter;
     }
@@ -161,7 +161,6 @@ public class Day05 implements Days {
      * Helper method for Day 5, Part 2.
      * Removes given letter from list - upper and lower case.
      * Gives reduced polymerList to duplicateCleaning function.
-     *
      *
      * @return int of duplicateCleanedList.size.
      */
