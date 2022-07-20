@@ -6,6 +6,7 @@ import org.haffson.adventofcode.utils.FileReaders;
 import org.haffson.adventofcode.utils.ProblemStatus;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Nonnull;
 import java.util.*;
 
 /**
@@ -17,7 +18,9 @@ public class Day05 implements Days {
     /**
      * The puzzle status {@code HashMap}
      */
+    @Nonnull
     private final Map<Integer, ProblemStatusEnum> problemStatus;
+    @Nonnull
     private final FileReaders fileReaders;
 
     /**
@@ -25,7 +28,7 @@ public class Day05 implements Days {
      *
      * @param fileReaders {@code @Autowired} fileReader //TODO: inject what you need
      */
-    public Day05(final FileReaders fileReaders) {
+    public Day05(@Nonnull final FileReaders fileReaders) {
         this.fileReaders = fileReaders;
         this.problemStatus = ProblemStatus.getProblemStatusMap(1, 2,
                 ProblemStatusEnum.SOLVED, ProblemStatusEnum.SOLVED);
@@ -36,17 +39,20 @@ public class Day05 implements Days {
         return 5;
     }
 
+    @Nonnull
     @Override
     public Map<Integer, ProblemStatusEnum> getProblemStatus() {
         return problemStatus;
     }
 
+    @Nonnull
     @Override
     public String firstPart() {
         final String fileName = "src/main/resources/puzzle_input/day5_input.txt";
         return "Part 1 - Remaining Units after fully reacting the polymer: " + calculateRemainingUnits(fileReaders.getInputList(fileName));
     }
 
+    @Nonnull
     @Override
     public String secondPart() {
         final String fileName = "src/main/resources/puzzle_input/day5_input.txt";
@@ -59,7 +65,7 @@ public class Day05 implements Days {
      *
      * @return Int of remaining Units
      */
-    private int calculateRemainingUnits(final List<String> inputStringList) {
+    private int calculateRemainingUnits(@Nonnull final List<String> inputStringList) {
         String inputString = convertStringListToString(inputStringList);
 
         List<Character> characterInputList = new ArrayList<>(convertStringToCharacterList(inputString));
@@ -75,7 +81,8 @@ public class Day05 implements Days {
      *
      * @return String of complete list
      */
-    String convertStringListToString(final List<String> inputStringList) {
+    @Nonnull
+    String convertStringListToString(@Nonnull final List<String> inputStringList) {
         return inputStringList.get(0);
     }
 
@@ -86,7 +93,8 @@ public class Day05 implements Days {
      *
      * @return a mutable List<Character> for further functions.
      */
-    List<Character> convertStringToCharacterList(final String inputString) {
+    @Nonnull
+    List<Character> convertStringToCharacterList(@Nonnull final String inputString) {
         return inputString.chars().mapToObj(c -> (char) c).toList();
     }
 
@@ -99,7 +107,8 @@ public class Day05 implements Days {
      *
      * @return List<Character> without adjacent duplicates.
      */
-    List<Character> removeCharDuplicatesWithDifferentCases(List<Character> polymerCharacterList) {
+    @Nonnull
+    List<Character> removeCharDuplicatesWithDifferentCases(@Nonnull final List<Character> polymerCharacterList) {
         boolean isRunning = true;
         while (isRunning) {
             isRunning = false;
@@ -126,7 +135,7 @@ public class Day05 implements Days {
      *
      * @return Int of remaining Units
      */
-    private int calculateShortestRemainingUnits(final List<String> inputStringList) {
+    private int calculateShortestRemainingUnits(@Nonnull final List<String> inputStringList) {
         String inputString = convertStringListToString(inputStringList);
         List<Character> characterInputList = convertStringToCharacterList(inputString);
 
@@ -144,7 +153,8 @@ public class Day05 implements Days {
      *
      * @return Map<Character, Integer>
      */
-    Map<Character, Integer> getPolymerLengthByRemovedChar(final List<Character> inputCharacterList) {
+    @Nonnull
+    Map<Character, Integer> getPolymerLengthByRemovedChar(@Nonnull final List<Character> inputCharacterList) {
         String letterString = "abcdefghijklmnopqrstuvwxyz";
 
         List<Character> letterList = letterString.chars().mapToObj(c -> (char) c).toList();
@@ -164,7 +174,7 @@ public class Day05 implements Days {
      *
      * @return int of duplicateCleanedList.size.
      */
-    public int removeSpecificLetterAndReturnDuplicateCleanedPolymerLength(Character letter, final List<Character> polymerList) {
+    int removeSpecificLetterAndReturnDuplicateCleanedPolymerLength(@Nonnull final Character letter, @Nonnull final List<Character> polymerList) {
         List<Character> letterToRemove = new ArrayList<>();
         letterToRemove.add(letter);
         letterToRemove.add(Character.toUpperCase(letter));
