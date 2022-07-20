@@ -7,7 +7,6 @@ import org.haffson.adventofcode.utils.ProblemStatus;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Implementation for <i>Day 5: Chronal Calibration</i>.
@@ -63,7 +62,7 @@ public class Day05 implements Days {
     private int calculateRemainingUnits(final List<String> inputStringList) {
         String inputString = convertStringListToString(inputStringList);
 
-        List<Character> characterInputList = convertStringToCharacterList(inputString);
+        List<Character> characterInputList = new ArrayList<>(convertStringToCharacterList(inputString));
 
         List<Character> polymerCharacterList = removeCharDuplicatesWithDifferentCases(characterInputList);
         return polymerCharacterList.size();
@@ -88,7 +87,7 @@ public class Day05 implements Days {
      * @return a mutable List<Character> for further functions.
      */
     List<Character> convertStringToCharacterList(final String inputString) {
-        return inputString.chars().mapToObj(c -> (char) c).collect(Collectors.toList());
+        return inputString.chars().mapToObj(c -> (char) c).toList();
     }
 
     /**
