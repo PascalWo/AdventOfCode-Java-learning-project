@@ -119,8 +119,7 @@ public class Day05 implements Days {
                 Character nextCharacter = polymerCharacterList.get(i + 1);
                 final boolean nextCharIsDuplicateInDifferentCase = ((Character.isUpperCase(actualCharacter) && Character.isLowerCase(nextCharacter))
                         || (Character.isLowerCase(actualCharacter) && Character.isUpperCase(nextCharacter)))
-                        && (Character.toUpperCase(actualCharacter) == nextCharacter
-                        || actualCharacter == Character.toUpperCase(nextCharacter));
+                        && Character.toUpperCase(actualCharacter) == Character.toUpperCase(nextCharacter);
                 if (nextCharIsDuplicateInDifferentCase) {
                     polymerCharacterList.remove(i);
                     polymerCharacterList.remove(i);
