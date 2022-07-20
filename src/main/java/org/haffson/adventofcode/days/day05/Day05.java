@@ -6,8 +6,7 @@ import org.haffson.adventofcode.utils.FileReaders;
 import org.haffson.adventofcode.utils.ProblemStatus;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -30,7 +29,7 @@ public class Day05 implements Days {
     public Day05(final FileReaders fileReaders) {
         this.fileReaders = fileReaders;
         this.problemStatus = ProblemStatus.getProblemStatusMap(1, 2,
-                ProblemStatusEnum.SOLVED, ProblemStatusEnum.UNSOLVED);
+                ProblemStatusEnum.SOLVED, ProblemStatusEnum.SOLVED);
     }
 
     @Override
@@ -52,7 +51,7 @@ public class Day05 implements Days {
     @Override
     public String secondPart() {
         final String fileName = "src/main/resources/puzzle_input/day5_input.txt";
-        return null;
+        return "Part 2 - Shortest remaining Units after fully reacting the polymer and removing one letter: " + calculateShortestRemainingUnits(fileReaders.getInputList(fileName));
     }
 
     /**
@@ -119,5 +118,64 @@ public class Day05 implements Days {
             }
         }
         return polymerCharacterList;
+    }
+
+    /**
+     * Primary method for Day 5, Part 2.
+     * Eliminates one letter from the polymer and let it fully reacting.
+     * Searches for the letter which produces the shortest remaining units and returns its length.
+     *
+     * @return Int of remaining Units
+     */
+    private int calculateShortestRemainingUnits(final List<String> inputStringList) {
+        String inputString = convertStringListToString(inputStringList);
+        List<Character> characterInputList = convertStringToCharacterList(inputString);
+
+        Map<Character, Integer> lengthByLetterMap = getPolymerLengthByRemovedChar(characterInputList);
+
+        Map.Entry<Character, Integer> min = Collections.min(lengthByLetterMap.entrySet(),
+                Map.Entry.comparingByValue());
+
+        return min.getValue();
+    }
+
+    /**
+     * Helper method for Day 5, Part 2.
+     * Start's a loop to map each alphabetical letter with a polymer length.
+     *
+     * @return Map<Character, Integer>
+     */
+    Map<Character, Integer> getPolymerLengthByRemovedChar(final List<Character> inputCharacterList) {
+        String letterString = "abcdefghijklmnopqrstuvwxyz";
+
+        List<Character> letterList = letterString.chars().mapToObj(c -> (char) c).toList();
+
+        Map<Character, Integer> lengthByLetter = new HashMap<>();
+
+        letterList.forEach(letter -> lengthByLetter.put(letter,
+                   removeSpecificLetterAndReturnDuplicateCleanedPolymerLength(letter, inputCharacterList)));
+
+        return lengthByLetter;
+    }
+
+    /**
+     * Helper method for Day 5, Part 2.
+     * Removes given letter from list - upper and lower case.
+     * Gives reduced polymerList to duplicateCleaning function.
+     *
+     *
+     * @return int of duplicateCleanedList.size.
+     */
+    public int removeSpecificLetterAndReturnDuplicateCleanedPolymerLength(Character letter, final List<Character> polymerList) {
+        List<Character> letterToRemove = new ArrayList<>();
+        letterToRemove.add(letter);
+        letterToRemove.add(Character.toUpperCase(letter));
+
+        List<Character> copyPolymerList = new ArrayList<>(List.copyOf(polymerList));
+        copyPolymerList.removeAll(letterToRemove);
+
+        List<Character> duplicateCleanedList = removeCharDuplicatesWithDifferentCases(copyPolymerList);
+
+        return duplicateCleanedList.size();
     }
 }
