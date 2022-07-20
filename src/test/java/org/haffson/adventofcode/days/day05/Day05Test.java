@@ -133,7 +133,7 @@ class Day05Test {
         final int expectedResult = 6;
 
         //act
-        final int actualResult = day05.cleanedPolymerLengthByRemovedLetter(inputLetter,inputList);
+        final int actualResult = day05.cleanedPolymerLengthByRemovedLetter(inputLetter, inputList);
 
         //assert
         assertThat(actualResult).isEqualTo(expectedResult);
