@@ -6,9 +6,8 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
+import static java.util.Map.entry;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -111,33 +110,33 @@ class Day05Test {
         final Day05 day05 = new Day05(fileReaders);
         final List<Character> inputList = new ArrayList<>(List.of('d', 'a', 'b', 'A', 'c', 'C', 'a', 'C', 'B', 'A', 'c', 'C', 'c', 'a', 'D', 'A'));
 
-        final Map<Character, Integer> expectedResult = Stream.of(new Object[][]{
-                {'a', 6,},
-                {'b', 8,},
-                {'c', 4,},
-                {'d', 6,},
-                {'e', 10,},
-                {'f', 10,},
-                {'g', 10,},
-                {'h', 10,},
-                {'i', 10,},
-                {'j', 10,},
-                {'k', 10,},
-                {'l', 10,},
-                {'m', 10,},
-                {'n', 10,},
-                {'o', 10,},
-                {'p', 10,},
-                {'q', 10,},
-                {'r', 10,},
-                {'s', 10,},
-                {'t', 10,},
-                {'u', 10,},
-                {'v', 10,},
-                {'w', 10,},
-                {'x', 10,},
-                {'y', 10,},
-                {'z', 10}}).collect(Collectors.toMap(data -> (Character) data[0], data -> (Integer) data[1]));
+        final Map<Character, Integer> expectedResult = Map.ofEntries(
+                entry('a', 6),
+                entry('b', 8),
+                entry('c', 4),
+                entry('d', 6),
+                entry('e', 10),
+                entry('f', 10),
+                entry('g', 10),
+                entry('h', 10),
+                entry('i', 10),
+                entry('j', 10),
+                entry('k', 10),
+                entry('l', 10),
+                entry('m', 10),
+                entry('n', 10),
+                entry('o', 10),
+                entry('p', 10),
+                entry('q', 10),
+                entry('r', 10),
+                entry('s', 10),
+                entry('t', 10),
+                entry('u', 10),
+                entry('v', 10),
+                entry('w', 10),
+                entry('x', 10),
+                entry('y', 10),
+                entry('z', 10));
 
         //act
         final Map<Character, Integer> actualResult = day05.getPolymerLengthByRemovedChar(inputList);
