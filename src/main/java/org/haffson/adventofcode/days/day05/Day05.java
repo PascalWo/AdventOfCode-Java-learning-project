@@ -85,7 +85,7 @@ public class Day05 implements Days {
      */
     @Nonnull
     String convertStringListToString(@Nonnull final List<String> inputStringList) {
-        return inputStringList.get(0);
+        return String.join("", inputStringList);
     }
 
     /**
