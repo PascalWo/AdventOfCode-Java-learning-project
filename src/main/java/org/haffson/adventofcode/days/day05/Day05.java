@@ -182,7 +182,7 @@ public class Day05 implements Days {
         letterToRemove.add(letter);
         letterToRemove.add(Character.toUpperCase(letter));
 
-        List<Character> copyPolymerList = new ArrayList<>(List.copyOf(polymerList));
+        List<Character> copyPolymerList = new ArrayList<>(polymerList);
         copyPolymerList.removeAll(letterToRemove);
 
         List<Character> duplicateCleanedList = removeCharDuplicatesWithDifferentCases(copyPolymerList);
