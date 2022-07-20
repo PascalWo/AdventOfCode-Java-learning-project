@@ -49,14 +49,16 @@ public class Day05 implements Days {
     @Override
     public String firstPart() {
         final String fileName = "src/main/resources/puzzle_input/day5_input.txt";
-        return "Part 1 - Remaining Units after fully reacting the polymer: " + calculateRemainingUnits(fileReaders.getInputList(fileName));
+        final String part1Result = "Part 1 - Remaining Units after fully reacting the polymer: ";
+        return part1Result + calculateRemainingUnits(fileReaders.getInputList(fileName));
     }
 
     @Nonnull
     @Override
     public String secondPart() {
         final String fileName = "src/main/resources/puzzle_input/day5_input.txt";
-        return "Part 2 - Shortest remaining Units after fully reacting the polymer and removing one letter: " + calculateShortestRemainingUnits(fileReaders.getInputList(fileName));
+        final String part2Result = "Part 2 - Shortest remaining Units after fully reacting the polymer and removing one letter: ";
+        return part2Result + calculateShortestRemainingUnits(fileReaders.getInputList(fileName));
     }
 
     /**
@@ -115,10 +117,11 @@ public class Day05 implements Days {
             for (int i = 0; i < polymerCharacterList.size() - 1; i++) {
                 Character actualCharacter = polymerCharacterList.get(i);
                 Character nextCharacter = polymerCharacterList.get(i + 1);
-                if (((Character.isUpperCase(actualCharacter) && Character.isLowerCase(nextCharacter))
+                final boolean nextCharIsDuplicateInDifferentCase = ((Character.isUpperCase(actualCharacter) && Character.isLowerCase(nextCharacter))
                         || (Character.isLowerCase(actualCharacter) && Character.isUpperCase(nextCharacter)))
                         && (Character.toUpperCase(actualCharacter) == nextCharacter
-                        || actualCharacter == Character.toUpperCase(nextCharacter))) {
+                        || actualCharacter == Character.toUpperCase(nextCharacter));
+                if (nextCharIsDuplicateInDifferentCase) {
                     polymerCharacterList.remove(i);
                     polymerCharacterList.remove(i);
                     isRunning = true;
@@ -162,7 +165,7 @@ public class Day05 implements Days {
         Map<Character, Integer> lengthByLetter = new HashMap<>();
 
         letterList.forEach(letter -> lengthByLetter.put(letter,
-                removeSpecificLetterAndReturnDuplicateCleanedPolymerLength(letter, inputCharacterList)));
+                cleanedPolymerLengthByRemovedLetter(letter, inputCharacterList)));
 
         return lengthByLetter;
     }
@@ -174,7 +177,7 @@ public class Day05 implements Days {
      *
      * @return int of duplicateCleanedList.size.
      */
-    int removeSpecificLetterAndReturnDuplicateCleanedPolymerLength(@Nonnull final Character letter, @Nonnull final List<Character> polymerList) {
+    int cleanedPolymerLengthByRemovedLetter(@Nonnull final Character letter, @Nonnull final List<Character> polymerList) {
         List<Character> letterToRemove = new ArrayList<>();
         letterToRemove.add(letter);
         letterToRemove.add(Character.toUpperCase(letter));
