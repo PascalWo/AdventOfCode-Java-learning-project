@@ -10,7 +10,7 @@ import javax.annotation.Nonnull;
 import java.util.*;
 
 /**
- * Implementation for <i>Day 5: Chronal Calibration</i>.
+ * Implementation for <i>Day 5: Alchemical Reduction</i>.
  */
 @Component
 public class Day05 implements Days {
@@ -50,84 +50,27 @@ public class Day05 implements Days {
     public String firstPart() {
         final String fileName = "src/main/resources/puzzle_input/day5_input.txt";
         final String part1Result = "Part 1 - Remaining Units after fully reacting the polymer: ";
-        return part1Result + calculateRemainingUnits(fileReaders.getInputList(fileName));
+        return part1Result + calculateRemainingUnits(fileReaders.getInputString(fileName));
     }
 
     @Nonnull
     @Override
     public String secondPart() {
         final String fileName = "src/main/resources/puzzle_input/day5_input.txt";
-        final String part2Result = "Part 2 - Shortest remaining Units after fully reacting the polymer and removing one letter: ";
-        return part2Result + calculateShortestRemainingUnits(fileReaders.getInputList(fileName));
+        final String part2Result = "Part 2 - Shortest remaining Units after removing one letter and fully reacting the polymer: ";
+        return part2Result + calculateShortestRemainingUnits(fileReaders.getInputString(fileName));
     }
 
     /**
      * Primary method for Day 5, Part 1.
-     * Calculates the remaining Units after fully reacting the polymer scanned.
+     * Calculates the remaining Units after the scanned polymer fully react.
      *
      * @return Int of remaining Units
      */
-    private int calculateRemainingUnits(@Nonnull final List<String> inputStringList) {
-        String inputString = convertStringListToString(inputStringList);
+    private int calculateRemainingUnits(@Nonnull final String inputString) {
+        Polymer polymer = new Polymer(inputString);
 
-        List<Character> characterInputList = new ArrayList<>(convertStringToCharacterList(inputString));
-
-        List<Character> polymerCharacterList = removeCharDuplicatesWithDifferentCases(characterInputList);
-        return polymerCharacterList.size();
-    }
-
-    /**
-     * Helper method for Day 5, Part 1.
-     * Converts a List<String> to a single String.
-     * Needed because the FilerReader returns a List<String>.
-     *
-     * @return String of complete list
-     */
-    @Nonnull
-    String convertStringListToString(@Nonnull final List<String> inputStringList) {
-        return String.join("", inputStringList);
-    }
-
-    /**
-     * Helper method for Day 5, Part 1.
-     * Converts a String to a List<Character>.
-     * Important: You get a mutable list.
-     *
-     * @return a mutable List<Character> for further functions.
-     */
-    @Nonnull
-    List<Character> convertStringToCharacterList(@Nonnull final String inputString) {
-        return inputString.chars().mapToObj(c -> (char) c).toList();
-    }
-
-    /**
-     * Helper method for Day 5, Part 1.
-     * Main method to remove duplicates.
-     * Not every duplicate should be removed.
-     * Just the duplicated adjacent values which have different cases (upper/ lower) will be removed.
-     * Loops over the list to remove emerging values too.
-     *
-     * @return List<Character> without adjacent duplicates.
-     */
-    @Nonnull
-    List<Character> removeCharDuplicatesWithDifferentCases(@Nonnull final List<Character> polymerCharacterList) {
-        boolean isRunning = true;
-        while (isRunning) {
-            isRunning = false;
-            for (int i = 0; i < polymerCharacterList.size() - 1; i++) {
-                Character actualCharacter = polymerCharacterList.get(i);
-                Character nextCharacter = polymerCharacterList.get(i + 1);
-                final boolean nextCharIsDuplicateInDifferentCase = ((Character.isUpperCase(actualCharacter) && Character.isLowerCase(nextCharacter))
-                        || (Character.isLowerCase(actualCharacter) && Character.isUpperCase(nextCharacter)))
-                        && Character.toUpperCase(actualCharacter) == Character.toUpperCase(nextCharacter);
-                if (nextCharIsDuplicateInDifferentCase) {
-                    polymerCharacterList.remove(i);
-                    polymerCharacterList.remove(i);
-                    isRunning = true;
-                }
-            }
-        }
-        return polymerCharacterList;
+        return polymer.removeCharDuplicatesWithDifferentCases().length();
     }
 
     /**
@@ -137,53 +80,9 @@ public class Day05 implements Days {
      *
      * @return Int of remaining Units
      */
-    private int calculateShortestRemainingUnits(@Nonnull final List<String> inputStringList) {
-        String inputString = convertStringListToString(inputStringList);
-        List<Character> characterInputList = convertStringToCharacterList(inputString);
+    private int calculateShortestRemainingUnits(@Nonnull final String inputString) {
+        Polymer polymer = new Polymer(inputString);
 
-        Map<Character, Integer> lengthByLetterMap = getPolymerLengthByRemovedChar(characterInputList);
-
-        Map.Entry<Character, Integer> min = Collections.min(lengthByLetterMap.entrySet(),
-                Map.Entry.comparingByValue());
-
-        return min.getValue();
-    }
-
-    /**
-     * Helper method for Day 5, Part 2.
-     * Start's a loop to map each alphabetical letter with a polymer length.
-     *
-     * @return Map<Character, Integer>
-     */
-    @Nonnull
-    Map<Character, Integer> getPolymerLengthByRemovedChar(@Nonnull final List<Character> inputCharacterList) {
-        List<Character> letterList = inputCharacterList.stream().map(Character::toLowerCase).distinct().sorted().toList();
-
-        Map<Character, Integer> lengthByLetter = new HashMap<>();
-
-        letterList.forEach(letter -> lengthByLetter.put(letter,
-                cleanedPolymerLengthByRemovedLetter(letter, inputCharacterList)));
-
-        return lengthByLetter;
-    }
-
-    /**
-     * Helper method for Day 5, Part 2.
-     * Removes given letter from list - upper and lower case.
-     * Gives reduced polymerList to duplicateCleaning function.
-     *
-     * @return int of duplicateCleanedList.size.
-     */
-    int cleanedPolymerLengthByRemovedLetter(@Nonnull final Character letter, @Nonnull final List<Character> polymerList) {
-        List<Character> letterToRemove = new ArrayList<>();
-        letterToRemove.add(letter);
-        letterToRemove.add(Character.toUpperCase(letter));
-
-        List<Character> copyPolymerList = new ArrayList<>(polymerList);
-        copyPolymerList.removeAll(letterToRemove);
-
-        List<Character> duplicateCleanedList = removeCharDuplicatesWithDifferentCases(copyPolymerList);
-
-        return duplicateCleanedList.size();
+        return polymer.getShortestRemainingPolymerLength();
     }
 }
