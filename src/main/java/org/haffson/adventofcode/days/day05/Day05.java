@@ -132,7 +132,7 @@ public class Day05 implements Days {
 
     /**
      * Primary method for Day 5, Part 2.
-     * Eliminates one letter from the polymer and let it fully reacting.
+     * Eliminates one letter from the polymer and let it fully react.
      * Searches for the letter which produces the shortest remaining units and returns its length.
      *
      * @return Int of remaining Units
