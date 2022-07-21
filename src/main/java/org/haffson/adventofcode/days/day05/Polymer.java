@@ -5,7 +5,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public record Polymer(@Nonnull String value) {
-
     public int length() {
         return value.length();
     }
@@ -43,7 +42,7 @@ public record Polymer(@Nonnull String value) {
      * @return new Polymer without adjacent duplicates.
      */
     @Nonnull
-    public Polymer removeCharDuplicatesWithDifferentCases() {
+    public Polymer react() {
         List<Character> characterList = new ArrayList<>(convertPolymerToCharacterList());
 
         boolean isRunning = true;
@@ -72,12 +71,12 @@ public record Polymer(@Nonnull String value) {
      * @return Map<Character, Integer>
      */
     @Nonnull
-    public Map<Character, Integer> getPolymerLengthByRemovedChar() {
+    public Map<Character, Polymer> getPolymerLengthByRemovedChar() {
         List<Character> inputCharacterList = new ArrayList<>(convertPolymerToCharacterList());
 
         List<Character> letterList = inputCharacterList.stream().map(Character::toLowerCase).distinct().sorted().toList();
 
-        Map<Character, Integer> lengthByLetter = new HashMap<>();
+        Map<Character, Polymer> lengthByLetter = new HashMap<>();
 
         letterList.forEach(letter -> lengthByLetter.put(letter,
                 reactedPolymerLengthWithRemovedLetter(letter)));
@@ -92,7 +91,7 @@ public record Polymer(@Nonnull String value) {
      *
      * @return int of reacted polymer length
      */
-    public int reactedPolymerLengthWithRemovedLetter(@Nonnull final Character letter) {
+    public Polymer reactedPolymerLengthWithRemovedLetter(@Nonnull final Character letter) {
         List<Character> inputCharacterList = new ArrayList<>(convertPolymerToCharacterList());
 
         List<Character> letterToRemove = new ArrayList<>();
@@ -103,9 +102,7 @@ public record Polymer(@Nonnull String value) {
 
         Polymer polymerWithRemovedLetter = new Polymer(convertCharacterListToString(inputCharacterList));
 
-        Polymer reactedPolymer = polymerWithRemovedLetter.removeCharDuplicatesWithDifferentCases();
-
-        return reactedPolymer.length();
+        return polymerWithRemovedLetter.react();
     }
 
     /**
@@ -116,10 +113,11 @@ public record Polymer(@Nonnull String value) {
      * @return Map.Entry<Character, Integer> shortest reacted polymer length by letter
      */
     @Nonnull
-    public Map.Entry<Character, Integer> getShortestRemainingUnitEntry() {
+    public ShortestPolymer getShortestRemainingUnitEntry() {
 
-        return Collections.min(getPolymerLengthByRemovedChar().entrySet(),
-                Map.Entry.comparingByValue());
+        var entry = Collections.min(getPolymerLengthByRemovedChar().entrySet(),
+                Map.Entry.comparingByValue(Comparator.comparingInt(Polymer::length)));
+        return new ShortestPolymer(entry.getKey(), entry.getValue());
     }
 
     /**
@@ -129,7 +127,13 @@ public record Polymer(@Nonnull String value) {
      * @return int value of shortest reacted polymer length by letter
      */
     public int getShortestRemainingPolymerLength() {
-        return getShortestRemainingUnitEntry().getValue();
+        return getShortestRemainingUnitEntry().length();
+    }
+
+    public record ShortestPolymer(char removedLetter, Polymer polymer){
+        public int length() {
+            return polymer.length();
+        }
     }
 
 }

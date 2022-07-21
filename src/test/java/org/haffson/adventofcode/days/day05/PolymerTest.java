@@ -62,7 +62,7 @@ class PolymerTest {
         final Polymer expectedResult = new Polymer("dabCBAcaDA");
 
         //act
-        final Polymer actualResult = polymer.removeCharDuplicatesWithDifferentCases();
+        final Polymer actualResult = polymer.react();
 
         //assert
         assertThat(actualResult).isEqualTo(expectedResult);
@@ -75,14 +75,14 @@ class PolymerTest {
         final Polymer polymer = new Polymer(inputString);
 
 
-        final Map<Character, Integer> expectedResult = Map.ofEntries(
-                entry('a', 6),
-                entry('b', 8),
-                entry('c', 4),
-                entry('d', 6));
+        final Map<Character, Polymer> expectedResult = Map.ofEntries(
+                entry('a', new Polymer("dbCBcD")),
+                entry('b', new Polymer("daCAcaDA")),
+                entry('c', new Polymer("daDA")),
+                entry('d', new Polymer("abCBAc")));
 
         //act
-        final Map<Character, Integer> actualResult = polymer.getPolymerLengthByRemovedChar();
+        final Map<Character, Polymer> actualResult = polymer.getPolymerLengthByRemovedChar();
 
         //assert
         assertThat(actualResult).isEqualTo(expectedResult);
@@ -95,10 +95,10 @@ class PolymerTest {
         final Polymer polymer = new Polymer(inputString);
         final Character inputLetter = 'a';
 
-        final int expectedResult = 6;
+        final Polymer expectedResult = new Polymer("dbCBcD");
 
         //act
-        final int actualResult = polymer.reactedPolymerLengthWithRemovedLetter(inputLetter);
+        final Polymer actualResult = polymer.reactedPolymerLengthWithRemovedLetter(inputLetter);
 
         //assert
         assertThat(actualResult).isEqualTo(expectedResult);
@@ -111,10 +111,10 @@ class PolymerTest {
         final Polymer polymer = new Polymer(inputString);
 
 
-        final Map.Entry<Character, Integer> expectedResult = Map.entry('c', 4);
+        final Polymer.ShortestPolymer expectedResult = new Polymer.ShortestPolymer('c', new Polymer("daDA"));
 
         //act
-        final Map.Entry<Character, Integer> actualResult = polymer.getShortestRemainingUnitEntry();
+        final Polymer.ShortestPolymer actualResult = polymer.getShortestRemainingUnitEntry();
 
         //assert
         assertThat(actualResult).isEqualTo(expectedResult);

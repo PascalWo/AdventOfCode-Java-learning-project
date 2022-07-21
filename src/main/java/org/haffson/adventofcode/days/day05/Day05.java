@@ -70,7 +70,7 @@ public class Day05 implements Days {
     private int calculateRemainingUnits(@Nonnull final String inputString) {
         Polymer polymer = new Polymer(inputString);
 
-        return polymer.removeCharDuplicatesWithDifferentCases().length();
+        return polymer.react().length();
     }
 
     /**
