@@ -110,7 +110,6 @@ class PolymerTest {
         final String inputString = "dabAcCaCBAcCcaDA";
         final Polymer polymer = new Polymer(inputString);
 
-
         final Polymer.ShortestPolymer expectedResult = new Polymer.ShortestPolymer('c', new Polymer("daDA"));
 
         //act
