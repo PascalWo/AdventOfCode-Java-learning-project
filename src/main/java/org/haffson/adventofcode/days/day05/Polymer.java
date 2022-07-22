@@ -17,18 +17,18 @@ public record Polymer(@Nonnull String value) {
      * @return a mutable List<Character> for further functions.
      */
     @Nonnull
-    public List<Character> convertPolymerToCharacterList() {
+    private List<Character> convertPolymerToCharacterList() {
         return value.chars().mapToObj(c -> (char) c).toList();
     }
 
     /**
      * Helper method for Day 5, Part 1.
-     * Converts a List<Character> to a String/ Polymer.
+     * Converts a List<Character> to a String.
      *
      * @return String of a List<Character>.
      */
     @Nonnull
-    public String convertCharacterListToString(@Nonnull final List<Character> characterList) {
+    private String convertCharacterListToString(@Nonnull final List<Character> characterList) {
         return characterList.stream().map(String::valueOf).collect(Collectors.joining());
     }
 
@@ -71,7 +71,7 @@ public record Polymer(@Nonnull String value) {
      * @return Map<Character, Integer>
      */
     @Nonnull
-    public Map<Character, Polymer> getPolymerLengthByRemovedChar() {
+    private Map<Character, Polymer> getPolymerLengthByRemovedChar() {
         List<Character> inputCharacterList = new ArrayList<>(convertPolymerToCharacterList());
 
         List<Character> letterList = inputCharacterList.stream().map(Character::toLowerCase).distinct().sorted().toList();
@@ -91,7 +91,7 @@ public record Polymer(@Nonnull String value) {
      *
      * @return int of reacted polymer length
      */
-    public Polymer reactedPolymerLengthWithRemovedLetter(@Nonnull final Character letter) {
+    private Polymer reactedPolymerLengthWithRemovedLetter(@Nonnull final Character letter) {
         List<Character> inputCharacterList = new ArrayList<>(convertPolymerToCharacterList());
 
         List<Character> letterToRemove = new ArrayList<>();
@@ -113,7 +113,7 @@ public record Polymer(@Nonnull String value) {
      * @return Map.Entry<Character, Integer> shortest reacted polymer length by letter
      */
     @Nonnull
-    public ShortestPolymer getShortestRemainingUnitEntry() {
+    private ShortestPolymer getShortestRemainingUnitEntry() {
 
         var entry = Collections.min(getPolymerLengthByRemovedChar().entrySet(),
                 Map.Entry.comparingByValue(Comparator.comparingInt(Polymer::length)));
@@ -130,7 +130,7 @@ public record Polymer(@Nonnull String value) {
         return getShortestRemainingUnitEntry().length();
     }
 
-    public record ShortestPolymer(char removedLetter, Polymer polymer){
+    public record ShortestPolymer(char removedLetter, Polymer polymer) {
         public int length() {
             return polymer.length();
         }

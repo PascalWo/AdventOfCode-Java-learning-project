@@ -7,7 +7,7 @@ import org.haffson.adventofcode.utils.ProblemStatus;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.Map;
 
 /**
  * Implementation for <i>Day 5: Alchemical Reduction</i>.
