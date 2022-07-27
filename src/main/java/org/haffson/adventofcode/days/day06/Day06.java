@@ -67,9 +67,12 @@ public class Day06 implements Days {
      *
      * @return Int
      */
-    private int calculateFirstPart(@Nonnull final List<String> inputStringList) {
+    private long calculateFirstPart(@Nonnull final List<String> inputStringList) {
+        List<Coordinate> coordinateList = Coordinate.of(inputStringList);
 
-        return 0;
+        Coordinate.CoordinateAreas coordinateAreas = new Coordinate.CoordinateAreas(coordinateList);
+        return coordinateAreas.biggestCoordAreaWithoutInfinites();
+
     }
 
     /**
