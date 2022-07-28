@@ -266,6 +266,72 @@ public record Coordinate(int xCoordinate, int yCoordinate) {
 
             return findCoordinateWithBiggestArea(areaByCoordsWithoutInfinites);
         }
+//        ----------------------------------------------------------------------------------------------------
+
+        /**
+         * Helper method for day 6 Part2.
+         * Iterates over the coordinate system.
+         * Fills each entry with a "#" when the combined distance to each coordinate is less than 10,000.
+         * Else fills the spot with ".".
+         */
+        private void fillCoordinateSystemWithHashTags() {
+            Arrays.stream(coordinateSystem).forEach(arrayOfXCoordinates ->
+                    IntStream.range(0, arrayOfXCoordinates.length)
+                            .forEach(yCoordinate -> {
+                                int xCoordinate = Arrays.asList(coordinateSystem).indexOf(arrayOfXCoordinates);
+                                Coordinate toCompare = new Coordinate(xCoordinate, yCoordinate);
+
+                                Map<Integer, Integer> distancesByCoordinate = getDistanceByCoordinate(toCompare);
+
+                                coordinateSystem[xCoordinate][yCoordinate] = getClaimIdentification(distancesByCoordinate);
+
+                            }));
+        }
+
+        /**
+         * Helper method for day 6 Part2.
+         * Needs a Map of coordinate index and claimed area.
+         * If the combined distance to all other coordinates is less than 10,000 it returns "#".
+         * Else it return ".".
+         *
+         * @return String with identification("#" or ".")
+         */
+        @Nonnull
+        private String getClaimIdentification(@Nonnull final Map<Integer, Integer> distancesByCoordinate) {
+            int claimedArea = distancesByCoordinate.values().stream().mapToInt(d -> d).sum();
+
+            if (claimedArea < 32) {
+                return "#";
+            } else {
+                return ".";
+            }
+        }
+
+        /**
+         * Helper method for day 6 Part2.
+         * Needs a Map of coordinate ids and claimed area.
+         * Return the value (claimed region) for coordinate id "#".
+         * All coordinates in this region have a combined distance less than 10,000 to all other coordinates.
+         *
+         * @return long claimed region with distance less than 10,000.
+         */
+        private long getValueClaimedByCoordinateLessThan10000(Map<String, Long> areaByString) {
+            return areaByString.get("#");
+        }
+
+        /**
+         * Helper method for day 6 Part2.
+         * Finds the size of the region which is claimed when each coordinate in this region has less than 10,000
+         * distance to every other coordinate.
+         *
+         * @return long region size.
+         */
+        public long regionSizeWithLessThan10000Distance() {
+            fillCoordinateSystemWithHashTags();
+            Map<String, Long> areaByString = getAreaByCoordinate();
+            return getValueClaimedByCoordinateLessThan10000(areaByString);
+        }
+
 
         @Override
         public boolean equals(Object o) {
