@@ -1,59 +1,97 @@
 package org.haffson.adventofcode.days.day06;
 
+import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+/**
+ * Helper record for day 6.
+ * Is used to work better with the string inputs.
+ * Coordinates have an x and y value.
+ * Also, you can compare two coordinates with each other.
+ */
 public record Coordinate(int xCoordinate, int yCoordinate) {
 
-
-    public static Coordinate of(final String input) {
+    @Nonnull
+    public static Coordinate of(@Nonnull final String input) {
         final String[] split1 = input.split(",");
         final String[] split2 = split1[1].split(" ");
 
-        int xCoordinate = Integer.parseInt(split1[0]);
-        int yCoordinate = Integer.parseInt(split2[1]);
+        final int xCoordinate = Integer.parseInt(split1[0]);
+        final int yCoordinate = Integer.parseInt(split2[1]);
 
         return new Coordinate(xCoordinate, yCoordinate);
     }
-
-    public static List<Coordinate> of(final List<String> stringList) {
+    /**
+     * Helper method for day 6.
+     * Gives a list<Coordinate> of a string-list.
+     *
+     *
+     * @return List<Coordinate>
+     */
+    @Nonnull
+    public static List<Coordinate> of(@Nonnull final List<String> stringList) {
         return stringList.stream().map(Coordinate::of).toList();
     }
 
-    public static int coordinateFieldDistance
-            (Coordinate coordinateToCompare, Coordinate comparedCoordinate) {
+    /**
+     * Helper method for day 6.
+     * Compares the distance of two coordinates.
+     *
+     * @return int of how many fields are between two coordinates.
+     */
+    public static int coordinateFieldDistance(@Nonnull final Coordinate coordinateToCompare,
+                                              @Nonnull final Coordinate comparedCoordinate) {
         int xDistance = Math.abs(coordinateToCompare.xCoordinate - comparedCoordinate.xCoordinate);
         int yDistance = Math.abs(coordinateToCompare.yCoordinate - comparedCoordinate.yCoordinate);
 
         return xDistance + yDistance;
     }
 
-    public record CoordinateAreas(List<Coordinate> coordinates, String[][] coordinateSystem) {
-        public CoordinateAreas(List<Coordinate> coordinates) {
+    /**
+     * Helper record for day 6.
+     * Uses a List<Coordinates> to get a coordinate system.
+     * Has some helper methods to calculate areas of coordinates.
+     */
+    public record CoordinateAreas(@Nonnull List<Coordinate> coordinates,@Nonnull String[][] coordinateSystem) {
+        public CoordinateAreas(@Nonnull List<Coordinate> coordinates) {
             this(coordinates, createCoordinateSystem(coordinates));
         }
 
-        //    public String[][] coordinateSystem = createCoordinateSystem();
-
-        public static String[][] createCoordinateSystem(List<Coordinate> coordinates) {
-            int maxCoordX = coordinates.stream()
+        /**
+         * Helper method for day 6.
+         * Creates a coordinate system.
+         * The length and height depends on the max values of the List<Coordinate>
+         *
+         * @return String[][] coordinate system.
+         */
+        @Nonnull
+        private static String[][] createCoordinateSystem(@Nonnull final List<Coordinate> coordinates) {
+            int maxCoordinateX = coordinates.stream()
                     .max(Comparator.comparingInt(c -> c.xCoordinate))
                     .orElseThrow(NoSuchElementException::new)
                     .xCoordinate();
-            int maxCoordY = coordinates.stream()
+            int maxCoordinateY = coordinates.stream()
                     .max(Comparator.comparingInt(c -> c.yCoordinate)).
                     orElseThrow(NoSuchElementException::new)
                     .yCoordinate();
 
-            return new String[maxCoordX + 1][maxCoordY + 1];
+            return new String[maxCoordinateX + 1][maxCoordinateY + 1];
         }
 
-        List<Integer> findCoordinatesWithShortestDistance(Coordinate toCompare) {
-            Map<Integer, Integer> distancesByCoordinate = new HashMap<>();
-            coordinates.forEach(coordinate -> distancesByCoordinate
-                    .put(coordinates.indexOf(coordinate), coordinateFieldDistance(toCompare, coordinate)));
+        /**
+         * Helper method for day 6.
+         * Needs a Map with key=coordinate ids and value=distance.
+         * Lists the coordinate ids, which have the shortest distance.
+         *
+         *
+         * @return List<Integer> with coordinate ids.
+         */
+        @Nonnull
+        private List<Integer> findShortestDistances(@Nonnull final Map<Integer, Integer> distancesByCoordinate) {
+            List<Integer> nearestCoordinates = new ArrayList<>();
 
             int shortestDistance = distancesByCoordinate
                     .entrySet()
@@ -62,8 +100,6 @@ public record Coordinate(int xCoordinate, int yCoordinate) {
                     .orElseThrow(NoSuchElementException::new)
                     .getValue();
 
-            List<Integer> nearestCoordinates = new ArrayList<>();
-
             distancesByCoordinate.forEach((comparedCoordinate, coordinateDistance) -> {
                 if (coordinateDistance.equals(shortestDistance)) {
                     nearestCoordinates.add(comparedCoordinate);
@@ -71,63 +107,101 @@ public record Coordinate(int xCoordinate, int yCoordinate) {
             });
 
             return nearestCoordinates;
-
         }
 
-        public void fillCoordinateSystem() {
-//        String[][] coordinateSystem = createCoordinateSystem();
+        /**
+         * Helper method for day 6.
+         * Needs a Coordinate and compares it to instance coordinates.
+         * Uses a helper method to get a List<Integer> of the closest coordinates.
+         *
+         * @return List<Integer> with coordinate ids.
+         */
+        @Nonnull
+        private List<Integer> findNearestCoordinates(@Nonnull final Coordinate coordinateToCompare) {
+            Map<Integer, Integer> distancesByCoordinate = new HashMap<>();
+            coordinates.forEach(coordinate -> distancesByCoordinate
+                    .put(coordinates.indexOf(coordinate), coordinateFieldDistance(coordinateToCompare, coordinate)));
+
+            return findShortestDistances(distancesByCoordinate);
+        }
+
+        /**
+         * Helper method for day 6.
+         * Needs a List<Integer> with Coordinate ids.
+         * Proves whether the list contains one or more values.
+         * If the list just contains one value, it means the spot in the coordinate system is only claimed by one coordinate.
+         * If the list contains two or more values, the spot is claimed by more coordinates.
+         * Is it claimed by more coordinates it should be marked with a ".".
+         *
+         *
+         * @return String to fill the coordinate system.
+         */
+        @Nonnull
+        private String givesCoordinateSystemInput(@Nonnull final List<Integer> nearestCoordinates) {
+            if (nearestCoordinates.size() > 1) {
+                return ".";
+            } else {
+                return String.valueOf(nearestCoordinates.get(0));
+            }
+        }
+
+        /**
+         * Helper method for day 6.
+         * Iterates over the coordinate system.
+         * Fills each entry with a coordinate id or "." when a spot is claimed by several coordinates
+         */
+        private void fillCoordinateSystem() {
             Arrays.stream(coordinateSystem).forEach(arrayOfXCoordinates ->
                     IntStream.range(0, arrayOfXCoordinates.length)
                             .forEach(yCoordinate -> {
-
                                 int xCoordinate = Arrays.asList(coordinateSystem).indexOf(arrayOfXCoordinates);
-
                                 Coordinate toCompare = new Coordinate(xCoordinate, yCoordinate);
 
-                                List<Integer> nearestCoordinates = findCoordinatesWithShortestDistance(toCompare);
-
-                                if (nearestCoordinates.size() > 1) {
-                                    coordinateSystem[xCoordinate][yCoordinate] = ".";
-                                } else {
-                                    coordinateSystem[xCoordinate][yCoordinate] = String.valueOf(nearestCoordinates.get(0));
-                                }
-
+                                List<Integer> nearestCoordinates = findNearestCoordinates(toCompare);
+                                coordinateSystem[xCoordinate][yCoordinate] = givesCoordinateSystemInput(nearestCoordinates);
                             }));
         }
 
 
-        public Set<String> findInfiniteCoordinates() {
-//        String[][] coordinateSystem = fillCoordinateSystem();
-            // Walk the outer edges, and if we find an ID, it is to be excluded
-            // Top
+        /**
+         * Helper method for day 6.
+         * After a coordinate system is filled with coordinate ids it returns infinite coordinates.
+         * Coordinates who grow till infinity.
+         * To find those, this method irritates over all 4 borders and collects the coordinate ids to a Set.
+         *
+         * @return Set<String> with coordinate ids who grow till infinity.
+         */
+        @Nonnull
+        private Set<String> findInfiniteCoordinates() {
             Set<String> infiniteCoordinates = Arrays.stream(coordinateSystem)
-                    .map(strings -> strings[0])
-                    .filter(gridElement -> !Objects.equals(gridElement, "."))
+                    .map(coordinates -> coordinates[0])
+                    .filter(coordinateSystem -> !Objects.equals(coordinateSystem, "."))
                     .collect(Collectors.toSet());
 
-            // Bottom
             Arrays.stream(coordinateSystem)
-                    .map(strings -> strings[coordinateSystem[0].length - 1])
-                    .filter(gridElement -> !Objects.equals(gridElement, "."))
+                    .map(coordinates -> coordinates[coordinateSystem[0].length - 1])
+                    .filter(coordinateSystem -> !Objects.equals(coordinateSystem, "."))
                     .forEach(infiniteCoordinates::add);
 
-            // Left
             Arrays.stream(coordinateSystem[0])
-                    .filter(gridElement -> !Objects.equals(gridElement, "."))
+                    .filter(coordinateSystem -> !Objects.equals(coordinateSystem, "."))
                     .forEach(infiniteCoordinates::add);
 
-            // Right
             Arrays.stream(coordinateSystem[coordinateSystem.length - 1], 0, coordinateSystem[0].length)
-                    .filter(gridElement -> !Objects.equals(gridElement, "."))
+                    .filter(coordinateSystem -> !Objects.equals(coordinateSystem, "."))
                     .forEach(infiniteCoordinates::add);
 
-            System.out.println(infiniteCoordinates);
             return infiniteCoordinates;
         }
 
-        public Map<String, Long> getAreaByCoordinate() {
-//        String[][] coordinateSystem = fillCoordinateSystem();
-
+        /**
+         * Helper method for day 6.
+         * Uses a coordinate system to create a Map with coordinate ids and claimed area.
+         *
+         * @return Map<String, Integer> AreaByCoordinate
+         */
+        @Nonnull
+        private Map<String, Long> getAreaByCoordinate() {
             List<String> flattedCoordinateSystem = Arrays.stream(coordinateSystem)
                     .flatMap(Arrays::stream).toList();
 
@@ -136,15 +210,28 @@ public record Coordinate(int xCoordinate, int yCoordinate) {
                             Collectors.counting()));
         }
 
-        public Map<String, Long> removeInfiniteCoordsFromMap(Map<String, Long> areaByPoint,
-                                                             Set<String> infiniteCoordinates) {
+        /**
+         * Helper method for day 6.
+         * Needs a Map of coordinate ids and claimed area + infinite coordinates.
+         * Removes the infinitely growing coordinates from the map.
+         *
+         * @return Map<String, long> without infinite coordinates.
+         */
+        @Nonnull
+        private Map<String, Long> removeInfiniteCoordsFromMap(@Nonnull final Map<String, Long> areaByPoint,
+                                                             @Nonnull final Set<String> infiniteCoordinates) {
             infiniteCoordinates.forEach(areaByPoint.keySet()::remove);
-            System.out.println(areaByPoint);
             return areaByPoint;
         }
 
-        public long findCoordinateWithBiggestArea(Map<String, Long> areaByCoordinates) {
-            System.out.println(areaByCoordinates.entrySet().stream().max(Map.Entry.comparingByValue()).orElseThrow(NoSuchElementException::new).getValue());
+        /**
+         * Helper method for day 6.
+         * Needs a Map of coordinate ids and claimed area.
+         * Finds the highest value in the map -> coordinate with max claimed area.
+         *
+         * @return long max claimed area by a cooridnate.
+         */
+        private long findCoordinateWithBiggestArea(@Nonnull final Map<String, Long> areaByCoordinates) {
             return areaByCoordinates.entrySet()
                     .stream()
                     .max(Map.Entry.comparingByValue())
@@ -152,7 +239,14 @@ public record Coordinate(int xCoordinate, int yCoordinate) {
                     .getValue();
         }
 
-        public long biggestCoordAreaWithoutInfinites() {
+        /**
+         * Helper method for day 6.
+         * Needs a Map of coordinate ids and claimed area.
+         * Finds the highest value in the map -> coordinate with max claimed area.
+         *
+         * @return long max claimed area by a cooridnate.
+         */
+        public long maxCoordinateAreaWithoutInfinites() {
             fillCoordinateSystem();
             Set<String> infiniteCoords = findInfiniteCoordinates();
             Map<String, Long> areaByCoords = getAreaByCoordinate();
@@ -183,7 +277,5 @@ public record Coordinate(int xCoordinate, int yCoordinate) {
                     ", coordinateSystem=" + Arrays.toString(coordinateSystem) +
                     '}';
         }
-
     }
-
 }

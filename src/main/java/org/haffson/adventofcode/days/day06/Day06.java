@@ -64,15 +64,18 @@ public class Day06 implements Days {
 
     /**
      * Primary method for Day 6, Part 1.
+     * Input: List<String> with coordinates.
+     * Pattern looks like "x, y".
      *
-     * @return Int
+     * Transform strings to List<Coordinates> and finds the coordinate which claims the biggest area when it grows.
+     *
+     * @return long area of the biggest grown coordinate.
      */
     private long calculateFirstPart(@Nonnull final List<String> inputStringList) {
         List<Coordinate> coordinateList = Coordinate.of(inputStringList);
 
         Coordinate.CoordinateAreas coordinateAreas = new Coordinate.CoordinateAreas(coordinateList);
-        return coordinateAreas.biggestCoordAreaWithoutInfinites();
-
+        return coordinateAreas.maxCoordinateAreaWithoutInfinites();
     }
 
     /**
