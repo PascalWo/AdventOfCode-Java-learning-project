@@ -1,12 +1,10 @@
 package org.haffson.adventofcode.days.day06;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class CoordinateTest {
 
@@ -38,7 +36,26 @@ class CoordinateTest {
 
         //act
         List<Coordinate> actualResult = Coordinate.of(stringList);
-        System.out.println(actualResult);
+
+        //assert
+        assertThat(actualResult).isEqualTo(expectedResult);
+    }
+
+    @Test
+    void constructorForCoordinateArea_shouldReturnAreaWithCoordinateSystem() {
+        //arrange
+        List<Coordinate> coordinates = List.of(
+                new Coordinate(1, 1),
+                new Coordinate(1, 6),
+                new Coordinate(8, 3),
+                new Coordinate(3, 4),
+                new Coordinate(5, 5),
+                new Coordinate(8, 9));
+
+        Coordinate.CoordinateAreas expectedResult = new Coordinate.CoordinateAreas(coordinates, new String[9][10]);
+        //act
+
+        Coordinate.CoordinateAreas actualResult = new Coordinate.CoordinateAreas(coordinates);
 
         //assert
         assertThat(actualResult).isEqualTo(expectedResult);
