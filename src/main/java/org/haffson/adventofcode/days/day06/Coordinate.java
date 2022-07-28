@@ -117,11 +117,25 @@ public record Coordinate(int xCoordinate, int yCoordinate) {
          */
         @Nonnull
         private List<Integer> findNearestCoordinates(@Nonnull final Coordinate coordinateToCompare) {
+            Map<Integer, Integer> distancesByCoordinate = getDistanceByCoordinate(coordinateToCompare);
+
+            return findShortestDistances(distancesByCoordinate);
+        }
+
+        /**
+         * Helper method for day 6.
+         * Needs a Coordinate and compares it to given coordinates.
+         * Maps coordinate distance by compared coordinate
+         *
+         * @return Map<Integer, Integer> distanceByCoordinate.
+         */
+        @Nonnull
+        private Map<Integer, Integer> getDistanceByCoordinate(@Nonnull final Coordinate coordinateToCompare) {
             Map<Integer, Integer> distancesByCoordinate = new HashMap<>();
             coordinates.forEach(coordinate -> distancesByCoordinate
                     .put(coordinates.indexOf(coordinate), coordinateFieldDistance(coordinateToCompare, coordinate)));
 
-            return findShortestDistances(distancesByCoordinate);
+            return distancesByCoordinate;
         }
 
         /**
