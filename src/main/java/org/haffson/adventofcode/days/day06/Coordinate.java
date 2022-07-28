@@ -24,10 +24,10 @@ public record Coordinate(int xCoordinate, int yCoordinate) {
 
         return new Coordinate(xCoordinate, yCoordinate);
     }
+
     /**
      * Helper method for day 6.
      * Gives a list<Coordinate> of a string-list.
-     *
      *
      * @return List<Coordinate>
      */
@@ -55,7 +55,7 @@ public record Coordinate(int xCoordinate, int yCoordinate) {
      * Uses a List<Coordinates> to get a coordinate system.
      * Has some helper methods to calculate areas of coordinates.
      */
-    public record CoordinateAreas(@Nonnull List<Coordinate> coordinates,@Nonnull String[][] coordinateSystem) {
+    public record CoordinateAreas(@Nonnull List<Coordinate> coordinates, @Nonnull String[][] coordinateSystem) {
         public CoordinateAreas(@Nonnull List<Coordinate> coordinates) {
             this(coordinates, createCoordinateSystem(coordinates));
         }
@@ -86,7 +86,6 @@ public record Coordinate(int xCoordinate, int yCoordinate) {
          * Needs a Map with key=coordinate ids and value=distance.
          * Lists the coordinate ids, which have the shortest distance.
          *
-         *
          * @return List<Integer> with coordinate ids.
          */
         @Nonnull
@@ -111,7 +110,7 @@ public record Coordinate(int xCoordinate, int yCoordinate) {
 
         /**
          * Helper method for day 6.
-         * Needs a Coordinate and compares it to instance coordinates.
+         * Needs a Coordinate and compares it to given coordinates.
          * Uses a helper method to get a List<Integer> of the closest coordinates.
          *
          * @return List<Integer> with coordinate ids.
@@ -219,7 +218,7 @@ public record Coordinate(int xCoordinate, int yCoordinate) {
          */
         @Nonnull
         private Map<String, Long> removeInfiniteCoordsFromMap(@Nonnull final Map<String, Long> areaByPoint,
-                                                             @Nonnull final Set<String> infiniteCoordinates) {
+                                                              @Nonnull final Set<String> infiniteCoordinates) {
             infiniteCoordinates.forEach(areaByPoint.keySet()::remove);
             return areaByPoint;
         }
@@ -229,7 +228,7 @@ public record Coordinate(int xCoordinate, int yCoordinate) {
          * Needs a Map of coordinate ids and claimed area.
          * Finds the highest value in the map -> coordinate with max claimed area.
          *
-         * @return long max claimed area by a cooridnate.
+         * @return long max claimed area by a coordinate.
          */
         private long findCoordinateWithBiggestArea(@Nonnull final Map<String, Long> areaByCoordinates) {
             return areaByCoordinates.entrySet()
@@ -241,10 +240,9 @@ public record Coordinate(int xCoordinate, int yCoordinate) {
 
         /**
          * Helper method for day 6.
-         * Needs a Map of coordinate ids and claimed area.
-         * Finds the highest value in the map -> coordinate with max claimed area.
+         * Finds the value of the coordinate which claims the largest area when growing.
          *
-         * @return long max claimed area by a cooridnate.
+         * @return long max claimed area by a coordinate.
          */
         public long maxCoordinateAreaWithoutInfinites() {
             fillCoordinateSystem();
