@@ -49,10 +49,17 @@ class Day06Test {
     void test_secondPart_returnsExpectedResult() {
         //arrange
         final Day06 day06 = new Day06(fileReaders);
-        when(fileReaders.getInputString("src/main/resources/puzzle_input/day5_input.txt"))
-                .thenReturn("");
+        when(fileReaders.getInputList("src/main/resources/puzzle_input/day6_input.txt"))
+                .thenReturn(List.of(
+                        "1, 1",
+                        "1, 6",
+                        "8, 3",
+                        "3, 4",
+                        "5, 5",
+                        "8, 9"
+                ));
 
-        final String expectedResult = "Part 2 - : " + 0;
+        final String expectedResult = "Part 2 - : " + 16;
 
         //act
         final String actualResult = day06.secondPart();
