@@ -146,7 +146,6 @@ public record Coordinate(int xCoordinate, int yCoordinate) {
          * If the list contains two or more values, the spot is claimed by more coordinates.
          * Is it claimed by more coordinates it should be marked with a ".".
          *
-         *
          * @return String to fill the coordinate system.
          */
         @Nonnull
@@ -174,7 +173,6 @@ public record Coordinate(int xCoordinate, int yCoordinate) {
                                 coordinateSystem[xCoordinate][yCoordinate] = givesCoordinateSystemInput(nearestCoordinates);
                             }));
         }
-
 
         /**
          * Helper method for day 6.
