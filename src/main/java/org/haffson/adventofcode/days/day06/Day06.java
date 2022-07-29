@@ -4,6 +4,7 @@ import org.haffson.adventofcode.ProblemStatusEnum;
 import org.haffson.adventofcode.days.Days;
 import org.haffson.adventofcode.utils.FileReaders;
 import org.haffson.adventofcode.utils.ProblemStatus;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
@@ -88,4 +89,14 @@ public class Day06 implements Days {
 
         return coordinateAreas.regionSizeWithLessThan10000Distance();
     }
+
+//    /**
+//     * Const given in AoC day6
+//     */
+//    @Value("${aoc.distance.to.check}")
+//    public int COORDINATE_DISTANCE_TO_CHECK_123;
+//
+//    public int giveMeMyInt(){
+//        return COORDINATE_DISTANCE_TO_CHECK_123;
+//    }
 }

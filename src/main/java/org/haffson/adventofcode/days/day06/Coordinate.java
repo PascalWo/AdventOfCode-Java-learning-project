@@ -1,5 +1,7 @@
 package org.haffson.adventofcode.days.day06;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.function.Function;
@@ -56,6 +58,7 @@ public record Coordinate(int xCoordinate, int yCoordinate) {
      * Has some helper methods to calculate areas of coordinates.
      */
     public record CoordinateAreas(@Nonnull List<Coordinate> coordinates, @Nonnull String[][] coordinateSystem) {
+
         public CoordinateAreas(@Nonnull List<Coordinate> coordinates) {
             this(coordinates, createCoordinateSystem(coordinates));
         }
@@ -286,6 +289,18 @@ public record Coordinate(int xCoordinate, int yCoordinate) {
                             }));
         }
 
+
+//        /**
+//         * Const given in AoC day6
+//         */
+//        @Value("${aoc.distance.to.check}")
+        public static int COORDINATE_DISTANCE_TO_CHECK;
+
+        @Value("${aoc.distance.to.check}")
+        public void setMyNumber(int number){
+            CoordinateAreas.COORDINATE_DISTANCE_TO_CHECK = number;
+        }
+
         /**
          * Helper method for day 6 Part2.
          * Needs a Map of coordinate index and claimed area.
@@ -296,9 +311,11 @@ public record Coordinate(int xCoordinate, int yCoordinate) {
          */
         @Nonnull
         private String getClaimIdentification(@Nonnull final Map<Integer, Integer> distancesByCoordinate) {
+
+
             int claimedArea = distancesByCoordinate.values().stream().mapToInt(d -> d).sum();
 
-            if (claimedArea < 32) {
+            if (claimedArea < COORDINATE_DISTANCE_TO_CHECK) {
                 return "#";
             } else {
                 return ".";
