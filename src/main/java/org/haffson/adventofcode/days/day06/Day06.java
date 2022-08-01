@@ -4,8 +4,6 @@ import org.haffson.adventofcode.ProblemStatusEnum;
 import org.haffson.adventofcode.days.Days;
 import org.haffson.adventofcode.utils.FileReaders;
 import org.haffson.adventofcode.utils.ProblemStatus;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -14,7 +12,6 @@ import java.util.Map;
 /**
  * Implementation for <i>Day 6: Chronal Coordinates</i>.
  */
-@Component
 public class Day06 implements Days {
 
     /**
@@ -26,14 +23,23 @@ public class Day06 implements Days {
     private final FileReaders fileReaders;
 
     /**
+     * There is a Const given in AoC day6.
+     * This number is random and needs to change for tests.
+     * Therefore, this number comes from a configuration class.
+     * Later in the test, this variable can be changed in day06 constructor parameters.
+     */
+    private final int distanceToCheck;
+
+    /**
      * Causes the input file to be parsed into the frequencies array ({@code frequencies}).
      *
      * @param fileReaders {@code @Autowired} fileReader //TODO: inject what you need
      */
-    public Day06(@Nonnull final FileReaders fileReaders) {
+    public Day06(@Nonnull final FileReaders fileReaders, final int distanceToCheck) {
         this.fileReaders = fileReaders;
         this.problemStatus = ProblemStatus.getProblemStatusMap(1, 2,
                 ProblemStatusEnum.SOLVED, ProblemStatusEnum.SOLVED);
+        this.distanceToCheck = distanceToCheck;
     }
 
     @Override
@@ -80,23 +86,18 @@ public class Day06 implements Days {
 
     /**
      * Primary method for Day 6, Part 2.
+     * Input: List<String> with coordinates.
+     * Pattern looks like "x, y".
+     * Transform strings to List<Coordinates>.
+     * Finds a region of coordinates which is close to all other coordinates.
+     * All coordinates in this region needs to have a combined distance to other coordinates less than "distanceToCheck" given in day06 constructor parameters.
      *
-     * @return Int
+     * @return long of region size
      */
     private long calculateSecondPart(@Nonnull final List<String> inputStringList) {
         List<Coordinate> coordinateList = Coordinate.of(inputStringList);
         Coordinate.CoordinateAreas coordinateAreas = new Coordinate.CoordinateAreas(coordinateList);
 
-        return coordinateAreas.regionSizeWithLessThan10000Distance();
+        return coordinateAreas.regionSizeOfCoordinatesBetweenDistance(distanceToCheck);
     }
-
-//    /**
-//     * Const given in AoC day6
-//     */
-//    @Value("${aoc.distance.to.check}")
-//    public int COORDINATE_DISTANCE_TO_CHECK_123;
-//
-//    public int giveMeMyInt(){
-//        return COORDINATE_DISTANCE_TO_CHECK_123;
-//    }
 }

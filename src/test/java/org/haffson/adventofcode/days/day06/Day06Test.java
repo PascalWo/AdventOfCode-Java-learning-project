@@ -9,14 +9,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-
 class Day06Test {
 
     private final FileReaders fileReaders = mock(FileReaders.class);
 
     @Test
     void testGetDay() {
-        final Day06 day06 = new Day06(fileReaders);
+        final Day06 day06 = new Day06(fileReaders, 32);
         final int expectedResult = 6;
         final int actualResult = day06.getDay();
         assertThat(actualResult).isEqualTo(expectedResult);
@@ -25,7 +24,7 @@ class Day06Test {
     @Test
     void test_firstPart_returnsExpectedResult() {
         //arrange
-        final Day06 day06 = new Day06(fileReaders);
+        final Day06 day06 = new Day06(fileReaders, 32);
         when(fileReaders.getInputList("src/main/resources/puzzle_input/day6_input.txt"))
                 .thenReturn(List.of(
                         "1, 1",
@@ -48,7 +47,10 @@ class Day06Test {
     @Test
     void test_secondPart_returnsExpectedResult() {
         //arrange
-        final Day06 day06 = new Day06(fileReaders);
+        final Day06 day06 = new Day06(fileReaders, 32);
+//        day06.maxDistance = 32;
+
+
         when(fileReaders.getInputList("src/main/resources/puzzle_input/day6_input.txt"))
                 .thenReturn(List.of(
                         "1, 1",

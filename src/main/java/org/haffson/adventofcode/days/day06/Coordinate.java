@@ -1,7 +1,5 @@
 package org.haffson.adventofcode.days.day06;
 
-import org.springframework.beans.factory.annotation.Value;
-
 import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.function.Function;
@@ -275,7 +273,7 @@ public record Coordinate(int xCoordinate, int yCoordinate) {
          * Fills each entry with a "#" when the combined distance to each coordinate is less than 10,000.
          * Else fills the spot with ".".
          */
-        private void fillCoordinateSystemWithHashTags() {
+        private void fillCoordinateSystemByDistance(final int distanceToCheck) {
             Arrays.stream(coordinateSystem).forEach(arrayOfXCoordinates ->
                     IntStream.range(0, arrayOfXCoordinates.length)
                             .forEach(yCoordinate -> {
@@ -284,21 +282,9 @@ public record Coordinate(int xCoordinate, int yCoordinate) {
 
                                 Map<Integer, Integer> distancesByCoordinate = getDistanceByCoordinate(toCompare);
 
-                                coordinateSystem[xCoordinate][yCoordinate] = getClaimIdentification(distancesByCoordinate);
+                                coordinateSystem[xCoordinate][yCoordinate] = getClaimIdentification(distancesByCoordinate, distanceToCheck);
 
                             }));
-        }
-
-
-//        /**
-//         * Const given in AoC day6
-//         */
-//        @Value("${aoc.distance.to.check}")
-        public static int COORDINATE_DISTANCE_TO_CHECK;
-
-        @Value("${aoc.distance.to.check}")
-        public void setMyNumber(int number){
-            CoordinateAreas.COORDINATE_DISTANCE_TO_CHECK = number;
         }
 
         /**
@@ -310,12 +296,11 @@ public record Coordinate(int xCoordinate, int yCoordinate) {
          * @return String with identification("#" or ".")
          */
         @Nonnull
-        private String getClaimIdentification(@Nonnull final Map<Integer, Integer> distancesByCoordinate) {
+        private String getClaimIdentification(@Nonnull final Map<Integer, Integer> distancesByCoordinate, final int distanceToCheck) {
 
+            int claimedArea = distancesByCoordinate.values().stream().mapToInt(claim -> claim).sum();
 
-            int claimedArea = distancesByCoordinate.values().stream().mapToInt(d -> d).sum();
-
-            if (claimedArea < COORDINATE_DISTANCE_TO_CHECK) {
+            if (claimedArea < distanceToCheck) {
                 return "#";
             } else {
                 return ".";
@@ -330,7 +315,7 @@ public record Coordinate(int xCoordinate, int yCoordinate) {
          *
          * @return long claimed region with distance less than 10,000.
          */
-        private long getValueClaimedByCoordinateLessThan10000(Map<String, Long> areaByString) {
+        private long getValueClaimedByCoordinateLessThanDistanceToCheck(Map<String, Long> areaByString) {
             return areaByString.get("#");
         }
 
@@ -341,12 +326,11 @@ public record Coordinate(int xCoordinate, int yCoordinate) {
          *
          * @return long region size.
          */
-        public long regionSizeWithLessThan10000Distance() {
-            fillCoordinateSystemWithHashTags();
+        public long regionSizeOfCoordinatesBetweenDistance(final int distanceToCheck) {
+            fillCoordinateSystemByDistance(distanceToCheck);
             Map<String, Long> areaByString = getAreaByCoordinate();
-            return getValueClaimedByCoordinateLessThan10000(areaByString);
+            return getValueClaimedByCoordinateLessThanDistanceToCheck(areaByString);
         }
-
 
         @Override
         public boolean equals(Object o) {
