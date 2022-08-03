@@ -79,7 +79,7 @@ public class Day06 implements Days {
      */
     private long calculateFirstPart(@Nonnull final List<String> inputStringList) {
         final List<Coordinate> coordinateList = Coordinate.of(inputStringList);
-        final Coordinate.CoordinateAreas coordinateAreas = new Coordinate.CoordinateAreas(coordinateList);
+        final CoordinateAreas coordinateAreas = new CoordinateAreas(coordinateList);
         return coordinateAreas.maxCoordinateAreaWithoutInfinites();
     }
 
@@ -95,7 +95,7 @@ public class Day06 implements Days {
      */
     private long calculateSecondPart(@Nonnull final List<String> inputStringList) {
         final List<Coordinate> coordinateList = Coordinate.of(inputStringList);
-        final Coordinate.CoordinateAreas coordinateAreas = new Coordinate.CoordinateAreas(coordinateList);
+        final CoordinateAreas coordinateAreas = new CoordinateAreas(coordinateList);
 
         return coordinateAreas.regionSizeOfCoordinatesBetweenDistance(distanceToCheck);
     }

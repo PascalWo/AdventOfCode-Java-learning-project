@@ -56,10 +56,10 @@ class CoordinateTest {
                 new Coordinate(5, 5),
                 new Coordinate(8, 9));
 
-        final Coordinate.CoordinateAreas expectedResult = new Coordinate.CoordinateAreas(coordinates, new String[9][10]);
+        final CoordinateAreas expectedResult = new CoordinateAreas(coordinates, new String[9][10]);
         //act
 
-        final Coordinate.CoordinateAreas actualResult = new Coordinate.CoordinateAreas(coordinates);
+        final CoordinateAreas actualResult = new CoordinateAreas(coordinates);
 
         //assert
         assertThat(actualResult).isEqualTo(expectedResult);
