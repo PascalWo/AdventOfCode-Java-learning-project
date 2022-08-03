@@ -49,6 +49,4 @@ public record Coordinate(int x, int y) {
 
         return xDistance + yDistance;
     }
-
-
 }
