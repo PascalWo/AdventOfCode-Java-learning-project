@@ -78,9 +78,8 @@ public class Day06 implements Days {
      * @return long area of the biggest grown coordinate.
      */
     private long calculateFirstPart(@Nonnull final List<String> inputStringList) {
-        List<Coordinate> coordinateList = Coordinate.of(inputStringList);
-
-        Coordinate.CoordinateAreas coordinateAreas = new Coordinate.CoordinateAreas(coordinateList);
+        final List<Coordinate> coordinateList = Coordinate.of(inputStringList);
+        final Coordinate.CoordinateAreas coordinateAreas = new Coordinate.CoordinateAreas(coordinateList);
         return coordinateAreas.maxCoordinateAreaWithoutInfinites();
     }
 
@@ -95,8 +94,8 @@ public class Day06 implements Days {
      * @return long of region size
      */
     private long calculateSecondPart(@Nonnull final List<String> inputStringList) {
-        List<Coordinate> coordinateList = Coordinate.of(inputStringList);
-        Coordinate.CoordinateAreas coordinateAreas = new Coordinate.CoordinateAreas(coordinateList);
+        final List<Coordinate> coordinateList = Coordinate.of(inputStringList);
+        final Coordinate.CoordinateAreas coordinateAreas = new Coordinate.CoordinateAreas(coordinateList);
 
         return coordinateAreas.regionSizeOfCoordinatesBetweenDistance(distanceToCheck);
     }

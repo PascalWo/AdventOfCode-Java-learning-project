@@ -5,6 +5,9 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * Helper record for day 6.
@@ -12,10 +15,11 @@ import java.util.stream.IntStream;
  * Coordinates have an x and y value.
  * Also, you can compare two coordinates with each other.
  */
-public record Coordinate(int xCoordinate, int yCoordinate) {
+public record Coordinate(int x, int y) {
 
     @Nonnull
     public static Coordinate of(@Nonnull final String input) {
+        requireNonNull(input, "input");
         final String[] split1 = input.split(",");
         final String[] split2 = split1[1].split(" ");
 
@@ -33,6 +37,7 @@ public record Coordinate(int xCoordinate, int yCoordinate) {
      */
     @Nonnull
     public static List<Coordinate> of(@Nonnull final List<String> stringList) {
+        requireNonNull(stringList, "stringList");
         return stringList.stream().map(Coordinate::of).toList();
     }
 
@@ -42,10 +47,9 @@ public record Coordinate(int xCoordinate, int yCoordinate) {
      *
      * @return int of how many fields are between two coordinates.
      */
-    public static int coordinateFieldDistance(@Nonnull final Coordinate coordinateToCompare,
-                                              @Nonnull final Coordinate comparedCoordinate) {
-        int xDistance = Math.abs(coordinateToCompare.xCoordinate - comparedCoordinate.xCoordinate);
-        int yDistance = Math.abs(coordinateToCompare.yCoordinate - comparedCoordinate.yCoordinate);
+    public int coordinateFieldDistance(@Nonnull final Coordinate comparedCoordinate) {
+        final int xDistance = Math.abs(this.x - comparedCoordinate.x);
+        final int yDistance = Math.abs(this.y - comparedCoordinate.y);
 
         return xDistance + yDistance;
     }
@@ -57,8 +61,14 @@ public record Coordinate(int xCoordinate, int yCoordinate) {
      */
     public record CoordinateAreas(@Nonnull List<Coordinate> coordinates, @Nonnull String[][] coordinateSystem) {
 
-        public CoordinateAreas(@Nonnull List<Coordinate> coordinates) {
+        public CoordinateAreas {
+            requireNonNull(coordinates, "coordinates");
+            requireNonNull(coordinateSystem, "coordinateSystem");
+        }
+
+        public CoordinateAreas(@Nonnull final List<Coordinate> coordinates) {
             this(coordinates, createCoordinateSystem(coordinates));
+            requireNonNull(coordinates, "coordinates");
         }
 
         /**
@@ -70,14 +80,14 @@ public record Coordinate(int xCoordinate, int yCoordinate) {
          */
         @Nonnull
         private static String[][] createCoordinateSystem(@Nonnull final List<Coordinate> coordinates) {
-            int maxCoordinateX = coordinates.stream()
-                    .max(Comparator.comparingInt(c -> c.xCoordinate))
+            final int maxCoordinateX = coordinates.stream()
+                    .max(Comparator.comparingInt(Coordinate::x))
                     .orElseThrow(NoSuchElementException::new)
-                    .xCoordinate();
-            int maxCoordinateY = coordinates.stream()
-                    .max(Comparator.comparingInt(c -> c.yCoordinate)).
+                    .x();
+            final int maxCoordinateY = coordinates.stream()
+                    .max(Comparator.comparingInt(Coordinate::y)).
                     orElseThrow(NoSuchElementException::new)
-                    .yCoordinate();
+                    .y();
 
             return new String[maxCoordinateX + 1][maxCoordinateY + 1];
         }
@@ -91,9 +101,9 @@ public record Coordinate(int xCoordinate, int yCoordinate) {
          */
         @Nonnull
         private List<Integer> findShortestDistances(@Nonnull final Map<Integer, Integer> distancesByCoordinate) {
-            List<Integer> nearestCoordinates = new ArrayList<>();
+            final List<Integer> nearestCoordinates = new ArrayList<>();
 
-            int shortestDistance = distancesByCoordinate
+            final int shortestDistance = distancesByCoordinate
                     .entrySet()
                     .stream()
                     .min(Map.Entry.comparingByValue())
@@ -118,7 +128,7 @@ public record Coordinate(int xCoordinate, int yCoordinate) {
          */
         @Nonnull
         private List<Integer> findNearestCoordinates(@Nonnull final Coordinate coordinateToCompare) {
-            Map<Integer, Integer> distancesByCoordinate = getDistanceByCoordinate(coordinateToCompare);
+            final Map<Integer, Integer> distancesByCoordinate = getDistanceByCoordinate(coordinateToCompare);
 
             return findShortestDistances(distancesByCoordinate);
         }
@@ -132,9 +142,9 @@ public record Coordinate(int xCoordinate, int yCoordinate) {
          */
         @Nonnull
         private Map<Integer, Integer> getDistanceByCoordinate(@Nonnull final Coordinate coordinateToCompare) {
-            Map<Integer, Integer> distancesByCoordinate = new HashMap<>();
+            final Map<Integer, Integer> distancesByCoordinate = new HashMap<>();
             coordinates.forEach(coordinate -> distancesByCoordinate
-                    .put(coordinates.indexOf(coordinate), coordinateFieldDistance(coordinateToCompare, coordinate)));
+                    .put(coordinates.indexOf(coordinate), coordinateToCompare.coordinateFieldDistance(coordinate)));
 
             return distancesByCoordinate;
         }
@@ -167,10 +177,10 @@ public record Coordinate(int xCoordinate, int yCoordinate) {
             Arrays.stream(coordinateSystem).forEach(arrayOfXCoordinates ->
                     IntStream.range(0, arrayOfXCoordinates.length)
                             .forEach(yCoordinate -> {
-                                int xCoordinate = Arrays.asList(coordinateSystem).indexOf(arrayOfXCoordinates);
-                                Coordinate toCompare = new Coordinate(xCoordinate, yCoordinate);
+                                final int xCoordinate = Arrays.asList(coordinateSystem).indexOf(arrayOfXCoordinates);
+                                final Coordinate toCompare = new Coordinate(xCoordinate, yCoordinate);
 
-                                List<Integer> nearestCoordinates = findNearestCoordinates(toCompare);
+                                final List<Integer> nearestCoordinates = findNearestCoordinates(toCompare);
                                 coordinateSystem[xCoordinate][yCoordinate] = givesCoordinateSystemInput(nearestCoordinates);
                             }));
         }
@@ -185,25 +195,26 @@ public record Coordinate(int xCoordinate, int yCoordinate) {
          */
         @Nonnull
         private Set<String> findInfiniteCoordinates() {
-            Set<String> infiniteCoordinates = Arrays.stream(coordinateSystem)
+            final Stream<String> topBorderCoordinates = Arrays.stream(coordinateSystem)
                     .map(coordinates -> coordinates[0])
-                    .filter(coordinateSystem -> !Objects.equals(coordinateSystem, "."))
-                    .collect(Collectors.toSet());
+                    .filter(coordinateSystem -> !Objects.equals(coordinateSystem, "."));
 
-            Arrays.stream(coordinateSystem)
+            final Stream<String> bottomBorderCoordinates = Arrays.stream(coordinateSystem)
                     .map(coordinates -> coordinates[coordinateSystem[0].length - 1])
-                    .filter(coordinateSystem -> !Objects.equals(coordinateSystem, "."))
-                    .forEach(infiniteCoordinates::add);
+                    .filter(coordinateSystem -> !Objects.equals(coordinateSystem, "."));
 
-            Arrays.stream(coordinateSystem[0])
-                    .filter(coordinateSystem -> !Objects.equals(coordinateSystem, "."))
-                    .forEach(infiniteCoordinates::add);
+            final Stream<String> leftBorderCoordinates = Arrays.stream(coordinateSystem[0])
+                    .filter(coordinateSystem -> !Objects.equals(coordinateSystem, "."));
 
-            Arrays.stream(coordinateSystem[coordinateSystem.length - 1], 0, coordinateSystem[0].length)
-                    .filter(coordinateSystem -> !Objects.equals(coordinateSystem, "."))
-                    .forEach(infiniteCoordinates::add);
+            final Stream<String> rightBorderCoordinates = Arrays.stream(coordinateSystem[coordinateSystem.length - 1],
+                            0, coordinateSystem[0].length)
+                    .filter(coordinateSystem -> !Objects.equals(coordinateSystem, "."));
 
-            return infiniteCoordinates;
+            final Stream<String> borderCoordinates = Stream.concat(
+                    Stream.concat(
+                            Stream.concat(
+                                    topBorderCoordinates, bottomBorderCoordinates), leftBorderCoordinates), rightBorderCoordinates);
+            return borderCoordinates.collect(Collectors.toSet());
         }
 
         /**
@@ -214,10 +225,8 @@ public record Coordinate(int xCoordinate, int yCoordinate) {
          */
         @Nonnull
         private Map<String, Long> getAreaByCoordinate() {
-            List<String> flattedCoordinateSystem = Arrays.stream(coordinateSystem)
-                    .flatMap(Arrays::stream).toList();
-
-            return flattedCoordinateSystem.stream()
+            return Arrays.stream(coordinateSystem)
+                    .flatMap(Arrays::stream)
                     .collect(Collectors.groupingBy(Function.identity(),
                             Collectors.counting()));
         }
@@ -259,9 +268,9 @@ public record Coordinate(int xCoordinate, int yCoordinate) {
          */
         public long maxCoordinateAreaWithoutInfinites() {
             fillCoordinateSystem();
-            Set<String> infiniteCoords = findInfiniteCoordinates();
-            Map<String, Long> areaByCoords = getAreaByCoordinate();
-            Map<String, Long> areaByCoordsWithoutInfinites = removeInfiniteCoordsFromMap(areaByCoords, infiniteCoords);
+            final Set<String> infiniteCoords = findInfiniteCoordinates();
+            final Map<String, Long> areaByCoords = getAreaByCoordinate();
+            final Map<String, Long> areaByCoordsWithoutInfinites = removeInfiniteCoordsFromMap(areaByCoords, infiniteCoords);
 
             return findCoordinateWithBiggestArea(areaByCoordsWithoutInfinites);
         }
@@ -277,10 +286,10 @@ public record Coordinate(int xCoordinate, int yCoordinate) {
             Arrays.stream(coordinateSystem).forEach(arrayOfXCoordinates ->
                     IntStream.range(0, arrayOfXCoordinates.length)
                             .forEach(yCoordinate -> {
-                                int xCoordinate = Arrays.asList(coordinateSystem).indexOf(arrayOfXCoordinates);
-                                Coordinate toCompare = new Coordinate(xCoordinate, yCoordinate);
+                                final int xCoordinate = Arrays.asList(coordinateSystem).indexOf(arrayOfXCoordinates);
+                                final Coordinate toCompare = new Coordinate(xCoordinate, yCoordinate);
 
-                                Map<Integer, Integer> distancesByCoordinate = getDistanceByCoordinate(toCompare);
+                                final Map<Integer, Integer> distancesByCoordinate = getDistanceByCoordinate(toCompare);
 
                                 coordinateSystem[xCoordinate][yCoordinate] = getClaimIdentification(distancesByCoordinate, distanceToCheck);
 
@@ -298,7 +307,7 @@ public record Coordinate(int xCoordinate, int yCoordinate) {
         @Nonnull
         private String getClaimIdentification(@Nonnull final Map<Integer, Integer> distancesByCoordinate, final int distanceToCheck) {
 
-            int claimedArea = distancesByCoordinate.values().stream().mapToInt(claim -> claim).sum();
+            final int claimedArea = distancesByCoordinate.values().stream().mapToInt(claim -> claim).sum();
 
             if (claimedArea < distanceToCheck) {
                 return "#";
@@ -315,7 +324,7 @@ public record Coordinate(int xCoordinate, int yCoordinate) {
          *
          * @return long claimed region with distance less than 10,000.
          */
-        private long getValueClaimedByCoordinateLessThanDistanceToCheck(Map<String, Long> areaByString) {
+        private long getValueClaimedByCoordinateLessThanDistanceToCheck(final Map<String, Long> areaByString) {
             return areaByString.get("#");
         }
 
@@ -328,15 +337,15 @@ public record Coordinate(int xCoordinate, int yCoordinate) {
          */
         public long regionSizeOfCoordinatesBetweenDistance(final int distanceToCheck) {
             fillCoordinateSystemByDistance(distanceToCheck);
-            Map<String, Long> areaByString = getAreaByCoordinate();
+            final Map<String, Long> areaByString = getAreaByCoordinate();
             return getValueClaimedByCoordinateLessThanDistanceToCheck(areaByString);
         }
 
         @Override
-        public boolean equals(Object o) {
+        public boolean equals(final Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-            CoordinateAreas that = (CoordinateAreas) o;
+            final CoordinateAreas that = (CoordinateAreas) o;
             return Objects.equals(coordinates, that.coordinates) && Arrays.deepEquals(coordinateSystem, that.coordinateSystem);
         }
 
