@@ -14,11 +14,18 @@ import static java.util.Objects.requireNonNull;
  * Uses a List<Coordinates> to get a coordinate system.
  * Has some helper methods to calculate areas of coordinates.
  */
-public record CoordinateAreas(@Nonnull List<Coordinate> coordinates, @Nonnull String[][] coordinateSystem) {
+public final class CoordinateAreas {
+    @Nonnull
+    private final List<Coordinate> coordinates;
+    @Nonnull
+    private final String[][] coordinateSystem;
 
-    public CoordinateAreas {
+
+    public CoordinateAreas(@Nonnull final List<Coordinate> coordinates, @Nonnull final String[][] coordinateSystem) {
         requireNonNull(coordinates, "coordinates");
         requireNonNull(coordinateSystem, "coordinateSystem");
+        this.coordinates = coordinates;
+        this.coordinateSystem = coordinateSystem;
     }
 
     public CoordinateAreas(@Nonnull final List<Coordinate> coordinates) {
@@ -166,24 +173,23 @@ public record CoordinateAreas(@Nonnull List<Coordinate> coordinates, @Nonnull St
     @Nonnull
     private Set<String> findInfiniteCoordinates() {
         final Stream<String> topBorderCoordinates = Arrays.stream(coordinateSystem)
-                .map(coordinates -> coordinates[0])
-                .filter(coordinateSystem -> !Objects.equals(coordinateSystem, "."));
+                .map(coordinate -> coordinate[0])
+                .filter(coordinateSystemEntry -> !Objects.equals(coordinateSystemEntry, "."));
 
         final Stream<String> bottomBorderCoordinates = Arrays.stream(coordinateSystem)
-                .map(coordinates -> coordinates[coordinateSystem[0].length - 1])
-                .filter(coordinateSystem -> !Objects.equals(coordinateSystem, "."));
+                .map(coordinate -> coordinate[coordinateSystem[0].length - 1])
+                .filter(coordinateSystemEntry -> !Objects.equals(coordinateSystemEntry, "."));
 
         final Stream<String> leftBorderCoordinates = Arrays.stream(coordinateSystem[0])
-                .filter(coordinateSystem -> !Objects.equals(coordinateSystem, "."));
+                .filter(coordinateSystemEntry -> !Objects.equals(coordinateSystemEntry, "."));
 
         final Stream<String> rightBorderCoordinates = Arrays.stream(coordinateSystem[coordinateSystem.length - 1],
                         0, coordinateSystem[0].length)
-                .filter(coordinateSystem -> !Objects.equals(coordinateSystem, "."));
+                .filter(coordinateSystemEntry -> !Objects.equals(coordinateSystemEntry, "."));
 
-        final Stream<String> borderCoordinates = Stream.concat(
-                Stream.concat(
-                        Stream.concat(
-                                topBorderCoordinates, bottomBorderCoordinates), leftBorderCoordinates), rightBorderCoordinates);
+        final Stream<String> borderCoordinates = Stream.of(
+                topBorderCoordinates, bottomBorderCoordinates, leftBorderCoordinates, rightBorderCoordinates).flatMap(coordinate -> coordinate);
+
         return borderCoordinates.collect(Collectors.toSet());
     }
 
