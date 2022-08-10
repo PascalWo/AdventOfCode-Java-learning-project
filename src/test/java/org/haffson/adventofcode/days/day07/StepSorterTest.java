@@ -26,7 +26,7 @@ class StepSorterTest {
         final List<Character> expectedResult = List.of('C');
         //act
         stepSorter.findStartingStep();
-        final List<Character> actualResult = stepSorter.getStartingStep();
+        final List<Character> actualResult = stepSorter.getStartingSteps();
         //assert
         assertThat(actualResult).isEqualTo(expectedResult);
     }
