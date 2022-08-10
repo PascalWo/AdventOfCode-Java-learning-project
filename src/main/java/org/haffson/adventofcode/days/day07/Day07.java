@@ -4,6 +4,7 @@ import org.haffson.adventofcode.ProblemStatusEnum;
 import org.haffson.adventofcode.days.Days;
 import org.haffson.adventofcode.utils.FileReaders;
 import org.haffson.adventofcode.utils.ProblemStatus;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.Map;
 /**
  * Implementation for <i>Day 7: The Sum of Its Parts</i>.
  */
+@Component
 public class Day07 implements Days {
 
     /**
@@ -61,15 +63,16 @@ public class Day07 implements Days {
     }
 
     /**
-     * Primary method for Day 6, Part 1.
-     * Input: List<String> with coordinates.
-     * Pattern looks like "x, y".
-     * Transform strings to List<Coordinates> and finds the coordinate which claims the biggest area when it grows.
+     * Primary method for Day 7, Part 1.
      *
-     * @return long area of the biggest grown coordinate.
+     * @return sorted String of Steps.
      */
+    @Nonnull
     private String calculateFirstPart(@Nonnull final List<String> inputStringList) {
-        return null;
+        final List<StepInstruction> inputList = StepInstruction.of(inputStringList);
+        final StepSorter stepSorter = new StepSorter(inputList);
+
+        return stepSorter.getSortedSteps();
     }
 
 
