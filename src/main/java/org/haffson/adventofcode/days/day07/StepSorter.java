@@ -21,11 +21,12 @@ public class StepSorter {
     private char leastStep;
 
     private char nextStepToCheck;
-
-    private final List<Character> resultAsCharList = new ArrayList<>();
+    
+    private final SortedSteps sortedSteps;
 
     public StepSorter(@Nonnull final List<StepInstruction> stepInstructions) {
         this.stepInstructions = stepInstructions;
+        this.sortedSteps = new SortedSteps();
     }
 
 
@@ -42,7 +43,7 @@ public class StepSorter {
             addStepToResult();
         }
 
-        return getResultAsString(resultAsCharList);
+        return sortedSteps.getSequenceAsString();
     }
 
     public List<Character> getStartingSteps() {
@@ -67,10 +68,8 @@ public class StepSorter {
     }
 
     private void addStepToResult() {
-        if (!resultAsCharList.contains(nextStepToCheck)) {
-            this.resultAsCharList.add(nextStepToCheck);
-            setLeastStep();
-        }
+        sortedSteps.addStep(nextStepToCheck);
+        setLeastStep();
     }
 
     private void setLeastStep() {
@@ -80,17 +79,8 @@ public class StepSorter {
     private void initialiseStarting() {
         findStartingStep();
         setAvailableStarterOptions();
-        resultAsCharList.add(getStartingStep());
-        nextStepToCheck = getStartingStep();
-    }
-
-    @Nonnull
-    private String getResultAsString(@Nonnull final List<Character> result) {
-        final StringBuilder stringBuilder = new StringBuilder(result.size());
-        for (final Character character : result) {
-            stringBuilder.append(character);
-        }
-        return stringBuilder.toString();
+        this.sortedSteps.addStep(getStartingStep());
+        this.nextStepToCheck = getStartingStep();
     }
 
     public void findStartingStep() {
@@ -171,7 +161,7 @@ public class StepSorter {
     @Nonnull
     private List<Character> getAvailableStarterSteps() {
         final List<Character> starterSteps = new ArrayList<>(startingSteps);
-        final List<Character> actualSteps = new ArrayList<>(resultAsCharList);
+        final List<Character> actualSteps = new ArrayList<>(sortedSteps.getStepSequence());
 
         starterSteps.removeAll(actualSteps);
 
@@ -197,7 +187,7 @@ public class StepSorter {
     }
 
     private boolean stepIsAlreadyUsed(final char stepToCheck) {
-        return resultAsCharList.contains(stepToCheck);
+        return sortedSteps.getStepSequence().contains(stepToCheck);
     }
 
     @Nonnull
@@ -210,6 +200,6 @@ public class StepSorter {
     }
 
     private boolean isEveryNeededStepCompleted(@Nonnull final List<Character> stepsNeededToBeCompleted) {
-        return new HashSet<>(resultAsCharList).containsAll(stepsNeededToBeCompleted);
+        return new HashSet<>(sortedSteps.getStepSequence()).containsAll(stepsNeededToBeCompleted);
     }
 }
