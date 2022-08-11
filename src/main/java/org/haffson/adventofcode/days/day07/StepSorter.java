@@ -21,7 +21,7 @@ public class StepSorter {
     private char leastStep;
 
     private char nextStepToCheck;
-    
+
     private final SortedSteps sortedSteps;
 
     public StepSorter(@Nonnull final List<StepInstruction> stepInstructions) {

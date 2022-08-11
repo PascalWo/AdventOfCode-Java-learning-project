@@ -9,11 +9,11 @@ import java.util.stream.Collectors;
 public class SortedSteps {
     private final List<Character> stepSequence;
 
-    public SortedSteps(){
+    public SortedSteps() {
         this.stepSequence = new ArrayList<>();
     }
 
-    public List<Character> getStepSequence(){
+    public List<Character> getStepSequence() {
         return Collections.unmodifiableList(stepSequence);
     }
 
@@ -22,6 +22,7 @@ public class SortedSteps {
             this.stepSequence.add(nextStepToCheck);
         }
     }
+
     @Nonnull
     public String getSequenceAsString() {
         return stepSequence.stream().map(String::valueOf).collect(Collectors.joining());
