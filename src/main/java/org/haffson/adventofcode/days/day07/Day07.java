@@ -10,6 +10,8 @@ import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Map;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * Implementation for <i>Day 7: The Sum of Its Parts</i>.
  */
@@ -30,7 +32,7 @@ public class Day07 implements Days {
      * @param fileReaders {@code @Autowired} fileReader //TODO: inject what you need
      */
     public Day07(@Nonnull final FileReaders fileReaders) {
-        this.fileReaders = fileReaders;
+        this.fileReaders = requireNonNull(fileReaders, "fileReaders");
         this.problemStatus = ProblemStatus.getProblemStatusMap(1, 2,
                 ProblemStatusEnum.SOLVED, ProblemStatusEnum.SOLVED);
     }

@@ -3,6 +3,8 @@ package org.haffson.adventofcode.days.day07;
 import javax.annotation.Nonnull;
 import java.util.*;
 
+import static java.util.Objects.requireNonNull;
+
 public class StepSorter {
 
     @Nonnull
@@ -25,7 +27,7 @@ public class StepSorter {
     private final SortedSteps sortedSteps;
 
     public StepSorter(@Nonnull final List<StepInstruction> stepInstructions) {
-        this.stepInstructions = stepInstructions;
+        this.stepInstructions = requireNonNull(stepInstructions, "stepInstructions");
         this.sortedSteps = new SortedSteps();
     }
 
