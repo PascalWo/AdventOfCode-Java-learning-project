@@ -1,14 +1,11 @@
 package org.haffson.adventofcode.days.day07;
 
-import java.util.List;
-
 public class SelectedSteps {
 
     private char leastStep;
     private char nextStepToCheck;
     private char stepWhenInstructionIsEmpty;
     private char stepWhenInstructionIsDuplicated;
-    private List<Character> startingSteps;
 
 
     public SelectedSteps() {
@@ -48,17 +45,5 @@ public class SelectedSteps {
 
     public void setStepWhenInstructionIsDuplicated(final char stepWhenInstructionIsDuplicated) {
         this.stepWhenInstructionIsDuplicated = stepWhenInstructionIsDuplicated;
-    }
-
-    public List<Character> getStartingSteps() {
-        return startingSteps;
-    }
-
-    public void setStartingSteps(final List<Character> startingSteps) {
-        this.startingSteps = startingSteps;
-    }
-
-    public char getStartingStep() {
-        return startingSteps.get(0);
     }
 }

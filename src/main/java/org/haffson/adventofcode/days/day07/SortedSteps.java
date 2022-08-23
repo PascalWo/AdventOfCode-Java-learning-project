@@ -18,9 +18,16 @@ public class SortedSteps {
     }
 
     public void addStep(final char nextStepToCheck) {
+        if (isStepToCheckEmpty(nextStepToCheck)) {
+            return;
+        }
         if (!stepSequence.contains(nextStepToCheck)) {
             this.stepSequence.add(nextStepToCheck);
         }
+    }
+
+    private boolean isStepToCheckEmpty(final char stepToCheck) {
+        return stepToCheck == Character.MIN_VALUE;
     }
 
     @Nonnull

@@ -1,7 +1,6 @@
 package org.haffson.adventofcode.days.day07;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -15,21 +14,21 @@ class StepSorterTest {
 
     }
 
-    @DisplayName("find starting step character")
-    @Test
-    void findStartingStep_shouldReturnStartingStep() {
-        //arrange
-        final List<StepInstruction> stepInstructions = List.of(new StepInstruction('C', 'A'),
-                new StepInstruction('C', 'F'),
-                new StepInstruction('A', 'B'));
-        final StepSorter stepSorter = new StepSorter(stepInstructions);
-        final List<Character> expectedResult = List.of('C');
-        //act
-        stepSorter.findStartingStep();
-        final List<Character> actualResult = stepSorter.getStartingSteps();
-        //assert
-        assertThat(actualResult).isEqualTo(expectedResult);
-    }
+//    @DisplayName("find starting step character")
+//    @Test
+//    void findStartingStep_shouldReturnStartingStep() {
+//        //arrange
+//        final List<StepInstruction> stepInstructions = List.of(new StepInstruction('C', 'A'),
+//                new StepInstruction('C', 'F'),
+//                new StepInstruction('A', 'B'));
+//        final StepSorter stepSorter = new StepSorter(stepInstructions);
+//        final List<Character> expectedResult = List.of('C');
+//        //act
+//        stepSorter.findStartingStep();
+//        final List<Character> actualResult = stepSorter.getStartingSteps();
+//        //assert
+//        assertThat(actualResult).isEqualTo(expectedResult);
+//    }
 
     @Test
     void getSortedSteps_shouldReturnSortedStepsAsString() {
