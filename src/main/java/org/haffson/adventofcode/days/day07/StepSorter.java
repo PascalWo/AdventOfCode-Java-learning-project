@@ -11,8 +11,8 @@ public class StepSorter {
     private final SelectedInstructions selectedInstructions;
 
     public StepSorter(@Nonnull final List<StepInstruction> stepInstructions) {
-        this.selectedInstructions = new SelectedInstructions(stepInstructions);
         this.sortedSteps = new SortedSteps();
+        this.selectedInstructions = new SelectedInstructions(stepInstructions, sortedSteps);
         this.selectedSteps = new SelectedSteps();
         this.starter = new Starter(stepInstructions);
     }
@@ -23,7 +23,7 @@ public class StepSorter {
         for (int i = 0; i < selectedInstructions.getAmountOfInstructions(); i++) {
             selectedInstructions.setAvailableStepInstructions(selectedSteps.getNextStepToCheck());
 
-            selectedInstructions.getNextStepInstructionByAlphabeticalOrder(sortedSteps);
+            selectedInstructions.getNextStepInstructionByAlphabeticalOrder();
 
             setNextStepToCheck();
 

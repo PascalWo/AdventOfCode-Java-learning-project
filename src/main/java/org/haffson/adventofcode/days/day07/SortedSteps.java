@@ -3,6 +3,7 @@ package org.haffson.adventofcode.days.day07;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,5 +34,13 @@ public class SortedSteps {
     @Nonnull
     public String getSequenceAsString() {
         return stepSequence.stream().map(String::valueOf).collect(Collectors.joining());
+    }
+
+    public boolean stepIsAlreadyUsed(final char stepToCheck) {
+        return getStepSequence().contains(stepToCheck);
+    }
+
+    public boolean isEveryNeededStepCompleted(@Nonnull final List<Character> stepsNeededToBeCompleted) {
+        return new HashSet<>(getStepSequence()).containsAll(stepsNeededToBeCompleted);
     }
 }

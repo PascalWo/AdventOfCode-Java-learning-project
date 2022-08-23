@@ -14,13 +14,16 @@ public class SelectedInstructions {
     @Nonnull
     private List<StepInstruction> availableStepInstructionsNotUsed = new ArrayList<>();
     private StepInstruction nextStepInstruction;
+    @Nonnull
+    private final SortedSteps sortedSteps;
+
+    public SelectedInstructions(@Nonnull final List<StepInstruction> stepInstructions, @Nonnull final SortedSteps sortedSteps) {
+        this.stepInstructions = requireNonNull(stepInstructions, "stepInstructions");
+        this.sortedSteps = requireNonNull(sortedSteps, "sortedSteps");
+    }
 
     public StepInstruction getNextStepInstruction() {
         return nextStepInstruction;
-    }
-
-    public SelectedInstructions(@Nonnull final List<StepInstruction> stepInstructions) {
-        this.stepInstructions = requireNonNull(stepInstructions);
     }
 
     public int getAmountOfInstructions() {
@@ -54,10 +57,10 @@ public class SelectedInstructions {
         return availableStepInstructions.size();
     }
 
-    public void getNextStepInstructionByAlphabeticalOrder(@Nonnull final SortedSteps sortedSteps) {
+    public void getNextStepInstructionByAlphabeticalOrder() {
         sortInstructionsAlphabeticalByFinishedBefore();
         for (int i = 0; i < getAmountOfAvailableStepInstructions(); i++) {
-            if (isNextStepInstruction(i, sortedSteps)) {
+            if (isNextStepInstruction(i)) {
                 setNextStepInstruction(i);
                 setUnusedStepInstructions(i);
                 break;
@@ -72,25 +75,21 @@ public class SelectedInstructions {
                 .toList();
     }
 
-    private boolean isNextStepInstruction(final int i, @Nonnull final SortedSteps sortedSteps) {
+    private boolean isNextStepInstruction(final int i) {
         final StepInstruction possibleNextInstruction = availableStepInstructions.get(i);
 
-        return isPrerequisiteComplete(possibleNextInstruction, sortedSteps);
+        return isPrerequisiteComplete(possibleNextInstruction);
     }
 
-    private boolean isPrerequisiteComplete(@Nonnull final StepInstruction instructionToCheck, @Nonnull final SortedSteps sortedSteps) {
+    private boolean isPrerequisiteComplete(@Nonnull final StepInstruction instructionToCheck) {
         final char stepToCheck = instructionToCheck.finishedBefore();
 
-        if (stepIsAlreadyUsed(stepToCheck, sortedSteps)) {
+        if (sortedSteps.stepIsAlreadyUsed(stepToCheck)) {
             return false;
         }
         final List<Character> stepsNeededToBeCompleted = getStepsNeedToBeCompleted(stepToCheck);
 
-        return isEveryNeededStepCompleted(stepsNeededToBeCompleted, sortedSteps);
-    }
-
-    private boolean stepIsAlreadyUsed(final char stepToCheck, @Nonnull final SortedSteps sortedSteps) {
-        return sortedSteps.getStepSequence().contains(stepToCheck);
+        return sortedSteps.isEveryNeededStepCompleted(stepsNeededToBeCompleted);
     }
 
     @Nonnull
@@ -102,10 +101,6 @@ public class SelectedInstructions {
                 .toList();
     }
 
-    private boolean isEveryNeededStepCompleted(@Nonnull final List<Character> stepsNeededToBeCompleted, @Nonnull final SortedSteps sortedSteps) {
-        return new HashSet<>(sortedSteps.getStepSequence()).containsAll(stepsNeededToBeCompleted);
-    }
-
     private void setNextStepInstruction(final int i) {
         this.nextStepInstruction = availableStepInstructions.get(i);
     }
@@ -115,5 +110,4 @@ public class SelectedInstructions {
         stepInstructionsNotUsed.remove(i);
         this.availableStepInstructionsNotUsed = stepInstructionsNotUsed;
     }
-
 }
