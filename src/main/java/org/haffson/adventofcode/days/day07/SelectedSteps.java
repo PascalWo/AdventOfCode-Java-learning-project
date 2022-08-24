@@ -7,7 +7,6 @@ public class SelectedSteps {
     private char stepWhenInstructionIsEmpty;
     private char stepWhenInstructionIsDuplicated;
 
-
     public SelectedSteps() {
         this.leastStep = Character.MIN_VALUE;
         this.nextStepToCheck = Character.MIN_VALUE;
@@ -17,10 +16,6 @@ public class SelectedSteps {
 
     public char getLeastStep() {
         return leastStep;
-    }
-
-    public void setLeastStep(final char leastStep) {
-        this.leastStep = leastStep;
     }
 
     public char getNextStepToCheck() {
@@ -45,5 +40,9 @@ public class SelectedSteps {
 
     public void setStepWhenInstructionIsDuplicated(final char stepWhenInstructionIsDuplicated) {
         this.stepWhenInstructionIsDuplicated = stepWhenInstructionIsDuplicated;
+    }
+
+    void setLeastStep() {
+        this.leastStep = this.getNextStepToCheck();
     }
 }

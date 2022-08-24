@@ -20,28 +20,46 @@ public class StepSorter {
     public String getSortedSteps() {
         initialiseStarting();
 
-        for (int i = 0; i < selectedInstructions.getAmountOfInstructions(); i++) {
-            selectedInstructions.setAvailableStepInstructions(selectedSteps.getNextStepToCheck());
+//        for (int i = 0; i < selectedInstructions.getAmountOfInstructions(); i++) {
+        selectedInstructions.getStepInstructions().forEach(stepInstruction -> {
+            addNextStepToResult();
 
-            selectedInstructions.getNextStepInstructionByAlphabeticalOrder();
-
-            setNextStepToCheck();
-
-            addStepToResult();
-        }
+//            setAvailableStepInstructions();
+//            selectedInstructions.setNextStepInstructionByAlphabeticalOrder();
+//            setNextStepToCheck();
+//            addStepToResult();
+        });
 
         return sortedSteps.getSequenceAsString();
     }
 
+    private void addNextStepToResult() {
+//        final List<StepInstruction> availableStepInstructions = getAvailableStepInstructions();
+        setAvailableStepInstructions();
+
+        selectedInstructions.setNextStepInstructionByAlphabeticalOrder();
+
+        setNextStepToCheck();
+
+        addStepToResult();
+    }
+    private void setAvailableStepInstructions(){
+        selectedInstructions.setAvailableStepInstructions(selectedSteps.getNextStepToCheck());
+    }
+
+//    private List<StepInstruction> getAvailableStepInstructions(){
+//        return selectedInstructions.setAvailableStepInstructions(selectedSteps.getNextStepToCheck());
+//    }
+
     private void initialiseStarting() {
         starter.setStartingSteps();
         selectedInstructions.setAvailableStarterOptions(starter);
-        this.sortedSteps.addStep(starter.getStartingStep());
-        this.selectedSteps.setNextStepToCheck(starter.getStartingStep());
+        sortedSteps.addStep(starter.getStartingStep());
+        selectedSteps.setNextStepToCheck(starter.getStartingStep());
     }
 
     private void setNextStepToCheck() {
-        if (selectedInstructions.getNextStepInstruction() != null) {
+        if (isNextStepInstructionEmpty()) {
             selectedSteps.setNextStepToCheck(selectedInstructions.getNextStepInstruction().finishedBefore());
             if (selectedSteps.getNextStepToCheck() == selectedSteps.getLeastStep()) {
                 setNextStepWhenDuplicate();
@@ -51,6 +69,10 @@ public class StepSorter {
             setNextStepWhenEmpty();
             selectedSteps.setNextStepToCheck(selectedSteps.getStepWhenInstructionIsEmpty());
         }
+    }
+
+    private boolean isNextStepInstructionEmpty(){
+        return selectedInstructions.getNextStepInstruction() != null;
     }
 
     private void setNextStepWhenDuplicate() {
@@ -75,10 +97,6 @@ public class StepSorter {
 
     private void addStepToResult() {
         sortedSteps.addStep(selectedSteps.getNextStepToCheck());
-        setLeastStep();
-    }
-
-    private void setLeastStep() {
-        selectedSteps.setLeastStep(selectedSteps.getNextStepToCheck());
+        selectedSteps.setLeastStep();
     }
 }

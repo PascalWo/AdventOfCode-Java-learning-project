@@ -22,6 +22,11 @@ public class SelectedInstructions {
         this.sortedSteps = requireNonNull(sortedSteps, "sortedSteps");
     }
 
+    @Nonnull
+    public List<StepInstruction> getStepInstructions() {
+        return stepInstructions;
+    }
+
     public StepInstruction getNextStepInstruction() {
         return nextStepInstruction;
     }
@@ -52,12 +57,20 @@ public class SelectedInstructions {
 
         this.availableStepInstructions = new ArrayList<>(availableInstructions);
     }
+//public List<StepInstruction> setAvailableStepInstructions(final char stepToCompare) {
+//    final Set<StepInstruction> availableInstructions = new HashSet<>();
+//
+//    availableInstructions.addAll(getAvailableStepInstructions(stepToCompare));
+//    availableInstructions.addAll(availableStepInstructionsNotUsed);
+//
+//   return new ArrayList<>(availableInstructions);
+//}
 
     public int getAmountOfAvailableStepInstructions() {
         return availableStepInstructions.size();
     }
 
-    public void getNextStepInstructionByAlphabeticalOrder() {
+    public void setNextStepInstructionByAlphabeticalOrder() {
         sortInstructionsAlphabeticalByFinishedBefore();
         for (int i = 0; i < getAmountOfAvailableStepInstructions(); i++) {
             if (isNextStepInstruction(i)) {
@@ -67,6 +80,16 @@ public class SelectedInstructions {
             }
         }
     }
+//public void setNextStepInstructionByAlphabeticalOrder() {
+//    sortInstructionsAlphabeticalByFinishedBefore();
+//    for (int i = 0; i < getAmountOfAvailableStepInstructions(); i++) {
+//        if (isNextStepInstruction(i)) {
+//            setNextStepInstruction(i);
+//            setUnusedStepInstructions(i);
+//            break;
+//        }
+//    }
+//}
 
     private void sortInstructionsAlphabeticalByFinishedBefore() {
         this.availableStepInstructions = availableStepInstructions
