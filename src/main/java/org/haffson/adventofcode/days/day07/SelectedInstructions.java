@@ -80,8 +80,9 @@ public class SelectedInstructions {
             }
         }
     }
-//public void setNextStepInstructionByAlphabeticalOrder() {
-//    sortInstructionsAlphabeticalByFinishedBefore();
+//public void setNextStepInstructionByAlphabeticalOrder(@Nonnull final List<StepInstruction> availableStepInstructions) {
+//    List<StepInstruction> sortedInstructions = sortInstructionsAlphabeticalByFinishedBefore(availableStepInstructions);
+//
 //    for (int i = 0; i < getAmountOfAvailableStepInstructions(); i++) {
 //        if (isNextStepInstruction(i)) {
 //            setNextStepInstruction(i);
@@ -90,6 +91,13 @@ public class SelectedInstructions {
 //        }
 //    }
 //}
+
+//    private List<StepInstruction> sortInstructionsAlphabeticalByFinishedBefore() {
+//        return availableStepInstructions
+//                .stream()
+//                .sorted(Comparator.comparing(StepInstruction::finishedBefore))
+//                .toList();
+//    }
 
     private void sortInstructionsAlphabeticalByFinishedBefore() {
         this.availableStepInstructions = availableStepInstructions

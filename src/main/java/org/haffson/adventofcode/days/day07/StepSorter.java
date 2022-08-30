@@ -20,14 +20,8 @@ public class StepSorter {
     public String getSortedSteps() {
         initialiseStarting();
 
-//        for (int i = 0; i < selectedInstructions.getAmountOfInstructions(); i++) {
         selectedInstructions.getStepInstructions().forEach(stepInstruction -> {
             addNextStepToResult();
-
-//            setAvailableStepInstructions();
-//            selectedInstructions.setNextStepInstructionByAlphabeticalOrder();
-//            setNextStepToCheck();
-//            addStepToResult();
         });
 
         return sortedSteps.getSequenceAsString();
@@ -37,6 +31,7 @@ public class StepSorter {
 //        final List<StepInstruction> availableStepInstructions = getAvailableStepInstructions();
         setAvailableStepInstructions();
 
+//        selectedInstructions.setNextStepInstructionByAlphabeticalOrder(availableStepInstructions);
         selectedInstructions.setNextStepInstructionByAlphabeticalOrder();
 
         setNextStepToCheck();
