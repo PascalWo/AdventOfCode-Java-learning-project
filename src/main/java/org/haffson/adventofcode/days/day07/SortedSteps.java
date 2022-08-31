@@ -2,23 +2,27 @@ package org.haffson.adventofcode.days.day07;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class SortedSteps {
-    private final List<Character> stepSequence;
+    private final List<Character> characterSequence;
+    private final List<Step> stepSequence;
 
     public SortedSteps() {
+        this.characterSequence = new ArrayList<>();
         this.stepSequence = new ArrayList<>();
     }
 
-    public List<Character> getStepSequence() {
-        return Collections.unmodifiableList(stepSequence);
+    public List<Character> getCharacterSequence() {
+        final List<Character> characters = new ArrayList<>();
+        stepSequence.forEach(step -> {
+            characters.add(step.getStepName());
+        });
+        return characters;
     }
 
-    public void addStep(final char nextStepToCheck) {
+    public void addStep(final Step nextStepToCheck) {
         if (isStepToCheckEmpty(nextStepToCheck)) {
             return;
         }
@@ -27,20 +31,15 @@ public class SortedSteps {
         }
     }
 
-    private boolean isStepToCheckEmpty(final char stepToCheck) {
-        return stepToCheck == Character.MIN_VALUE;
+    private boolean isStepToCheckEmpty(final Step stepToCheck) {
+        return stepToCheck.getStepName() == Character.MIN_VALUE;
     }
 
     @Nonnull
-    public String getSequenceAsString() {
-        return stepSequence.stream().map(String::valueOf).collect(Collectors.joining());
-    }
-
-    public boolean stepIsAlreadyUsed(final char stepToCheck) {
-        return getStepSequence().contains(stepToCheck);
-    }
-
-    public boolean isEveryNeededStepCompleted(@Nonnull final List<Character> stepsNeededToBeCompleted) {
-        return new HashSet<>(getStepSequence()).containsAll(stepsNeededToBeCompleted);
+    public String getStepsAsString() {
+        List<Character> characters = getCharacterSequence();
+        return characters.stream().map(String::valueOf).collect(Collectors.joining());
     }
 }
+
+

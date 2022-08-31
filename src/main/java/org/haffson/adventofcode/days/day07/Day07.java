@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static java.util.Objects.requireNonNull;
 
@@ -75,94 +74,70 @@ public class Day07 implements Days {
     @Nonnull
     private String calculateFirstPart(@Nonnull final List<String> inputStringList) {
         final List<StepInstruction> inputList = StepInstruction.of(inputStringList);
-        final StepSorter stepSorter = new StepSorter(inputList);
+        final List<Step> steps = getSteps(inputList);
+        final StepSorter stepSorter = new StepSorter();
 
-        return stepSorter.getSortedSteps();
+        return stepSorter.getSortedSteps(steps);
     }
 
     private long calculateSecondPart(@Nonnull final List<String> inputStringList) {
         return 0;
     }
 
-    List<StepInstruction> getInstructions(@Nonnull final List<String> inputStringList) {
-        return StepInstruction.of(inputStringList);
 
-    }
-
-    List<StepInformation> convertInstructionsToSteps(@Nonnull final List<StepInstruction> stepInstructions) {
-        return getSteps(stepInstructions);
+    @Nonnull
+    private List<Step> getSteps(@Nonnull final List<StepInstruction> instructions) {
+        final Map<Character, List<Character>> dependenciesByStep = convertInstructionsToSortedSteps(instructions);
+        return Step.of(dependenciesByStep);
     }
 
     @Nonnull
-    public List<StepInformation> getSteps(@Nonnull final List<StepInstruction> stepInstructions) {
+    private List<Step> convertInstructionsToSteps(@Nonnull final List<StepInstruction> stepInstructions) {
         requireNonNull(stepInstructions, "stepInstructions");
 
-        final List<StepInformation> combinedStepInformations = new ArrayList<>();
+        final List<Step> combinedSteps = new ArrayList<>();
 
         stepInstructions.forEach(stepInstruction -> {
-            final StepInformation stepInformation1 = new StepInformation(stepInstruction.step(), new ArrayList<>());
-            final StepInformation step2 = new StepInformation(stepInstruction.finishedBefore(), List.of(stepInstruction.step()));
+            final Step step1 = new Step(stepInstruction.step(), new ArrayList<>());
+            final Step step2 = new Step(stepInstruction.finishedBefore(), List.of(stepInstruction.step()));
 
-            final List<StepInformation> extractedStepInformations = List.of(stepInformation1, step2);
-            combinedStepInformations.addAll(extractedStepInformations);
+            final List<Step> extractedSteps = List.of(step1, step2);
+            combinedSteps.addAll(extractedSteps);
         });
 
 
-        return combinedStepInformations;
+        return combinedSteps;
     }
 
-    Map<Character,List<Character>> convertInstructionsToSortedSteps(@Nonnull final List<StepInstruction> stepInstructions) {
-        List<StepInformation> stepInformations = getSteps(stepInstructions);
+    Map<Character, List<Character>> convertInstructionsToSortedSteps(@Nonnull final List<StepInstruction> stepInstructions) {
+        final List<Step> steps = convertInstructionsToSteps(stepInstructions);
 
-        Map<Character,List<List<Character>>> dependenciesByStep = new HashMap<>();
+        final Map<Character, List<List<Character>>> dependenciesByStep = new HashMap<>();
 
-        for (StepInformation stepInformation: stepInformations
-             ) {
-            if (!dependenciesByStep.containsKey(stepInformation.getStep())) {
-                List<List<Character>> dependencyList = new ArrayList<>();
+        for (final Step step : steps
+        ) {
+            if (!dependenciesByStep.containsKey(step.getStepName())) {
+                final List<List<Character>> dependencyList = new ArrayList<>();
 
-//                List<Character> informatonsList = stepInformation.getDependsOn().stream().flatMap(x -> x.charValue()).toList();
+                dependencyList.add(step.getDependsOn());
 
-                dependencyList.add(stepInformation.getDependsOn());
-//                dependencyList.add(informatonsList);
-
-                dependenciesByStep.put(stepInformation.getStep(), dependencyList);
+                dependenciesByStep.put(step.getStepName(), dependencyList);
             } else {
-                dependenciesByStep.get(stepInformation.getStep()).add(stepInformation.getDependsOn());
+                dependenciesByStep.get(step.getStepName()).add(step.getDependsOn());
             }
         }
 
-//        Map<Character,List<Character>> cleanedList = dependenciesByStep.values().stream().flatMap(List::stream).toList();
-//        Map<Character,List<Character>> cleanedList = dependenciesByStep.forEach(x -> {
-//           x.charValue();
-//        });
-
-        Map<Character,List<Character>> cleanedList = new HashMap<>();
-//
-//        for (List<List<Character>> characterList: dependenciesByStep.values()
-//             ) {
-////            characterList.stream().flatMap(List::stream).toList();
-//           dependenciesByStep.values().stream().flatMap(List::stream).toList();
-//        }
-
-//        dependenciesByStep.values().forEach(List::stream);
-
-        for (Map.Entry<Character,List<List<Character>>> entry: dependenciesByStep.entrySet()
-             ) {
-            cleanedList.put(entry.getKey(),entry.getValue().stream().flatMap(List::stream).toList());
-        }
-
-        return cleanedList;
+        return duplicateFreeDependenciesByStep(dependenciesByStep);
     }
 
+    private Map<Character, List<Character>> duplicateFreeDependenciesByStep(@Nonnull final Map<Character, List<List<Character>>> duplicatedDependenciesByStep) {
+        final Map<Character, List<Character>> dependenciesByStep = new HashMap<>();
 
+        for (final Map.Entry<Character, List<List<Character>>> entry : duplicatedDependenciesByStep.entrySet()
+        ) {
+            dependenciesByStep.put(entry.getKey(), entry.getValue().stream().flatMap(List::stream).toList());
+        }
 
-    //    public List<StepInformation> cleanSteps(@Nonnull final List<StepInformation> stepInformations){
-//        List<StepInformation> cleanedSteps = stepInformations.stream().collect(Collectors.groupingBy(StepInformation::getStep, ))
-//
-//    }
-//    public List<StepInformation> cleanSteps(@Nonnull final List<StepInformation> stepInformations) {
-//        List<StepInformation> cleanedSteps = stepInformations.stream()
-//
-//    }
+        return dependenciesByStep;
+    }
 }

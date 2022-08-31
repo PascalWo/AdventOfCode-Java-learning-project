@@ -33,20 +33,27 @@ class StepSorterTest {
     @Test
     void getSortedSteps_shouldReturnSortedStepsAsString() {
         //arrange
-        final List<StepInstruction> stepInstructions = List.of(new StepInstruction('C', 'A'),
-                new StepInstruction('C', 'F'),
-                new StepInstruction('A', 'B'),
-                new StepInstruction('A', 'D'),
-                new StepInstruction('B', 'E'),
-                new StepInstruction('D', 'E'),
-                new StepInstruction('F', 'E'));
+//        final List<StepInstruction> stepInstructions = List.of(new StepInstruction('C', 'A'),
+//                new StepInstruction('C', 'F'),
+//                new StepInstruction('A', 'B'),
+//                new StepInstruction('A', 'D'),
+//                new StepInstruction('B', 'E'),
+//                new StepInstruction('D', 'E'),
+//                new StepInstruction('F', 'E'));
 
-        final StepSorter stepSorter = new StepSorter(stepInstructions);
+        final List<Step> steps = List.of(new Step('A', List.of('C')),
+                new Step('F', List.of('C')),
+                new Step('B', List.of('A')),
+                new Step('D', List.of('A')),
+                new Step('E', List.of('B', 'D', 'F')),
+                new Step('C'));
+
+        final StepSorter stepSorter = new StepSorter();
 
         final String expectedResult = "CABDFE";
         //act
 
-        final String actualResult = stepSorter.getSortedSteps();
+        final String actualResult = stepSorter.getSortedSteps(steps);
         //assert
         assertThat(actualResult).isEqualTo(expectedResult);
     }

@@ -195,26 +195,26 @@ class Day07Test {
 //        assertThat()
 //    }
 
-    @Test
-    void test_convertSteps(){
-        //arrange
-        final List<StepInstruction> stepInstructions = List.of(
-                new StepInstruction('C','A'),
-                new StepInstruction('C','F'),
-                new StepInstruction('A','B'),
-                new StepInstruction('A','D'),
-                new StepInstruction('B','E'),
-                new StepInstruction('D','E'),
-                new StepInstruction('F','E'));
-
-        final List<StepInformation> expectedResult = new ArrayList<>();
-
-        //act
-
-        final List<StepInformation> actualResult = day07.convertInstructionsToSteps(stepInstructions);
-        //assert
-        assertThat(actualResult).isEqualTo(expectedResult);
-    }
+//    @Test
+//    void test_convertSteps(){
+//        //arrange
+//        final List<StepInstruction> stepInstructions = List.of(
+//                new StepInstruction('C','A'),
+//                new StepInstruction('C','F'),
+//                new StepInstruction('A','B'),
+//                new StepInstruction('A','D'),
+//                new StepInstruction('B','E'),
+//                new StepInstruction('D','E'),
+//                new StepInstruction('F','E'));
+//
+//        final List<StepInformation> expectedResult = new ArrayList<>();
+//
+//        //act
+//
+//        final List<StepInformation> actualResult = day07.convertInstructionsToSteps(stepInstructions);
+//        //assert
+//        assertThat(actualResult).isEqualTo(expectedResult);
+//    }
 
     @Test
     void test_convertSortedSteps(){
@@ -228,7 +228,13 @@ class Day07Test {
                 new StepInstruction('D','E'),
                 new StepInstruction('F','E'));
 
-        final Map<Character,List<Character>> expectedResult = new HashMap<>();
+        final Map<Character,List<Character>> expectedResult = Map.of('A',List.of('C'),
+                'F',List.of('C'),
+                'B',List.of('A'),
+                'D',List.of('A'),
+                'E',List.of('B','D','F'),
+                'C',List.of());
+
 
         //act
 
@@ -236,5 +242,24 @@ class Day07Test {
         //assert
         assertThat(actualResult).isEqualTo(expectedResult);
     }
+
+//    @Test
+//    void test_convertMapToSteps(){
+//        //arrange
+//        final Map<Character,List<Character>> inputMap = Map.of('A',List.of('C'),
+//                'F',List.of('C'),
+//                'B',List.of('A'),
+//                'D',List.of('A'),
+//                'E',List.of('B','D','F'),
+//                'C',List.of());
+//
+//        final List<Step> expectedResult = List.of(new Step())
+//
+//        //act
+//
+//        final Map<Character,List<Character>> actualResult = day07.convertInstructionsToSortedSteps(stepInstructions);
+//        //assert
+//        assertThat(actualResult).isEqualTo(expectedResult);
+//    }
 
 }

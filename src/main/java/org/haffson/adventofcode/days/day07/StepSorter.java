@@ -2,96 +2,54 @@ package org.haffson.adventofcode.days.day07;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 
 public class StepSorter {
     private final SortedSteps sortedSteps;
-    private final SelectedSteps selectedSteps;
-    private final Starter starter;
-    private final SelectedInstructions selectedInstructions;
 
-    public StepSorter(@Nonnull final List<StepInstruction> stepInstructions) {
+    private final Starter starter;
+
+    public StepSorter() {
         this.sortedSteps = new SortedSteps();
-        this.selectedInstructions = new SelectedInstructions(stepInstructions, sortedSteps);
-        this.selectedSteps = new SelectedSteps();
-        this.starter = new Starter(stepInstructions);
+        this.starter = new Starter();
     }
 
-    public String getSortedSteps() {
-        initialiseStarting();
+    public String getSortedSteps(@Nonnull final List<Step> stepsInput) {
 
-        selectedInstructions.getStepInstructions().forEach(stepInstruction -> {
-            addNextStepToResult();
+        final List<Step> steps = new ArrayList<>(stepsInput);
+        final Step startingStep = getStartingStep(steps);
+        sortedSteps.addStep(startingStep);
+        steps.remove(startingStep);
+        final List<Step> stepsWithoutStart = new ArrayList<>(steps);
+
+        stepsWithoutStart.forEach(step -> {
+            final List<Step> availableSteps = getAvailableSteps(steps);
+            final List<Step> sortedAvailableSteps = new ArrayList<>(availableSteps);
+            sortedAvailableSteps.sort(Comparator.comparing(Step::getStepName));
+            final Step nextStep = sortedAvailableSteps.get(0);
+            sortedSteps.addStep(nextStep);
+            steps.remove(nextStep);
         });
 
-        return sortedSteps.getSequenceAsString();
+        return sortedSteps.getStepsAsString();
     }
 
-    private void addNextStepToResult() {
-//        final List<StepInstruction> availableStepInstructions = getAvailableStepInstructions();
-        setAvailableStepInstructions();
-
-//        selectedInstructions.setNextStepInstructionByAlphabeticalOrder(availableStepInstructions);
-        selectedInstructions.setNextStepInstructionByAlphabeticalOrder();
-
-        setNextStepToCheck();
-
-        addStepToResult();
-    }
-    private void setAvailableStepInstructions(){
-        selectedInstructions.setAvailableStepInstructions(selectedSteps.getNextStepToCheck());
+    private Step getStartingStep(@Nonnull final List<Step> steps) {
+        final List<Step> startingSteps = starter.getStartingSteps(steps);
+        startingSteps.sort(Comparator.comparing(Step::getStepName));
+        return startingSteps.get(0);
     }
 
-//    private List<StepInstruction> getAvailableStepInstructions(){
-//        return selectedInstructions.setAvailableStepInstructions(selectedSteps.getNextStepToCheck());
-//    }
+    private List<Step> getAvailableSteps(@Nonnull final List<Step> steps) {
+        final List<Step> availableSteps = new ArrayList<>();
 
-    private void initialiseStarting() {
-        starter.setStartingSteps();
-        selectedInstructions.setAvailableStarterOptions(starter);
-        sortedSteps.addStep(starter.getStartingStep());
-        selectedSteps.setNextStepToCheck(starter.getStartingStep());
-    }
-
-    private void setNextStepToCheck() {
-        if (isNextStepInstructionEmpty()) {
-            selectedSteps.setNextStepToCheck(selectedInstructions.getNextStepInstruction().finishedBefore());
-            if (selectedSteps.getNextStepToCheck() == selectedSteps.getLeastStep()) {
-                setNextStepWhenDuplicate();
-                selectedSteps.setNextStepToCheck(selectedSteps.getStepWhenInstructionIsDuplicated());
+        steps.forEach(step -> {
+            if (new HashSet<>(sortedSteps.getCharacterSequence()).containsAll(step.getDependsOn())) {
+                availableSteps.add(step);
             }
-        } else {
-            setNextStepWhenEmpty();
-            selectedSteps.setNextStepToCheck(selectedSteps.getStepWhenInstructionIsEmpty());
-        }
-    }
-
-    private boolean isNextStepInstructionEmpty(){
-        return selectedInstructions.getNextStepInstruction() != null;
-    }
-
-    private void setNextStepWhenDuplicate() {
-        if (!getAvailableStarterSteps().isEmpty()) {
-            selectedSteps.setStepWhenInstructionIsDuplicated(getAvailableStarterSteps().get(0));
-        }
-    }
-
-    private void setNextStepWhenEmpty() {
-        selectedSteps.setStepWhenInstructionIsEmpty(getAvailableStarterSteps().get(0));
-    }
-
-    @Nonnull
-    private List<Character> getAvailableStarterSteps() {
-        final List<Character> starterSteps = new ArrayList<>(starter.getStartingSteps());
-        final List<Character> actualSteps = new ArrayList<>(sortedSteps.getStepSequence());
-
-        starterSteps.removeAll(actualSteps);
-
-        return starterSteps;
-    }
-
-    private void addStepToResult() {
-        sortedSteps.addStep(selectedSteps.getNextStepToCheck());
-        selectedSteps.setLeastStep();
+        });
+        return availableSteps;
     }
 }
