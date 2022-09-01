@@ -6,19 +6,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import static java.util.Objects.requireNonNull;
+
 public final class Step {
     private final char stepName;
 
+    @Nonnull
     private final List<Character> dependsOn;
 
     public Step(final char stepName, @Nonnull final List<Character> dependsOn) {
         this.stepName = stepName;
-        this.dependsOn = dependsOn;
-    }
-
-    public static List<Step> of(@Nonnull final Map<Character, List<Character>> dependenciesByStep) {
-        return dependenciesByStep.entrySet().stream().map(entry -> new Step(entry.getKey(), entry.getValue())).toList();
-
+        this.dependsOn = requireNonNull(dependsOn, "dependsOn");
     }
 
     public Step(final char stepName) {
@@ -26,10 +24,16 @@ public final class Step {
         this.dependsOn = new ArrayList<>();
     }
 
+    public static List<Step> of(@Nonnull final Map<Character, List<Character>> dependenciesByStep) {
+        requireNonNull(dependenciesByStep, "dependenciesByStep");
+        return dependenciesByStep.entrySet().stream().map(entry -> new Step(entry.getKey(), entry.getValue())).toList();
+    }
+
     public char getStepName() {
         return stepName;
     }
 
+    @Nonnull
     public List<Character> getDependsOn() {
         return dependsOn;
     }

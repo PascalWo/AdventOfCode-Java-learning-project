@@ -5,10 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -127,17 +124,6 @@ class Day07Test {
                         "Step K must be finished before step I can begin.",
                         "Step J must be finished before step G can begin."
                 ));
-
-//        when(fileReaders.getInputList("src/main/resources/puzzle_input/day7_input.txt"))
-//                .thenReturn(List.of(
-//                        "Step C must be finished before step A can begin.",
-//                        "Step C must be finished before step F can begin.",
-//                        "Step A must be finished before step B can begin.",
-//                        "Step A must be finished before step D can begin.",
-//                        "Step B must be finished before step E can begin.",
-//                        "Step D must be finished before step E can begin.",
-//                        "Step F must be finished before step E can begin."
-//                ));
     }
 
     @DisplayName("get the current AoC Day")
@@ -152,7 +138,6 @@ class Day07Test {
     @Test
     void test_firstPart_returnsExpectedResult() {
         //arrange
-//        final String expectedResult = "Part 1 - : " + "CABDFE";
         final String expectedResult = "Part 1 - : " + "EPWCFXKISTZVJHDGNABLQYMORU";
 
         //act
@@ -161,105 +146,4 @@ class Day07Test {
         //assert
         assertThat(actualResult).isEqualTo(expectedResult);
     }
-
-//    @Test
-//    void test_getInstructions(){
-//        //arrange
-//        final FileReaders fileReaders = mock(FileReaders.class);
-//
-//                when(fileReaders.getInputList("src/main/resources/puzzle_input/day7_input.txt"))
-//                .thenReturn(List.of(
-//                        "Step C must be finished before step A can begin.",
-//                        "Step C must be finished before step F can begin.",
-//                        "Step A must be finished before step B can begin.",
-//                        "Step A must be finished before step D can begin.",
-//                        "Step B must be finished before step E can begin.",
-//                        "Step D must be finished before step E can begin.",
-//                        "Step F must be finished before step E can begin."
-//                ));
-//
-//        final List<StepInstruction> expectedResult = List.of(
-//                new StepInstruction('C','A'),
-//                new StepInstruction('C','F'),
-//                new StepInstruction('A','B'),
-//                new StepInstruction('A','D'),
-//                new StepInstruction('B','E'),
-//                new StepInstruction('D','E'),
-//                new StepInstruction('F','E'));
-//
-//        //act
-//
-//        final List<StepInstruction> actualResult = day07.getInstructions()
-//
-//        //assert
-//        assertThat()
-//    }
-
-//    @Test
-//    void test_convertSteps(){
-//        //arrange
-//        final List<StepInstruction> stepInstructions = List.of(
-//                new StepInstruction('C','A'),
-//                new StepInstruction('C','F'),
-//                new StepInstruction('A','B'),
-//                new StepInstruction('A','D'),
-//                new StepInstruction('B','E'),
-//                new StepInstruction('D','E'),
-//                new StepInstruction('F','E'));
-//
-//        final List<StepInformation> expectedResult = new ArrayList<>();
-//
-//        //act
-//
-//        final List<StepInformation> actualResult = day07.convertInstructionsToSteps(stepInstructions);
-//        //assert
-//        assertThat(actualResult).isEqualTo(expectedResult);
-//    }
-
-    @Test
-    void test_convertSortedSteps(){
-        //arrange
-        final List<StepInstruction> stepInstructions = List.of(
-                new StepInstruction('C','A'),
-                new StepInstruction('C','F'),
-                new StepInstruction('A','B'),
-                new StepInstruction('A','D'),
-                new StepInstruction('B','E'),
-                new StepInstruction('D','E'),
-                new StepInstruction('F','E'));
-
-        final Map<Character,List<Character>> expectedResult = Map.of('A',List.of('C'),
-                'F',List.of('C'),
-                'B',List.of('A'),
-                'D',List.of('A'),
-                'E',List.of('B','D','F'),
-                'C',List.of());
-
-
-        //act
-
-        final Map<Character,List<Character>> actualResult = day07.convertInstructionsToSortedSteps(stepInstructions);
-        //assert
-        assertThat(actualResult).isEqualTo(expectedResult);
-    }
-
-//    @Test
-//    void test_convertMapToSteps(){
-//        //arrange
-//        final Map<Character,List<Character>> inputMap = Map.of('A',List.of('C'),
-//                'F',List.of('C'),
-//                'B',List.of('A'),
-//                'D',List.of('A'),
-//                'E',List.of('B','D','F'),
-//                'C',List.of());
-//
-//        final List<Step> expectedResult = List.of(new Step())
-//
-//        //act
-//
-//        final Map<Character,List<Character>> actualResult = day07.convertInstructionsToSortedSteps(stepInstructions);
-//        //assert
-//        assertThat(actualResult).isEqualTo(expectedResult);
-//    }
-
 }

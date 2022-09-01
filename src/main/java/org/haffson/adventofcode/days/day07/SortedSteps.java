@@ -5,24 +5,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.util.Objects.requireNonNull;
+
 public class SortedSteps {
-    private final List<Character> characterSequence;
     private final List<Step> stepSequence;
 
     public SortedSteps() {
-        this.characterSequence = new ArrayList<>();
         this.stepSequence = new ArrayList<>();
     }
-
+    @Nonnull
     public List<Character> getCharacterSequence() {
         final List<Character> characters = new ArrayList<>();
-        stepSequence.forEach(step -> {
-            characters.add(step.getStepName());
-        });
+        stepSequence.forEach(step -> characters.add(step.getStepName()));
         return characters;
     }
 
-    public void addStep(final Step nextStepToCheck) {
+    public void addStep(@Nonnull final Step nextStepToCheck) {
+        requireNonNull(nextStepToCheck, "nextStepToCheck");
         if (isStepToCheckEmpty(nextStepToCheck)) {
             return;
         }
@@ -31,13 +30,14 @@ public class SortedSteps {
         }
     }
 
-    private boolean isStepToCheckEmpty(final Step stepToCheck) {
+    private boolean isStepToCheckEmpty(@Nonnull final Step stepToCheck) {
+        requireNonNull(stepToCheck, "stepToCheck");
         return stepToCheck.getStepName() == Character.MIN_VALUE;
     }
 
     @Nonnull
     public String getStepsAsString() {
-        List<Character> characters = getCharacterSequence();
+        final List<Character> characters = getCharacterSequence();
         return characters.stream().map(String::valueOf).collect(Collectors.joining());
     }
 }

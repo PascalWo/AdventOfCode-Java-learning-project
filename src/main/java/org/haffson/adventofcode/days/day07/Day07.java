@@ -84,7 +84,6 @@ public class Day07 implements Days {
         return 0;
     }
 
-
     @Nonnull
     private List<Step> getSteps(@Nonnull final List<StepInstruction> instructions) {
         final Map<Character, List<Character>> dependenciesByStep = convertInstructionsToSortedSteps(instructions);
@@ -92,30 +91,14 @@ public class Day07 implements Days {
     }
 
     @Nonnull
-    private List<Step> convertInstructionsToSteps(@Nonnull final List<StepInstruction> stepInstructions) {
+    private Map<Character, List<Character>> convertInstructionsToSortedSteps(@Nonnull final List<StepInstruction> stepInstructions) {
         requireNonNull(stepInstructions, "stepInstructions");
 
-        final List<Step> combinedSteps = new ArrayList<>();
-
-        stepInstructions.forEach(stepInstruction -> {
-            final Step step1 = new Step(stepInstruction.step(), new ArrayList<>());
-            final Step step2 = new Step(stepInstruction.finishedBefore(), List.of(stepInstruction.step()));
-
-            final List<Step> extractedSteps = List.of(step1, step2);
-            combinedSteps.addAll(extractedSteps);
-        });
-
-
-        return combinedSteps;
-    }
-
-    Map<Character, List<Character>> convertInstructionsToSortedSteps(@Nonnull final List<StepInstruction> stepInstructions) {
         final List<Step> steps = convertInstructionsToSteps(stepInstructions);
 
         final Map<Character, List<List<Character>>> dependenciesByStep = new HashMap<>();
 
-        for (final Step step : steps
-        ) {
+        steps.forEach(step -> {
             if (!dependenciesByStep.containsKey(step.getStepName())) {
                 final List<List<Character>> dependencyList = new ArrayList<>();
 
@@ -125,18 +108,38 @@ public class Day07 implements Days {
             } else {
                 dependenciesByStep.get(step.getStepName()).add(step.getDependsOn());
             }
-        }
+        });
 
         return duplicateFreeDependenciesByStep(dependenciesByStep);
     }
 
-    private Map<Character, List<Character>> duplicateFreeDependenciesByStep(@Nonnull final Map<Character, List<List<Character>>> duplicatedDependenciesByStep) {
+
+    @Nonnull
+    private List<Step> convertInstructionsToSteps(@Nonnull final List<StepInstruction> stepInstructions) {
+        requireNonNull(stepInstructions, "stepInstructions");
+
+        final List<Step> completeSteps = new ArrayList<>();
+
+        stepInstructions.forEach(stepInstruction -> {
+            final Step step1 = new Step(stepInstruction.step(), new ArrayList<>());
+            final Step step2 = new Step(stepInstruction.finishedBefore(), List.of(stepInstruction.step()));
+
+            final List<Step> transformedSteps = List.of(step1, step2);
+            completeSteps.addAll(transformedSteps);
+        });
+
+        return completeSteps;
+    }
+
+    @Nonnull
+    private Map<Character, List<Character>> duplicateFreeDependenciesByStep(
+            @Nonnull final Map<Character, List<List<Character>>> duplicatedDependenciesByStep) {
+        requireNonNull(duplicatedDependenciesByStep, "duplicatedDependenciesByStep");
+
         final Map<Character, List<Character>> dependenciesByStep = new HashMap<>();
 
-        for (final Map.Entry<Character, List<List<Character>>> entry : duplicatedDependenciesByStep.entrySet()
-        ) {
-            dependenciesByStep.put(entry.getKey(), entry.getValue().stream().flatMap(List::stream).toList());
-        }
+        duplicatedDependenciesByStep.forEach((stepName, stepDependencies) -> dependenciesByStep
+                .put(stepName, stepDependencies.stream().flatMap(List::stream).toList()));
 
         return dependenciesByStep;
     }
