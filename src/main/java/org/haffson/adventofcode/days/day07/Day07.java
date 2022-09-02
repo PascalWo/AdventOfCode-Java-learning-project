@@ -86,6 +86,7 @@ public class Day07 implements Days {
 
     @Nonnull
     private List<Step> getSteps(@Nonnull final List<StepInstruction> instructions) {
+        requireNonNull(instructions, "instructions");
         final Map<Character, List<Character>> dependenciesByStep = convertInstructionsToSortedSteps(instructions);
         return Step.of(dependenciesByStep);
     }
@@ -99,14 +100,14 @@ public class Day07 implements Days {
         final Map<Character, List<List<Character>>> dependenciesByStep = new HashMap<>();
 
         steps.forEach(step -> {
-            if (!dependenciesByStep.containsKey(step.getStepName())) {
+            if (!dependenciesByStep.containsKey(step.stepName())) {
                 final List<List<Character>> dependencyList = new ArrayList<>();
 
-                dependencyList.add(step.getDependsOn());
+                dependencyList.add(step.dependsOn());
 
-                dependenciesByStep.put(step.getStepName(), dependencyList);
+                dependenciesByStep.put(step.stepName(), dependencyList);
             } else {
-                dependenciesByStep.get(step.getStepName()).add(step.getDependsOn());
+                dependenciesByStep.get(step.stepName()).add(step.dependsOn());
             }
         });
 
@@ -121,8 +122,8 @@ public class Day07 implements Days {
         final List<Step> completeSteps = new ArrayList<>();
 
         stepInstructions.forEach(stepInstruction -> {
-            final Step step1 = new Step(stepInstruction.step(), new ArrayList<>());
-            final Step step2 = new Step(stepInstruction.finishedBefore(), List.of(stepInstruction.step()));
+            final Step step1 = new Step(stepInstruction.previousStep(), new ArrayList<>());
+            final Step step2 = new Step(stepInstruction.step(), List.of(stepInstruction.previousStep()));
 
             final List<Step> transformedSteps = List.of(step1, step2);
             completeSteps.addAll(transformedSteps);

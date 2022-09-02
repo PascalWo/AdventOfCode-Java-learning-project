@@ -14,33 +14,9 @@ class StepSorterTest {
 
     }
 
-//    @DisplayName("find starting step character")
-//    @Test
-//    void findStartingStep_shouldReturnStartingStep() {
-//        //arrange
-//        final List<StepInstruction> stepInstructions = List.of(new StepInstruction('C', 'A'),
-//                new StepInstruction('C', 'F'),
-//                new StepInstruction('A', 'B'));
-//        final StepSorter stepSorter = new StepSorter(stepInstructions);
-//        final List<Character> expectedResult = List.of('C');
-//        //act
-//        stepSorter.findStartingStep();
-//        final List<Character> actualResult = stepSorter.getStartingSteps();
-//        //assert
-//        assertThat(actualResult).isEqualTo(expectedResult);
-//    }
-
     @Test
     void getSortedSteps_shouldReturnSortedStepsAsString() {
         //arrange
-//        final List<StepInstruction> stepInstructions = List.of(new StepInstruction('C', 'A'),
-//                new StepInstruction('C', 'F'),
-//                new StepInstruction('A', 'B'),
-//                new StepInstruction('A', 'D'),
-//                new StepInstruction('B', 'E'),
-//                new StepInstruction('D', 'E'),
-//                new StepInstruction('F', 'E'));
-
         final List<Step> steps = List.of(new Step('A', List.of('C')),
                 new Step('F', List.of('C')),
                 new Step('B', List.of('A')),

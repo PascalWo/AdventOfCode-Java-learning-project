@@ -21,46 +21,21 @@ public class StepSorter {
         requireNonNull(stepsInput, "stepsInput");
 
         final List<Step> steps = new ArrayList<>(stepsInput);
-        final Step startingStep = getStartingStep(steps);
-        sortedSteps.addStep(startingStep);
-        steps.remove(startingStep);
-        final List<Step> stepsWithoutStart = new ArrayList<>(steps);
 
-        stepsWithoutStart.forEach(step -> addNextStepToResult(steps));
+        stepsInput.forEach(step -> addNextStepToResult(steps));
 
         return sortedSteps.getStepsAsString();
     }
 
 
-    private void addNextStepToResult(@Nonnull final List<Step> steps){
+    private void addNextStepToResult(@Nonnull final List<Step> steps) {
         requireNonNull(steps, "steps");
         final List<Step> availableSteps = getAvailableSteps(steps);
         final List<Step> sortedAvailableSteps = new ArrayList<>(availableSteps);
-        sortedAvailableSteps.sort(Comparator.comparing(Step::getStepName));
+        sortedAvailableSteps.sort(Comparator.comparing(Step::stepName));
         final Step nextStep = sortedAvailableSteps.get(0);
         sortedSteps.addStep(nextStep);
         steps.remove(nextStep);
-    }
-
-    @Nonnull
-    public List<Step> getStartingSteps(@Nonnull final List<Step> steps) {
-        requireNonNull(steps, "steps");
-        final List<Step> startingSteps = new ArrayList<>();
-        steps.forEach(step -> {
-            if (step.getDependsOn().isEmpty()) {
-                startingSteps.add(step);
-            }
-        });
-
-        return startingSteps;
-    }
-
-    @Nonnull
-    private Step getStartingStep(@Nonnull final List<Step> steps) {
-        requireNonNull(steps, "steps");
-        final List<Step> startingSteps = getStartingSteps(steps);
-        startingSteps.sort(Comparator.comparing(Step::getStepName));
-        return startingSteps.get(0);
     }
 
     @Nonnull
@@ -69,7 +44,7 @@ public class StepSorter {
         final List<Step> availableSteps = new ArrayList<>();
 
         steps.forEach(step -> {
-            if (new HashSet<>(sortedSteps.getCharacterSequence()).containsAll(step.getDependsOn())) {
+            if (new HashSet<>(sortedSteps.getCharacterSequence()).containsAll(step.dependsOn())) {
                 availableSteps.add(step);
             }
         });
