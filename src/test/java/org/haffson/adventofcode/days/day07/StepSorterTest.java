@@ -1,6 +1,6 @@
 package org.haffson.adventofcode.days.day07;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -9,11 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class StepSorterTest {
 
-    @BeforeEach
-    void setUp() {
-
-    }
-
+    @DisplayName("Should return the steps in correct order")
     @Test
     void getSortedSteps_shouldReturnSortedStepsAsString() {
         //arrange
@@ -28,8 +24,8 @@ class StepSorterTest {
 
         final String expectedResult = "CABDFE";
         //act
-
         final String actualResult = stepSorter.getSortedSteps(steps);
+
         //assert
         assertThat(actualResult).isEqualTo(expectedResult);
     }
