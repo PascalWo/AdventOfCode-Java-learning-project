@@ -7,8 +7,6 @@ import org.haffson.adventofcode.utils.ProblemStatus;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -73,75 +71,18 @@ public class Day07 implements Days {
      */
     @Nonnull
     private String calculateFirstPart(@Nonnull final List<String> inputStringList) {
-        final List<StepInstruction> inputList = StepInstruction.of(inputStringList);
-        final List<Step> steps = getSteps(inputList);
+        requireNonNull(inputStringList, "inputStringList");
+
+        final StepConverter stepConverter = new StepConverter();
         final StepSorter stepSorter = new StepSorter();
+
+        final List<StepInstruction> inputList = StepInstruction.of(inputStringList);
+        final List<Step> steps = stepConverter.getSteps(inputList);
 
         return stepSorter.getSortedSteps(steps);
     }
 
     private long calculateSecondPart(@Nonnull final List<String> inputStringList) {
         return 0;
-    }
-
-    @Nonnull
-    private List<Step> getSteps(@Nonnull final List<StepInstruction> instructions) {
-        requireNonNull(instructions, "instructions");
-        final Map<Character, List<Character>> dependenciesByStep = convertInstructionsToSortedSteps(instructions);
-        return Step.of(dependenciesByStep);
-    }
-
-    @Nonnull
-    private Map<Character, List<Character>> convertInstructionsToSortedSteps(@Nonnull final List<StepInstruction> stepInstructions) {
-        requireNonNull(stepInstructions, "stepInstructions");
-
-        final List<Step> steps = convertInstructionsToSteps(stepInstructions);
-
-        final Map<Character, List<List<Character>>> dependenciesByStep = new HashMap<>();
-
-        steps.forEach(step -> {
-            if (!dependenciesByStep.containsKey(step.stepName())) {
-                final List<List<Character>> dependencyList = new ArrayList<>();
-
-                dependencyList.add(step.dependsOn());
-
-                dependenciesByStep.put(step.stepName(), dependencyList);
-            } else {
-                dependenciesByStep.get(step.stepName()).add(step.dependsOn());
-            }
-        });
-
-        return duplicateFreeDependenciesByStep(dependenciesByStep);
-    }
-
-
-    @Nonnull
-    private List<Step> convertInstructionsToSteps(@Nonnull final List<StepInstruction> stepInstructions) {
-        requireNonNull(stepInstructions, "stepInstructions");
-
-        final List<Step> completeSteps = new ArrayList<>();
-
-        stepInstructions.forEach(stepInstruction -> {
-            final Step step1 = new Step(stepInstruction.previousStep(), new ArrayList<>());
-            final Step step2 = new Step(stepInstruction.step(), List.of(stepInstruction.previousStep()));
-
-            final List<Step> transformedSteps = List.of(step1, step2);
-            completeSteps.addAll(transformedSteps);
-        });
-
-        return completeSteps;
-    }
-
-    @Nonnull
-    private Map<Character, List<Character>> duplicateFreeDependenciesByStep(
-            @Nonnull final Map<Character, List<List<Character>>> duplicatedDependenciesByStep) {
-        requireNonNull(duplicatedDependenciesByStep, "duplicatedDependenciesByStep");
-
-        final Map<Character, List<Character>> dependenciesByStep = new HashMap<>();
-
-        duplicatedDependenciesByStep.forEach((stepName, stepDependencies) -> dependenciesByStep
-                .put(stepName, stepDependencies.stream().flatMap(List::stream).toList()));
-
-        return dependenciesByStep;
     }
 }

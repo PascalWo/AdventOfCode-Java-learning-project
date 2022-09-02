@@ -14,9 +14,10 @@ public record SortedSteps(@Nonnull List<Step> stepSequence) {
 
     @Nonnull
     public List<Character> getCharacterSequence() {
-        final List<Character> characters = new ArrayList<>();
-        stepSequence.forEach(step -> characters.add(step.stepName()));
-        return characters;
+        final List<Character> characterSequence = new ArrayList<>();
+        stepSequence.forEach(step -> characterSequence.add(step.stepName()));
+
+        return characterSequence;
     }
 
     public void addStep(@Nonnull final Step nextStepToCheck) {
@@ -28,6 +29,7 @@ public record SortedSteps(@Nonnull List<Step> stepSequence) {
     @Nonnull
     public String getStepsAsString() {
         final List<Character> characters = getCharacterSequence();
+
         return characters.stream().map(String::valueOf).collect(Collectors.joining());
     }
 }

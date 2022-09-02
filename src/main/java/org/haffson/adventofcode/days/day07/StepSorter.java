@@ -20,9 +20,9 @@ public class StepSorter {
     public String getSortedSteps(@Nonnull final List<Step> stepsInput) {
         requireNonNull(stepsInput, "stepsInput");
 
-        final List<Step> steps = new ArrayList<>(stepsInput);
+        final List<Step> stepsCopy = new ArrayList<>(stepsInput);
 
-        stepsInput.forEach(step -> addNextStepToResult(steps));
+        stepsInput.forEach(step -> addNextStepToResult(stepsCopy));
 
         return sortedSteps.getStepsAsString();
     }
@@ -30,6 +30,7 @@ public class StepSorter {
 
     private void addNextStepToResult(@Nonnull final List<Step> steps) {
         requireNonNull(steps, "steps");
+
         final List<Step> availableSteps = getAvailableSteps(steps);
         final List<Step> sortedAvailableSteps = new ArrayList<>(availableSteps);
         sortedAvailableSteps.sort(Comparator.comparing(Step::stepName));
@@ -41,6 +42,7 @@ public class StepSorter {
     @Nonnull
     private List<Step> getAvailableSteps(@Nonnull final List<Step> steps) {
         requireNonNull(steps, "steps");
+
         final List<Step> availableSteps = new ArrayList<>();
 
         steps.forEach(step -> {
@@ -48,6 +50,7 @@ public class StepSorter {
                 availableSteps.add(step);
             }
         });
+
         return availableSteps;
     }
 }
