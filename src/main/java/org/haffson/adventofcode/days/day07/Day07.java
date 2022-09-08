@@ -79,7 +79,7 @@ public class Day07 implements Days {
         final List<StepInstruction> inputList = StepInstruction.of(inputStringList);
         final List<Step> steps = stepConverter.getSteps(inputList);
 
-        return stepSorter.getSortedSteps(steps);
+        return stepSorter.getSortedSteps(steps).asString();
     }
 
     private long calculateSecondPart(@Nonnull final List<String> inputStringList) {

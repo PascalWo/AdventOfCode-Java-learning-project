@@ -9,29 +9,25 @@ import java.util.List;
 import static java.util.Objects.requireNonNull;
 
 public class StepSorter {
-    @Nonnull
-    private final SortedSteps sortedSteps;
-
-    public StepSorter() {
-        this.sortedSteps = new SortedSteps();
-    }
 
     @Nonnull
-    public String getSortedSteps(@Nonnull final List<Step> stepsInput) {
+    public SortedSteps getSortedSteps(@Nonnull final List<Step> stepsInput) {
         requireNonNull(stepsInput, "stepsInput");
+
+        final SortedSteps sortedSteps = new SortedSteps();
 
         final List<Step> stepsCopy = new ArrayList<>(stepsInput);
 
-        stepsInput.forEach(step -> addNextStepToResult(stepsCopy));
+        stepsInput.forEach(step -> addNextStepToResult(stepsCopy, sortedSteps));
 
-        return sortedSteps.getStepsAsString();
+        return sortedSteps;
     }
 
 
-    private void addNextStepToResult(@Nonnull final List<Step> steps) {
+    private void addNextStepToResult(@Nonnull final List<Step> steps, @Nonnull final SortedSteps sortedSteps) {
         requireNonNull(steps, "steps");
 
-        final List<Step> availableSteps = getAvailableSteps(steps);
+        final List<Step> availableSteps = getAvailableSteps(steps, sortedSteps);
         final List<Step> sortedAvailableSteps = new ArrayList<>(availableSteps);
         sortedAvailableSteps.sort(Comparator.comparing(Step::stepName));
         final Step nextStep = sortedAvailableSteps.get(0);
@@ -40,13 +36,13 @@ public class StepSorter {
     }
 
     @Nonnull
-    private List<Step> getAvailableSteps(@Nonnull final List<Step> steps) {
+    private List<Step> getAvailableSteps(@Nonnull final List<Step> steps, @Nonnull final SortedSteps sortedSteps) {
         requireNonNull(steps, "steps");
 
         final List<Step> availableSteps = new ArrayList<>();
 
         steps.forEach(step -> {
-            if (new HashSet<>(sortedSteps.getCharacterSequence()).containsAll(step.dependsOn())) {
+            if (new HashSet<>(sortedSteps.asCharacters()).containsAll(step.dependsOn())) {
                 availableSteps.add(step);
             }
         });

@@ -146,23 +146,4 @@ class Day07Test {
         //assert
         assertThat(actualResult).isEqualTo(expectedResult);
     }
-//
-//    @Test
-//    void test_getSteps2(){
-//        //arrange
-//        final List<StepInstruction> stepInstructions = List.of(new StepInstruction('C', 'A'),
-//                new StepInstruction('C', 'F'),
-//                new StepInstruction('A', 'B'),
-//                new StepInstruction('A', 'D'),
-//                new StepInstruction('B', 'E'),
-//                new StepInstruction('D', 'E'),
-//                new StepInstruction('F', 'E'));
-//
-//        final List<Step> expectedResult = new ArrayList<>();
-//        //actual
-//
-//        final List<Step> actualResult = day07.getSteps(stepInstructions);
-//        //assert
-//        assertThat(actualResult).isEqualTo(expectedResult);
-//    }
 }

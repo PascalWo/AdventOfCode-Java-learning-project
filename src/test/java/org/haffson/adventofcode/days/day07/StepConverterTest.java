@@ -4,6 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -22,11 +23,11 @@ class StepConverterTest {
                 new StepInstruction('F', 'E'));
 
         final List<Step> expectedResult = List.of(
-                new Step('A', List.of('C')),
-                new Step('F', List.of('C')),
-                new Step('B', List.of('A')),
-                new Step('D', List.of('A')),
-                new Step('E', List.of('B', 'D', 'F')),
+                new Step('A', Set.of('C')),
+                new Step('F', Set.of('C')),
+                new Step('B', Set.of('A')),
+                new Step('D', Set.of('A')),
+                new Step('E', Set.of('B', 'D', 'F')),
                 new Step('C'));
         //actual
         final StepConverter stepConverter = new StepConverter();
